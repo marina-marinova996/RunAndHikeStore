@@ -1,0 +1,121 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Product
+@model AllProductsViewModel
+
+
+<h1 class="text-center">@ViewData["Title"]</h1>
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-3 sidebar">
+            <fieldset class="form-group">
+                <label>Product Type</label>
+                <select id="selectProductType">
+                    @foreach (var productType in Model.ProductTypes)
+                    {
+                        <option asp-for="@productType.Id">@productType.Name</option>
+                    }
+                </select>
+            </fieldset>
+            <fieldset class="form-group">
+                <label>Gender</label>
+                <select id="selectGender" multiple>
+                    @foreach (var gender in Model.Genders)
+                    {
+                        <option asp-for="@gender.Id">@gender.Name</option>
+                    }
+                </select>
+            </fieldset>
+            <fieldset class="form-group">
+                <label>Product Sizes</label>
+                <select id="selectProductSize" multiple>
+                    @foreach (var size in Model.Sizes)
+                    {
+                        <option asp-for="@size.SizeId">@size.SizeName</option>
+                    }
+                </select>
+            </fieldset>
+            <fieldset class="form-group">
+                <label>Categories</label>
+                <select id="selectCategories" multiple>
+                    @foreach (var category in Model.Categories)
+                    {
+                        <option asp-for="@category.Id">@category.Name</option>
+                    }
+                </select>
+            </fieldset>
+            <fieldset class="form-group">
+                <label>Brands</label>
+                <select id="selectBrands" multiple>
+                    @foreach (var brand in Model.Brands)
+                    {
+                        <option asp-for="@brand.Id">@brand.Name</option>
+                    }
+                </select>
+                <form asp-action="Filter" asp-controller="Product" method="get">
+                    <button type="button" class="btn btn-primary mt-3">Filter</button>
+                </form>
+            </fieldset>
+        </div>
+        <div class="col-lg-9">
+            <section style="background-color: #eee;">
+                <div class="container">
+                    <div class="row">
+                        @foreach (var item in Model.Products)
+                        {
+                            <div class="col-md-12 col-lg-4 mb-lg-4">
+                                <div class="card h-100">
+                                    <img src="@item.ImageUrl" class="card-img-top" alt="Product-photo" />
+                                    <div class="card-body mb-1">
+                                        <div class="p-1">
+                                            <p class="card-text lead text-center">@item.Brand</p>
+                                        </div>
+                                        <div class="p-1">
+                                            <p class="card-text lead text-center">@item.Name</p>
+                                        </div>
+                                        <div class="d-flex justify-content-between p-1">
+                                            <p>Price</p>
+                                            <p>@item.UnitPrice.ToString("c")</p>
+                                        </div>
+                                    </div>
+                                    <form asp-action="Details" asp-controller="Product" method="get">
+                                        <div class="d-flex flex-row">
+                                            <input name="id" type="hidden" value="@item.Id" />
+                                            <button type="submit" class="btn btn-primary flex-fill me-1">
+                                                Details
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("#selectGender").selectize({
+            sortField: "text",
+        });</script>
+    <script type="text/javascript">
+        $("#selectProductType").selectize({
+            sortField: "text",
+        });</script>
+    <script type="text/javascript">
+        $("#selectProductSize").selectize({
+            sortField: "text",
+        });</script>
+    <script type="text/javascript">
+        $("#selectCategories").selectize({
+            sortField: "text",
+        });</script>
+    <script type="text/javascript">
+        $("#selectBrands").selectize({
+            sortField: "text",
+        });</script>
+}

@@ -1,0 +1,46 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Product
+@model IEnumerable<ProductViewModel>
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="d-grid gap-2 mb-4">
+    <a asp-controller="Product" asp-action="Add" class="btn btn-success">Add New Product</a>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-dark text-center">
+            <th scope="col">Product Number</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Product Type</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Color</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr class="table-dark text-center">
+                <td>@product.ProductNumber</td>
+                <td>@product.Brand</td>
+                <td>@product.Name</td>
+                <td>@product.ProductType</td>
+                <td>@product.Gender</td>
+                <td>@product.Color</td>
+                <td>@product.UnitPrice.ToString("c")</td>
+                <td>
+                    <a asp-controller="Stock" asp-action="AddStock" asp-route-productId="@product.Id" method="get" class="btn btn-success mr-2">Add stock</a>
+                    <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning mr-2">Edit</a>
+                    <a asp-controller="Product" asp-action="Delete" asp-route-id="@product.Id" method="get" class="btn btn-danger mr-2">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

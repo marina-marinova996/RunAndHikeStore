@@ -1,0 +1,33 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Category
+@model IEnumerable<CategoryViewModel>
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="d-grid gap-2 mb-4">
+    <a asp-controller="Category" asp-action="Add" class="btn btn-success">Add New Category</a>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-dark text-center">
+            <th scope="col">Category</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var category in Model)
+        {
+            <tr class="table-dark text-center">
+                <td>@category.Name</td>
+                <td>
+                    <a asp-controller="Category" asp-action="Edit" asp-route-id="@category.Id" method="get"  class="btn btn-warning mr-2">Edit</a>
+                    <a asp-controller="Category" asp-action="Delete" asp-route-id="@category.Id" method="get" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

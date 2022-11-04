@@ -1,0 +1,29 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Product
+@model ProductViewModel
+
+<div class="container">
+    <div class="card">
+        <div class="row">
+            <div class="col-md-4">
+                <img src=@Model.ImageUrl class="card-img-top img-thumbnail" alt="Product-photo" />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3>@Model.Brand</h3>
+                    <h4>@Model.Name</h4>
+                    <hr />
+                    <p>@Model.Description</p>
+                    <p class="text-white">@Model.UnitPrice.ToString("c")</p>
+                </div>
+                <form asp-action="Delete" asp-controller="Product" asp-route-id="@Model.Id" method="post">
+                    <input name="id" type="hidden" value="@Model.Id" />
+                    <button type="button" class="btn btn-danger ms-1">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

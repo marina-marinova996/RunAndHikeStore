@@ -1,0 +1,80 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Product
+@model ProductViewModel
+
+
+<div class="card">
+    <div class="row">
+        <div class="col-md-4">
+            <img src=@Model.ImageUrl class="card-img-top img-thumbnail" alt="Product-photo" />
+        </div>
+        <div class="col-md-8">
+            <div class="card-body">
+                <h4 class="text-center">@Model.Brand</h4>
+                <h5 class="text-center">@Model.Name</h5>
+                <p class="fw-bold">Description:</p>
+                <p>@Model.Description</p>
+                <hr />
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">Product Number</th>
+                            <th scope="col">Color</th>
+                            <th scope="col">Gender</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.ProductNumber</td>
+                            <td>@Model.Color</td>
+                            <td>@Model.Gender</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="table table-borderless">
+                    <thead>
+                        <tr>
+                            <th scope="col">Size</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select id="selectSize" asp-for="@Model.SizeId">
+                                    @foreach (var size in Model.Sizes)
+                                    {
+                                        <option value="@size.SizeId">@size.SizeName</option>
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <div class="input-group w-auto justify-content-end align-items-center">
+                                    <input type="button" value="-" class="button-minus border rounded-circle icon-shape icon-sm mx-1" data-field="quantity">
+                                    <input type="number" step="1" max="10" value="1" name="quantity" class="quantity-field border-0 text-center w-25">
+                                    <input type="button" value="+" class="button-plus border rounded-circle icon-shape icon-sm lh-0 ml-1" data-field="quantity">
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="d-flex justify-content-between mt-3">
+                    <div class="mr-3">
+                        <label asp-for="UnitPrice"><b>Price</b></label>
+                    </div>
+                    <p class="mr-2">@Model.UnitPrice.ToString("c")</p>
+                    <form asp-action="" asp-controller="" method="get">
+                        <input name="id" type="hidden" value="@Model.Id" />
+                        <button type="button" class="btn btn-success ms-1">Add to cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("#selectSize").selectize({
+            sortField: "text",
+        });</script>
+}

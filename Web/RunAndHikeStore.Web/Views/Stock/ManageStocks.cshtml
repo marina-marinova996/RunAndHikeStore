@@ -1,0 +1,44 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Stock
+@model IEnumerable<EditStockViewModel>
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-dark text-center">
+            <th scope="col">Product Number</th>
+            <th scope="col">Product Type</th>
+            <th scope="col">Brand</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Size</th>
+            <th scope="col">Units In Stock</th>
+            <th scope="col">Unit Price</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr class="table-dark text-center">
+                <td>@product.ProductNumber</td>
+                <td>@product.ProductType</td>
+                <td>@product.Brand</td>
+                <td>@product.Name</td>
+                <td>@product.Gender</td>
+                <td>@product.SizeName</td>
+                <td>@product.UnitsInStock</td>
+                <td>@product.UnitPrice.ToString("c")</td>
+                <td>
+                    <a asp-controller="Stock" asp-action="EditStock" asp-route-productId="@product.ProductId" asp-route-sizeId="@product.SizeId" class="btn btn-warning mr-2">Edit</a>
+                    <a asp-controller="Stock" asp-action="DeleteStock" asp-route-productId="@product.ProductId" asp-route-sizeId="@product.SizeId" method="get" class="btn btn-danger mr-2">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

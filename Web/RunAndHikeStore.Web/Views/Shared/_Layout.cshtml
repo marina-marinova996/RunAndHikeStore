@@ -1,0 +1,88 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RunAndHikeStore.Common
+@using RunAndHikeStore.Data.Models
+@inject SignInManager<ApplicationUser> SignInManager
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@this.ViewData["Title"] - "Run and Hike Store"</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico"/>
+    <link rel="stylesheet" href="~/css/bootswatchTheme.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/css/selectize.bootstrap5.min.css" />
+</head>
+<body>
+    <header>
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Run and Hike Store</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <picture>
+                        <img src="~/images/logo-mountain.PNG" class="logo" alt="Run and Hike Store Logo" width="40" height="30">
+                    </picture>
+                    <ul class="navbar-nav flex-grow-1">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="All">Products</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">About us</a>
+                        </li>
+                        @if (SignInManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
+                                <div class="dropdown-menu" data-bs-popper="static">
+                                    <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Products</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Brand" asp-action="ManageAll" method="get">Manage Brands</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="ManageAll" method ="get">Manage Categories</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="ManageStocks" method ="get">Manage Stocks</a>
+                                    @*                           <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Orders</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Sizes</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Users</a>*@
+                                </div>
+                            </li>
+
+                        }
+                    </ul>
+                    <partial name="_LoginPartial" />
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+            </div>
+        </nav>
+        <!-- End of Navigation -->
+    </header>
+
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @this.RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container text-center">
+            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/js/standalone/selectize.min.js" asp-append-version="true"></script>
+    @await this.RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
