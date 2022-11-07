@@ -25,6 +25,7 @@
         public async Task<IActionResult> All()
         {
             this.ViewData["Title"] = "Products";
+
             try
             {
                 var products = await this.productService.GetAllAsync();
@@ -47,27 +48,6 @@
                 return this.View();
             }
         }
-
-        //[HttpGet]
-        //[AllowAnonymous]
-        //public async Task<IActionResult> AllFromProductType(string productTypeId)
-        //{
-        //    var products = await this.productService.GetAllByProductTypeAsync(productTypeId);
-
-        //    var model = new AllProductsViewModel()
-        //    {
-        //        ProductTypes = await this.productService.GetProductTypesAsync(),
-        //        Brands = await this.productService.GetBrandsAsync(),
-        //        Categories = await this.productService.GetCategoriesAsync(),
-        //        Genders = await this.productService.GetGendersAsync(),
-        //        Sizes = await this.productService.GetSizesAsync(),
-        //        Products = products,
-        //    };
-
-        //    this.ViewData["Title"] = "";
-
-        //    return this.View(this.All);
-        //}
 
         [HttpGet]
         public async Task<IActionResult> Filter(AllProductsViewModel model)

@@ -23,13 +23,6 @@
         [StringLength(ProductSizeNameMaxLength)]
         public string Name { get; set; }
 
-        /// <summary>
-        /// Gets or sets Gender.
-        /// </summary>
-        [Required]
-        [StringLength(GenderMaxLength)]
-        public Gender Gender { get; set; }
-
         public bool IsInteger { get; set; }
 
         public ICollection<ProductSize> Products { get; set; }

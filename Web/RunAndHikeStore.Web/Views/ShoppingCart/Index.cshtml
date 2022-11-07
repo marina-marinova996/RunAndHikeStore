@@ -1,0 +1,45 @@
+﻿@using RunAndHikeStore.Web.ViewModels.ShoppingCart
+@model ShoppingCartViewModel
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+
+    <h3>Shopping cart</h3>
+    <table class="table table-hover" cellpadding="2" cellspacing="2" border="1">
+        <tr>
+            <th>Product Number</th>
+            <th>Product Name</th>
+            <th>Image</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Order Total</th>
+            <th>Action</th>
+        </tr>
+        @foreach (var item in Model.CartItems)
+        {
+            <tr>
+                <td></td>
+                <td></td>
+                <td><img src="" width="60" /> </td>
+                <td></td>
+                <td></td>
+                <td>@*@(item.Product.Price * item.Quantity)*@</td>
+                <td>@*<a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a>*@</td>
+            </tr>
+        }
+        <tr>
+            <td align="right" colspan="6">Sum</td>
+            <td>
+                
+            </td>
+        </tr>
+    </table>
+    <br>
+    <a asp-controller="Product" asp-action="All">Continue Shopping</a>
+
+</body>
+</html>

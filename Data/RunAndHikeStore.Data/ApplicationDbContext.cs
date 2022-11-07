@@ -4,6 +4,7 @@
     using Microsoft.EntityFrameworkCore;
     using RunAndHikeStore.Data.Common.Models;
     using RunAndHikeStore.Data.Models;
+
     using System;
     using System.Linq;
     using System.Reflection;
@@ -47,7 +48,7 @@
 
         public DbSet<ShoppingCart> ShoppingCart { get; set; }
 
-        public DbSet<ShoppingCartProduct> ShoppingCartsProducts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
 
         public override int SaveChanges() => this.SaveChanges(true);
 
@@ -87,9 +88,6 @@
 
             builder.Entity<CategoryProduct>()
                 .HasKey(cp => new { cp.CategoryId, cp.ProductId });
-
-            builder.Entity<ShoppingCartProduct>()
-                .HasKey(sp => new { sp.ShoppingCartId, sp.ProductId });
 
             builder.Entity<ApplicationUser>()
             .Property(u => u.Email)

@@ -30,7 +30,7 @@
                 <td>@product.ProductType</td>
                 <td>@product.Gender</td>
                 <td>@product.Color</td>
-                <td>@product.UnitPrice.ToString("c")</td>
+                <td>@product.UnitPrice.ToString() EUR</td>
                 <td>
                     <a asp-controller="Stock" asp-action="AddStock" asp-route-productId="@product.Id" method="get" class="btn btn-success mr-2">Add stock</a>
                     <a asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-warning mr-2">Edit</a>

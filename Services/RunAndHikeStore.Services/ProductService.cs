@@ -5,7 +5,6 @@
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Data.Models.Enums;
     using RunAndHikeStore.Services.Contracts;
-    using RunAndHikeStore.Web.ViewModels;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
     using RunAndHikeStore.Web.ViewModels.Product;

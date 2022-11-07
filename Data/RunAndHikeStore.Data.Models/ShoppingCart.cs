@@ -12,7 +12,7 @@
         public ShoppingCart()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Products = new HashSet<ShoppingCartProduct>();
+            this.CartItems = new HashSet<CartItem>();
         }
 
         /// <summary>
@@ -27,6 +27,6 @@
         [ForeignKey(nameof(ApplicationUserId))]
         public ApplicationUser ApplicationUser { get; set; }
 
-        public ICollection<ShoppingCartProduct> Products { get; set; }
+        public ICollection<CartItem> CartItems { get; set; }
     }
 }

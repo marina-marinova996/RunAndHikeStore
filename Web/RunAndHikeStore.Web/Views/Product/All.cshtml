@@ -1,13 +1,20 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.Product
 @model AllProductsViewModel
 
-
-<h1 class="text-center">@ViewData["Title"]</h1>
-<hr />
+<div class="col-lg-8">
+    <h1 class="text-center">@ViewData["Title"]</h1>
+</div>
 
 <div class="container">
     <div class="row">
         <div class="col-lg-3 sidebar">
+            <fieldset class="form-group">
+                <label asp-for="SearchTerm"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Search here...">
+                <div class="form-group mt-2">
+                    <input type="submit" value="Search" class="btn btn-primary" />
+                </div>
+            </fieldset>
             <fieldset class="form-group">
                 <label>Product Type</label>
                 <select id="selectProductType">
@@ -75,7 +82,7 @@
                                         </div>
                                         <div class="d-flex justify-content-between p-1">
                                             <p>Price</p>
-                                            <p>@item.UnitPrice.ToString("c")</p>
+                                            <p>@item.UnitPrice.ToString() EUR</p>
                                         </div>
                                     </div>
                                     <form asp-action="Details" asp-controller="Product" method="get">

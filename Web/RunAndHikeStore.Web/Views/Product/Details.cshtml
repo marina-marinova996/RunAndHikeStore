@@ -60,7 +60,7 @@
                     <div class="mr-3">
                         <label asp-for="UnitPrice"><b>Price</b></label>
                     </div>
-                    <p class="mr-2">@Model.UnitPrice.ToString("c")</p>
+                    <p class="mr-2">@Model.UnitPrice.ToString() EUR</p>
                     <form asp-action="" asp-controller="" method="get">
                         <input name="id" type="hidden" value="@Model.Id" />
                         <button type="button" class="btn btn-success ms-1">Add to cart</button>

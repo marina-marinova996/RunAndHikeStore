@@ -4,6 +4,7 @@
     using RunAndHikeStore.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using static RunAndHikeStore.Common.GlobalConstants.Address;
 
     public class Address : BaseDeletableModel<string>
     {
@@ -16,34 +17,34 @@
         /// Street of the address.
         /// </summary>
         [Required]
-        [StringLength(150)]
+        [StringLength(StreetAddressMaxLength)]
         public string StreetAddress { get; set; }
 
         /// <summary>
         /// City of the address.
         /// </summary>
         [Required]
-        [StringLength(200)]
+        [StringLength(CityMaxLength)]
         public string City { get; set; }
 
         /// <summary>
         /// Country of the address.
         /// </summary>
         [Required]
-        [StringLength(70)]
+        [StringLength(CountryMaxLength)]
         public string Country { get; set; }
 
         /// <summary>
         /// Postal code of the address.
         /// </summary>
         [Required]
-        [StringLength(20)]
+        [StringLength(PostalCodeMaxLength)]
         public string PostalCode { get; set; }
         /// <summary>
         /// Type of the address.
         /// </summary>
         [Required]
-        [StringLength(20)]
+        [StringLength(AddressTypeMaxLength)]
         public AddressType AddressType { get; set; }
     }
 }

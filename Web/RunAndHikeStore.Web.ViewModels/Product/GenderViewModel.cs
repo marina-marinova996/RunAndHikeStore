@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using RunAndHikeStore.Web.ViewModels.Product;
 
-namespace RunAndHikeStore.Web.ViewModels
+namespace RunAndHikeStore.Web.ViewModels.Product
 {
     public class GenderViewModel
     {

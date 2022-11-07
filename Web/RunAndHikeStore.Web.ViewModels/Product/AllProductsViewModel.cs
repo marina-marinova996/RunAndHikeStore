@@ -1,6 +1,7 @@
 ﻿namespace RunAndHikeStore.Web.ViewModels.Product
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
     using RunAndHikeStore.Web.ViewModels.Size;
@@ -18,5 +19,8 @@
         public IEnumerable<SizeViewModel> Sizes { get; set; } = new List<SizeViewModel>();
 
         public IEnumerable<ProductViewModel> Products { get; set; } = new List<ProductViewModel>();
+
+        [Display(Name ="Search")]
+        public string SearchTerm { get; set; }
     }
 }

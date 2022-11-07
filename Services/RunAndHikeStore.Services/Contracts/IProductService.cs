@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using RunAndHikeStore.Web.ViewModels;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
     using RunAndHikeStore.Web.ViewModels.Product;

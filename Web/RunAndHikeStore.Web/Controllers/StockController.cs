@@ -1,11 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.Product;
-using RunAndHikeStore.Web.ViewModels.Stock;
-using System.Threading.Tasks;
-
-namespace RunAndHikeStore.Web.Controllers
+﻿namespace RunAndHikeStore.Web.Controllers
 {
+    using Microsoft.AspNetCore.Mvc;
+    using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.Stock;
+    using System.Threading.Tasks;
     public class StockController : BaseController
     {
         private readonly IStockService stockService;

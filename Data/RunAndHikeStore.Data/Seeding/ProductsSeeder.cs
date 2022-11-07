@@ -61,7 +61,7 @@
                                                    Id = "e112a421-e2b1-46b4-9d38-5f6c3773b027",
                                                    ProductNumber = "45656585",
                                                    Name = "Helios III Space",
-                                                   Description = "Description",
+                                                   Description = "The Helios III Space has been designed for sprint races and training sessions of more than 60 minutes.The technical mesh design on the upper provides increased breathability and elasticity.Weight: 298g (size 42).Drop: 4 mm",
                                                    UnitPrice = 150m,
                                                    Color = "Blue",
                                                    ImageUrl = "/images/product-la-sportiva-helios-3-space.png",

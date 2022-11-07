@@ -1,4 +1,5 @@
 ﻿using RunAndHikeStore.Web.ViewModels;
+using RunAndHikeStore.Web.ViewModels.ShoppingCart;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -6,10 +7,10 @@ namespace RunAndHikeStore.Services.Contracts
 {
     public interface IShoppingCartService
     {
-        Task<IEnumerable<ShoppingCartViewModel>> AddProduct(string productId, string userId);
+        //Task<IEnumerable<ShoppingCartViewModel>> AddProduct(string productId, string userId);
 
-        void BuyProducts(string userId);
+        //void BuyProducts(string userId);
 
-        Task<IEnumerable<ShoppingCartViewModel>> GetProducts(string userId);
+        //Task<IEnumerable<ShoppingCartViewModel>> GetProducts(string userId);
     }
 }

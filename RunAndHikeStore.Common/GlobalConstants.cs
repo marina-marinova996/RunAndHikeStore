@@ -27,8 +27,20 @@
 
         public static class Address
         {
-            public const int MinLength = 2;
-            public const int MaxLength = 50;
+            public const int StreetAddressMinLength = 10;
+            public const int StreetAddressMaxLength = 150;
+
+            public const int CityMinLength = 2;
+            public const int CityMaxLength = 150;
+
+            public const int CountryMinLength = 2;
+            public const int CountryMaxLength = 150;
+
+            public const int PostalCodeMinLength = 3;
+            public const int PostalCodeMaxLength = 20;
+
+            public const int AddressTypeMaxLength = 20;
+
         }
 
         public static class Brand
