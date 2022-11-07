@@ -8,38 +8,47 @@
 </head>
 <body>
 
-    <h3>Shopping cart</h3>
-    <table class="table table-hover" cellpadding="2" cellspacing="2" border="1">
-        <tr>
+    <div class="row d-flex">
+        <h1 class="display-4 ml-2">Shopping cart</h1>
+        <img src="~/images/shopping_cart.png" class="img-fluid ml-2 mt-2" alt="ShoppingCart-photo" style="width:6rem;height:4rem;" />
+    </div>
+    <table class="table table-hover mt-2" cellpadding="2" cellspacing="2" border="1">
+        <tr class="table-light text-dark">
             <th>Product Number</th>
             <th>Product Name</th>
             <th>Image</th>
-            <th>Price</th>
+            <th>Unit Price</th>
             <th>Quantity</th>
-            <th>Order Total</th>
             <th>Action</th>
+            <th>Total</th>
         </tr>
-        @foreach (var item in Model.CartItems)
+        @*        @foreach (var item in Model.CartItems)
         {
-            <tr>
-                <td></td>
-                <td></td>
-                <td><img src="" width="60" /> </td>
-                <td></td>
-                <td></td>
-                <td>@*@(item.Product.Price * item.Quantity)*@</td>
-                <td>@*<a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a>*@</td>
-            </tr>
-        }
         <tr>
-            <td align="right" colspan="6">Sum</td>
+        <td>@item.Product.ProductNumber</td>
+        <td>@item.Product.Name</td>
+        <td><img src="@item.Product.ImageUrl" width="60" /> </td>
+        <td>@item.Product.UnitPrice</td>
+        <td></td>
+        <td>(item.Product.UnitPrice * item.Quantity)</td>
+        <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a></td>
+        </tr>
+        }*@
+        <tr>
+            <td class="light">Test</td>
+        </tr>
+        <tr>
+            <td align="right" colspan="6">Total amount</td>
             <td>
-                
+                EUR
             </td>
         </tr>
     </table>
+    <div class="text-center">
+        <a asp-controller="Product" asp-action="All" class="btn btn-success">Submit order</a>
+        <a asp-controller="Product" asp-action="All" class="btn btn-primary ml-2">Continue Shopping</a>
+    </div>
     <br>
-    <a asp-controller="Product" asp-action="All">Continue Shopping</a>
 
 </body>
 </html>
