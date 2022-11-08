@@ -1,95 +1,94 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.Product
 @model AllProductsViewModel
 
-<div class="col-lg-8">
-    <h1 class="text-center">@ViewData["Title"]</h1>
-</div>
-
-
-<div class="container">
-    <div class="row">
-        <div class="col-lg-3 sidebar">
-            <div class="input-group mb-3">
-                <input asp-for="SearchTerm" class="form-control" placeholder="Search here" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button class="btn btn-primary" type="button">Search</button>
+<div class="row">
+    <div class="col-lg-9">
+        <section style="background-color: #eee;">
+            <div class="row justify-content-center mb-2">
+                <h1 class="text-dark mr-4 mt-3">@ViewData["Title"]</h1>
+                <img src="/images/running-shoe.png" class="img-fluid mt-2" style="width:4rem;height:5rem;" />
+                <img src="/images/clothing.svg" class="img-fluid ml-4 mt-2" style="width:4rem;height:5rem;" />
+                <img src="/images/gps-watch-1921457-1628524.png" class="img-fluid ml-4 mt-3" style="width:4rem;height:4rem;" />
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="input-group mb-3">
+                        <input asp-for="SearchTerm" class="form-control" placeholder="Search here" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="button">Search</button>
+                        </div>
+                    </div>
+                    @foreach (var item in Model.Products)
+                    {
+                        <div class="col-md-12 col-lg-4 mb-lg-4">
+                            <div class="card h-100">
+                                <img src="@item.ImageUrl" class="card-img-top" alt="Product-photo" />
+                                <div class="card-body mb-1">
+                                    <div class="p-1">
+                                        <p class="card-text lead text-center">@item.Brand</p>
+                                    </div>
+                                    <div class="p-1">
+                                        <p class="card-text lead text-center">@item.Name</p>
+                                    </div>
+                                    <div class="d-flex justify-content-between p-1">
+                                        <p>Price</p>
+                                        <p>@item.UnitPrice.ToString() EUR</p>
+                                    </div>
+                                </div>
+                                <form asp-action="Details" asp-controller="Product" method="get">
+                                    <div class="d-flex flex-row">
+                                        <input name="id" type="hidden" value="@item.Id" />
+                                        <button type="submit" class="btn btn-primary flex-fill me-1">
+                                            Details
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
-            <label>Product Type</label>
-            <select id="selectProductType">
-                @foreach (var productType in Model.ProductTypes)
-                {
-                    <option asp-for="@productType.Id">@productType.Name</option>
-                }
-            </select>
-            <label class="mt-2">Gender</label>
-            <select id="selectGender" multiple>
-                @foreach (var gender in Model.Genders)
-                {
-                    <option asp-for="@gender.Id">@gender.Name</option>
-                }
-            </select>
-            <label class="mt-2">Product Sizes</label>
-            <select id="selectProductSize" multiple>
-                @foreach (var size in Model.Sizes)
-                {
-                    <option asp-for="@size.Id">@size.Name</option>
-                }
-            </select>
-            <label class="mt-2">Categories</label>
-            <select id="selectCategories" multiple>
-                @foreach (var category in Model.Categories)
-                {
-                    <option asp-for="@category.Id">@category.Name</option>
-                }
-            </select>
-            <label class="mt-2">Brands</label>
-            <select id="selectBrands" multiple>
-                @foreach (var brand in Model.Brands)
-                {
-                    <option asp-for="@brand.Id">@brand.Name</option>
-                }
-            </select>
-            <form asp-action="Filter" asp-controller="Product" method="get">
-                <button type="button" class="btn btn-primary mt-3">Filter</button>
-            </form>
-        </div>
-        <div class="col-lg-9">
-            <section style="background-color: #eee;">
-                <div class="container">
-                    <div class="row">
-                        @foreach (var item in Model.Products)
-                        {
-                            <div class="col-md-12 col-lg-4 mb-lg-4">
-                                <div class="card h-100">
-                                    <img src="@item.ImageUrl" class="card-img-top" alt="Product-photo" />
-                                    <div class="card-body mb-1">
-                                        <div class="p-1">
-                                            <p class="card-text lead text-center">@item.Brand</p>
-                                        </div>
-                                        <div class="p-1">
-                                            <p class="card-text lead text-center">@item.Name</p>
-                                        </div>
-                                        <div class="d-flex justify-content-between p-1">
-                                            <p>Price</p>
-                                            <p>@item.UnitPrice.ToString() EUR</p>
-                                        </div>
-                                    </div>
-                                    <form asp-action="Details" asp-controller="Product" method="get">
-                                        <div class="d-flex flex-row">
-                                            <input name="id" type="hidden" value="@item.Id" />
-                                            <button type="submit" class="btn btn-primary flex-fill me-1">
-                                                Details
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-            </section>
-        </div>
+        </section>
+    </div>
+    <div class="col-lg-3 sidebar">
+        <label>Product Type</label>
+        <select id="selectProductType">
+            @foreach (var productType in Model.ProductTypes)
+            {
+                <option asp-for="@productType.Id">@productType.Name</option>
+            }
+        </select>
+        <label class="mt-2">Gender</label>
+        <select id="selectGender" multiple>
+            @foreach (var gender in Model.Genders)
+            {
+                <option asp-for="@gender.Id">@gender.Name</option>
+            }
+        </select>
+        <label class="mt-2">Product Sizes</label>
+        <select id="selectProductSize" multiple>
+            @foreach (var size in Model.Sizes)
+            {
+                <option asp-for="@size.Id">@size.Name</option>
+            }
+        </select>
+        <label class="mt-2">Categories</label>
+        <select id="selectCategories" multiple>
+            @foreach (var category in Model.Categories)
+            {
+                <option asp-for="@category.Id">@category.Name</option>
+            }
+        </select>
+        <label class="mt-2">Brands</label>
+        <select id="selectBrands" multiple>
+            @foreach (var brand in Model.Brands)
+            {
+                <option asp-for="@brand.Id">@brand.Name</option>
+            }
+        </select>
+        <form asp-action="Filter" asp-controller="Product" method="get">
+            <button type="button" class="btn btn-primary mt-3">Filter</button>
+        </form>
     </div>
 </div>
 
