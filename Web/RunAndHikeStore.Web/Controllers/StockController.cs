@@ -4,17 +4,28 @@
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Stock;
     using System.Threading.Tasks;
+
     public class StockController : BaseController
     {
         private readonly IStockService stockService;
         private readonly IProductService productService;
 
+        /// <summary>
+        /// IoC.
+        /// </summary>
+        /// <param name="stockService"></param>
+        /// <param name="productService"></param>
         public StockController(IStockService stockService, IProductService productService)
         {
             this.stockService = stockService;
             this.productService = productService;
         }
 
+        /// <summary>
+        /// Add stock for product.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> AddStock(string productId)
         {
@@ -26,6 +37,11 @@
             return this.View(model);
         }
 
+        /// <summary>
+        /// Add Stock for product.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddStock(AddStockViewModel model)
         {
@@ -50,6 +66,10 @@
             }
         }
 
+        /// <summary>
+        /// Manage stocks for products.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ManageStocks()
         {
@@ -73,6 +93,12 @@
             }
         }
 
+        /// <summary>
+        /// Edit stock for product.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="sizeId"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> EditStock(string productId, string sizeId)
         {
@@ -92,6 +118,11 @@
             }
         }
 
+        /// <summary>
+        /// Edit stock for product.
+        /// </summary>
+        /// <param name="stockModel"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> EditStock(EditStockViewModel stockModel)
         {
@@ -116,6 +147,12 @@
             }
         }
 
+        /// <summary>
+        /// Delete stock for product.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="sizeId"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> DeleteStock(string productId, string sizeId)
         {

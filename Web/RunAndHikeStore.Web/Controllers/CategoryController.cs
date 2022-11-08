@@ -11,11 +11,19 @@
     {
         private ICategoryService categoryService;
 
+        /// <summary>
+        /// IoC.
+        /// </summary>
+        /// <param name="_categoryService"></param>
         public CategoryController(ICategoryService _categoryService)
         {
             this.categoryService = _categoryService;
         }
 
+        /// <summary>
+        /// Add new category.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Add()
         {
@@ -26,6 +34,10 @@
             return this.View(model);
         }
 
+        /// <summary>
+        /// Add new category.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Add(AddCategoryViewModel model)
         {
@@ -39,6 +51,11 @@
             return this.RedirectToAction("ManageAll", "Category");
         }
 
+        /// <summary>
+        /// Edit category.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -55,6 +72,12 @@
             return this.View(category);
         }
 
+        /// <summary>
+        /// Edit category.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditCategoryViewModel model)
         {
@@ -63,6 +86,10 @@
             return this.RedirectToAction("ManageAll", "Category");
         }
 
+        /// <summary>
+        /// Manage all categories.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ManageAll()
         {
@@ -72,6 +99,11 @@
             return this.View(categories);
         }
 
+        /// <summary>
+        /// Delete category.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

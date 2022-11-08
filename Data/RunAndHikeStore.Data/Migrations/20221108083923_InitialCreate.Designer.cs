@@ -12,7 +12,7 @@ using RunAndHikeStore.Data;
 namespace RunAndHikeStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221107142651_InitialCreate")]
+    [Migration("20221108083923_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -695,11 +695,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsInteger")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -708,9 +703,15 @@ namespace RunAndHikeStore.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
+                    b.Property<string>("ProductTypeId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("ProductTypeId");
 
                     b.ToTable("Sizes");
                 });
@@ -882,6 +883,17 @@ namespace RunAndHikeStore.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ApplicationUser");
+                });
+
+            modelBuilder.Entity("RunAndHikeStore.Data.Models.Size", b =>
+                {
+                    b.HasOne("RunAndHikeStore.Data.Models.ProductType", "ProductType")
+                        .WithMany()
+                        .HasForeignKey("ProductTypeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ProductType");
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationUser", b =>

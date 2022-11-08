@@ -23,7 +23,17 @@
         [StringLength(ProductSizeNameMaxLength)]
         public string Name { get; set; }
 
-        public bool IsInteger { get; set; }
+        /// <summary>
+        /// Foreign Key to table Product type.
+        /// </summary>
+        [Required]
+        public string ProductTypeId { get; set; }
+
+        /// <summary>
+        /// Navigation property to Product type table.
+        /// </summary>
+        [ForeignKey(nameof(ProductTypeId))]
+        public ProductType ProductType { get; set; }
 
         public ICollection<ProductSize> Products { get; set; }
     }

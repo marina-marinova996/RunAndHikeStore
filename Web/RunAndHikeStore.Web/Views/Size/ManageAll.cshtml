@@ -1,0 +1,35 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Size
+@model IEnumerable<SizeViewModel>
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+<div class="d-grid gap-2 mb-4">
+    <a asp-controller="Size" asp-action="Add" class="btn btn-success">Add New Size</a>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr class="table-dark text-center">
+            <th scope="col">Size</th>
+            <th scope="col">Product Type</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var size in Model)
+        {
+            <tr class="table-dark text-center">
+                <td>@size.Name</td>
+                <td>@size.ProductType</td>
+                <td>
+                    <a asp-controller="Size" asp-action="Edit" asp-route-id="@size.Id" class="btn btn-warning mr-2">Edit</a>
+                    <a asp-controller="Size" asp-action="Delete" asp-route-id="@size.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

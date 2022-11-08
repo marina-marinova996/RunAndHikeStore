@@ -37,13 +37,6 @@ namespace RunAndHikeStore.Web
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            //services.AddIdentity<ApplicationUser, ApplicationRole>(IdentityOptionsProvider.GetIdentityOptions)
-            //    .AddRoles<ApplicationRole>()
-            //    .AddDefaultUI()
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
-            ////services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-            ////        .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
-
             services.AddDefaultIdentity<ApplicationUser>()
                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
@@ -76,6 +69,7 @@ namespace RunAndHikeStore.Web
             services.AddScoped<IStockService, StockService>();
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IBrandService, BrandService>();
+            services.AddScoped<ISizeService, SizeService>();
         }
 
         private static void Configure(WebApplication app)

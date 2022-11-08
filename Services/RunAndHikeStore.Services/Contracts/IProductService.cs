@@ -51,7 +51,7 @@
 
         Task<IEnumerable<SizeViewModel>> GetSizesAsync();
 
-        Task<IEnumerable<GenderViewModel>> GetGendersAsync();
+        IEnumerable<GenderViewModel> GetGenders();
 
         Task Edit(string id, EditProductViewModel model);
     }

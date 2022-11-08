@@ -66,7 +66,6 @@
             this.ViewData["Title"] = "Register";
 
             return this.View(model);
-
         }
 
         [HttpGet]

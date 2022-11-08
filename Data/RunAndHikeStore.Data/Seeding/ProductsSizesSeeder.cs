@@ -52,7 +52,6 @@ namespace RunAndHikeStore.Data.Seeding
                                                   ProductId = "3bbf392e-9cd6-47bf-8ed1-1666c2dc6065",
                                                   SizeId = "e0670b96-58c4-43c5-a427-90fa5599213c",
                                                   UnitsInStock = 8,
-
                                               },
                                               new ProductSize
                                               {

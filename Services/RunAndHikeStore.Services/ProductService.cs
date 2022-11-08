@@ -300,7 +300,7 @@
             product.ProductTypes = await this.GetProductTypesAsync();
             product.Brands = await this.GetBrandsAsync();
             product.Categories = await this.GetCategoriesAsync();
-            product.Genders = await this.GetGendersAsync();
+            product.Genders = this.GetGenders();
 
             return product;
         }
@@ -363,8 +363,8 @@
                                        .Where(s => s.IsDeleted == false)
                                        .Select(s => new SizeViewModel
                                        {
-                                         SizeId = s.Id,
-                                         SizeName = s.Name,
+                                         Id = s.Id,
+                                         Name = s.Name,
                                        }).ToListAsync();
             return sizes;
         }
@@ -373,7 +373,7 @@
         /// Get all genders.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<GenderViewModel>> GetGendersAsync()
+        public IEnumerable<GenderViewModel> GetGenders()
         {
             List<GenderViewModel> genders = new List<GenderViewModel>();
 

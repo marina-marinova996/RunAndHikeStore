@@ -15,7 +15,8 @@
             <th scope="col">Size</th>
             <th scope="col">Units In Stock</th>
             <th scope="col">Unit Price</th>
-            <th scope="col">Actions</th>
+            <th scope="col">Edit Stock</th>
+            <th scope="col">Delete Stock</th>
         </tr>
     </thead>
     <tbody>
@@ -27,11 +28,13 @@
                 <td>@product.Brand</td>
                 <td>@product.Name</td>
                 <td>@product.Gender</td>
-                <td>@product.SizeName</td>
+                <td>@product.Name</td>
                 <td>@product.UnitsInStock</td>
-                <td>@product.UnitPrice.ToString("c")</td>
+                <td>@product.UnitPrice.ToString() EUR</td>
                 <td>
                     <a asp-controller="Stock" asp-action="EditStock" asp-route-productId="@product.ProductId" asp-route-sizeId="@product.SizeId" class="btn btn-warning mr-2">Edit</a>
+                </td>
+                <td>
                     <a asp-controller="Stock" asp-action="DeleteStock" asp-route-productId="@product.ProductId" asp-route-sizeId="@product.SizeId" method="get" class="btn btn-danger mr-2">Delete</a>
                 </td>
             </tr>

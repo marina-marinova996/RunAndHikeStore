@@ -13,12 +13,6 @@ namespace RunAndHikeStore.Data.Models
         }
 
         /// <summary>
-        /// Cart Item Id.
-        /// </summary>
-        [Key]
-        public string Id { get; set; }
-
-        /// <summary>
         /// Foreign key to ShoppingCarts table.
         /// </summary>
         [ForeignKey(nameof(ShoppingCartId))]

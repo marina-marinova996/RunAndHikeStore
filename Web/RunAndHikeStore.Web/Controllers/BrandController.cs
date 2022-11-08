@@ -10,11 +10,19 @@
     {
         private IBrandService brandService;
 
+        /// <summary>
+        /// IoC.
+        /// </summary>
+        /// <param name="_brandService"></param>
         public BrandController(IBrandService _brandService)
         {
             this.brandService = _brandService;
         }
 
+        /// <summary>
+        /// Manage all table with brands.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ManageAll()
         {
@@ -24,6 +32,10 @@
             return this.View(brands);
         }
 
+        /// <summary>
+        /// Add new brand.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult Add()
         {
@@ -34,6 +46,10 @@
             return this.View(model);
         }
 
+        /// <summary>
+        /// Add new brand.
+        /// </summary>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Add(AddBrandViewModel model)
         {
@@ -47,6 +63,11 @@
             return this.RedirectToAction("ManageAll", "Brand");
         }
 
+        /// <summary>
+        /// Edit brand, find by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -63,6 +84,11 @@
             return this.View(brand);
         }
 
+        /// <summary>
+        /// Edit brand.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(EditBrandViewModel model)
         {
@@ -71,6 +97,11 @@
             return this.RedirectToAction("ManageAll", "Brand");
         }
 
+        /// <summary>
+        /// Delete brand.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {

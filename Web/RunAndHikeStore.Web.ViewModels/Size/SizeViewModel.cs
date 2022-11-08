@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RunAndHikeStore.Web.ViewModels.Product;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,12 @@ namespace RunAndHikeStore.Web.ViewModels.Size
 {
     public class SizeViewModel
     {
-        public string SizeId { get; set; }
+        public string Id { get; set; }
 
-        public string SizeName { get; set; }
+        public string Name { get; set; }
+
+        public string ProductType { get; set; }
+
+        public string ProductTypeId { get; set; }
     }
 }

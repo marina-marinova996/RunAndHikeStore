@@ -45,7 +45,7 @@
                     <select asp-for="@Model.SizeId" class="form-control">
                         @foreach (var size in Model.Sizes)
                         {
-                            <option value="@size.SizeId">@size.SizeName</option>
+                            <option value="@size.Id">@size.Name</option>
                         }
                     </select>
                     <span asp-validation-for="@Model.SizeId" class="text-danger"></span>

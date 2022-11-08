@@ -5,64 +5,54 @@
     <h1 class="text-center">@ViewData["Title"]</h1>
 </div>
 
+
 <div class="container">
     <div class="row">
         <div class="col-lg-3 sidebar">
-            <fieldset class="form-group">
-                <label asp-for="SearchTerm"></label>
-                <input asp-for="SearchTerm" class="form-control" placeholder="Search here...">
-                <div class="form-group mt-2">
-                    <input type="submit" value="Search" class="btn btn-primary" />
+            <div class="input-group mb-3">
+                <input asp-for="SearchTerm" class="form-control" placeholder="Search here" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button">Search</button>
                 </div>
-            </fieldset>
-            <fieldset class="form-group">
-                <label>Product Type</label>
-                <select id="selectProductType">
-                    @foreach (var productType in Model.ProductTypes)
-                    {
-                        <option asp-for="@productType.Id">@productType.Name</option>
-                    }
-                </select>
-            </fieldset>
-            <fieldset class="form-group">
-                <label>Gender</label>
-                <select id="selectGender" multiple>
-                    @foreach (var gender in Model.Genders)
-                    {
-                        <option asp-for="@gender.Id">@gender.Name</option>
-                    }
-                </select>
-            </fieldset>
-            <fieldset class="form-group">
-                <label>Product Sizes</label>
-                <select id="selectProductSize" multiple>
-                    @foreach (var size in Model.Sizes)
-                    {
-                        <option asp-for="@size.SizeId">@size.SizeName</option>
-                    }
-                </select>
-            </fieldset>
-            <fieldset class="form-group">
-                <label>Categories</label>
-                <select id="selectCategories" multiple>
-                    @foreach (var category in Model.Categories)
-                    {
-                        <option asp-for="@category.Id">@category.Name</option>
-                    }
-                </select>
-            </fieldset>
-            <fieldset class="form-group">
-                <label>Brands</label>
-                <select id="selectBrands" multiple>
-                    @foreach (var brand in Model.Brands)
-                    {
-                        <option asp-for="@brand.Id">@brand.Name</option>
-                    }
-                </select>
-                <form asp-action="Filter" asp-controller="Product" method="get">
-                    <button type="button" class="btn btn-primary mt-3">Filter</button>
-                </form>
-            </fieldset>
+            </div>
+            <label>Product Type</label>
+            <select id="selectProductType">
+                @foreach (var productType in Model.ProductTypes)
+                {
+                    <option asp-for="@productType.Id">@productType.Name</option>
+                }
+            </select>
+            <label class="mt-2">Gender</label>
+            <select id="selectGender" multiple>
+                @foreach (var gender in Model.Genders)
+                {
+                    <option asp-for="@gender.Id">@gender.Name</option>
+                }
+            </select>
+            <label class="mt-2">Product Sizes</label>
+            <select id="selectProductSize" multiple>
+                @foreach (var size in Model.Sizes)
+                {
+                    <option asp-for="@size.Id">@size.Name</option>
+                }
+            </select>
+            <label class="mt-2">Categories</label>
+            <select id="selectCategories" multiple>
+                @foreach (var category in Model.Categories)
+                {
+                    <option asp-for="@category.Id">@category.Name</option>
+                }
+            </select>
+            <label class="mt-2">Brands</label>
+            <select id="selectBrands" multiple>
+                @foreach (var brand in Model.Brands)
+                {
+                    <option asp-for="@brand.Id">@brand.Name</option>
+                }
+            </select>
+            <form asp-action="Filter" asp-controller="Product" method="get">
+                <button type="button" class="btn btn-primary mt-3">Filter</button>
+            </form>
         </div>
         <div class="col-lg-9">
             <section style="background-color: #eee;">

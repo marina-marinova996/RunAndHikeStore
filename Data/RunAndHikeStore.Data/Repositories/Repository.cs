@@ -106,7 +106,7 @@
         /// <summary>
         /// Deletes a record from database.
         /// </summary>
-        /// <param name="entity">Entity representing record to be deleted</param>
+        /// <param name="entity">Entity representing record to be deleted.</param>
         public void Delete<T>(T entity)
         where T : class
         {
@@ -159,7 +159,7 @@
         /// <summary>
         /// Saves all made changes in trasaction.
         /// </summary>
-        /// <returns>Error code</returns>
+        /// <returns>Error code.</returns>
         public async Task<int> SaveChangesAsync()
         {
             return await this.Context.SaveChangesAsync();

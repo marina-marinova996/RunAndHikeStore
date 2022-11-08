@@ -40,7 +40,6 @@
             public const int PostalCodeMaxLength = 20;
 
             public const int AddressTypeMaxLength = 20;
-
         }
 
         public static class Brand

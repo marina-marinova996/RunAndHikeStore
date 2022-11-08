@@ -71,10 +71,6 @@
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<Size>()
-                .Property("IsInteger")
-                .HasDefaultValue(false);
-
             builder.Entity<ProductSize>()
                 .Property("IsDeleted")
                 .HasDefaultValue(false);
@@ -124,7 +120,6 @@
             {
                 foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
             }
-
         }
 
         private static void SetIsDeletedQueryFilter<T>(ModelBuilder builder)
