@@ -32,7 +32,9 @@
 
         public string SizeId { get; set; }
 
-        [Range(1, int.MaxValue, ErrorMessage = "Value for {0} must not be below {1}.")]
+        public ProductSizeViewModel Size { get; set; }
+
+        [Range(0, int.MaxValue, ErrorMessage = "Value for {0} must not be below {1}.")]
         public int Quantity { get; set; }
 
         public IEnumerable<ProductSizeViewModel> Sizes { get; set; } = new List<ProductSizeViewModel>();

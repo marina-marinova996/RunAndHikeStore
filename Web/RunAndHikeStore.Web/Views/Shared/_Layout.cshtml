@@ -59,7 +59,7 @@
                     <partial name="_LoginPartial" />
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <a asp-controller="ShoppingCart" asp-action="Index" class="fa-solid fa-cart-shopping text-dark"></a>
+                        <partial name="_ShoppingCartPartial"/>
                     }
                 </div>
             </div>

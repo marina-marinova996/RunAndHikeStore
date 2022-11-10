@@ -1,5 +1,7 @@
 ﻿namespace RunAndHikeStore.Web.Controllers
 {
+    using System.Linq;
+    using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -24,7 +26,7 @@
         [AllowAnonymous]
         public async Task<IActionResult> All()
         {
-            this.ViewData["Title"] = "Products";
+            this.ViewData["Title"] = "Our Products";
 
             try
             {
@@ -52,7 +54,7 @@
         [HttpGet]
         public async Task<IActionResult> Filter(AllProductsViewModel model)
         {
-            this.ViewData["Title"] = "Products";
+            this.ViewData["Title"] = "Our Products";
 
             return this.View(model);
         }
@@ -178,7 +180,6 @@
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
             try

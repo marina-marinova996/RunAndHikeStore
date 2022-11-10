@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RunAndHikeStore.Data.Models
 {
-    public class CartItem : BaseDeletableModel<string>
+    public class CartItem : BaseModel<string>
     {
         public CartItem()
         {
@@ -15,8 +15,14 @@ namespace RunAndHikeStore.Data.Models
         /// <summary>
         /// Foreign key to ShoppingCarts table.
         /// </summary>
+        [Required]
         [ForeignKey(nameof(ShoppingCartId))]
         public string ShoppingCartId { get; set; }
+
+        /// <summary>
+        /// Navigation property to ShoppingCarts table.
+        /// </summary>
+        public ShoppingCart ShoppingCart { get; set; }
 
         /// <summary>
         /// Product quantity in the cart.
@@ -26,6 +32,7 @@ namespace RunAndHikeStore.Data.Models
         /// <summary>
         /// Foreign key to Products table.
         /// </summary>
+        [Required]
         public string ProductId { get; set; }
 
         /// <summary>
@@ -34,5 +41,15 @@ namespace RunAndHikeStore.Data.Models
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
 
+        /// <summary>
+        /// Foreign key to Sizes table.
+        /// </summary>
+        [Required]
+        public string SizeId { get; set; }
+        /// <summary>
+        /// Navigation property to Sizes table.
+        /// </summary>
+        [ForeignKey(nameof(SizeId))]
+        public Size Size { get; set; }
     }
 }

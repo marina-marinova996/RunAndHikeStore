@@ -1,63 +1,62 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.ShoppingCart
 @model ShoppingCartViewModel
 
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
-</head>
 <body>
-    @if (Model.CartItems != null) {
-
+    @if (Model.CartItems.Any())
+    {
         <div class="row d-flex">
             <h1 class="display-4 ml-2 mt-3">Shopping cart</h1>
-            <img src="~/images/shopping_cart.png" class="img-fluid ml-2 mt-2" alt="ShoppingCart-photo" style="width:6rem;height:4rem;" />
+            <img src="~/images/shopping_cart.png" class="img-fluid ml-2 mt-3" alt="ShoppingCart-photo" style="width:6rem;height:4rem;" />
         </div>
         <table class="table table-hover mt-2" cellpadding="2" cellspacing="2" border="1">
-            <tr class="table-light text-dark">
+            <tr class="table-light text-dark text-center">
                 <th>Product Number</th>
-                <th>Product Name</th>
                 <th>Image</th>
+                <th>Product Name</th>
                 <th>Unit Price</th>
+                <th>Size</th>
                 <th>Quantity</th>
-                <th>Action</th>
                 <th>Total</th>
+                <th>Action</th>
             </tr>
-            @*        @foreach (var item in Model.CartItems)
-        {
-        <tr>
-        <td>@item.Product.ProductNumber</td>
-        <td>@item.Product.Name</td>
-        <td><img src="@item.Product.ImageUrl" width="60" /> </td>
-        <td>@item.Product.UnitPrice</td>
-        <td></td>
-        <td>(item.Product.UnitPrice * item.Quantity)</td>
-        <td><a asp-controller="cart" asp-action="remove" asp-route-id="@item.Product.Id">Remove</a></td>
-        </tr>
-        }*@
-            <tr>
-                <td class="light">Test</td>
-            </tr>
+            @foreach (var item in Model.CartItems)
+            {
+                <input asp-for="@item.Id" type="hidden" />
+                <tr class="text-center">
+                    <td>@item.Product.ProductNumber</td>
+                    <td><img src="@item.Product.ImageUrl" width="60" alt="Product Photo" /> </td>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Product.UnitPrice EUR</td>
+                    <td>@item.Size</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Total EUR</td>
+                    <input asp-for="@item.ProductId" type="hidden" />
+                    <td class="text-center">
+                        <a class="btn btn-primary" asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                        <a class="btn btn-danger ml-2" asp-controller="ShoppingCart" asp-action="RemoveCartItem" asp-route-cartItemId="@item.Id">Remove</a>
+                    </td>
+                </tr>
+            }
             <tr>
                 <td align="right" colspan="6">Total amount</td>
-                <td>
-                    EUR
+                <td class="text-center">@Model.CartItems.Sum(x=> Convert.ToDecimal(x.Total)).ToString("f2") EUR</td>
+                <td class="text-center">
+                    <a asp-controller="Product" asp-action="All" class="btn btn-success">Next Step</a>
                 </td>
             </tr>
         </table>
         <div class="text-center">
-            <a asp-controller="Product" asp-action="All" class="btn btn-success">Submit order</a>
             <a asp-controller="Product" asp-action="All" class="btn btn-primary ml-2">Continue Shopping</a>
+            <a class="btn btn-danger ml-2" asp-controller="ShoppingCart" asp-action="RemoveAllCartItems">Clear Shopping Cart</a>
         </div>
     }
-    else {
+    else
+    {
         <div class="text-center">
-        <h2 class="display-4 mt-4">Your Shopping cart is currently empty!</h2>
-        <a asp-controller="Product" asp-action="All" class="btn btn-primary mt-2">Continue Shopping</a>
+            <h2 class="display-4 mt-4">Your Shopping cart is currently empty!</h2>
+            <a asp-controller="Product" asp-action="All" class="btn btn-primary mt-2">Continue Shopping</a>
             <img src="~/images/shopping_cart.png" class="img-fluid ml-2 mt-2" alt="ShoppingCart-photo" style="width:6rem;height:4rem;" />
         </div>
     }
     <br>
-
 </body>
-</html>

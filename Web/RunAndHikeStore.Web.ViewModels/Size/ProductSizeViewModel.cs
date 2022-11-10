@@ -1,4 +1,6 @@
-﻿namespace RunAndHikeStore.Web.ViewModels.Size
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RunAndHikeStore.Web.ViewModels.Size
 {
     public class ProductSizeViewModel
     {

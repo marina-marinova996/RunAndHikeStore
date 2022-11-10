@@ -8,7 +8,7 @@ namespace RunAndHikeStore.Web.ViewModels.ShoppingCart
 {
     public class ShoppingCartViewModel
     {
-        public IEnumerable<ShoppingCartItemViewModel> CartItems { get; set; }
+        public IEnumerable<CartItemViewModel> CartItems { get; set; }
 
         public OrderViewModel Order { get; set; }
     }

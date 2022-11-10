@@ -72,9 +72,11 @@ namespace RunAndHikeStore.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            SizeViewModel brand = await this.sizeService.GetViewModelForEditByIdAsync(id);
+            SizeViewModel size = await this.sizeService.GetViewModelForEditByIdAsync(id);
 
-            if (brand == null)
+            size.ProductTypes = await this.productService.GetProductTypesAsync();
+
+            if (size == null)
             {
                 // When product with this Id doesn't exists
                 return this.BadRequest();
@@ -82,7 +84,7 @@ namespace RunAndHikeStore.Web.Controllers
 
             this.ViewData["Title"] = "Edit Size";
 
-            return this.View(brand);
+            return this.View(size);
         }
 
         /// <summary>

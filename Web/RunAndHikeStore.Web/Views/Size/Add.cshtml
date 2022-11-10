@@ -1,7 +1,7 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.Size
 @model AddSizeViewModel
 
-<h2 class="text-center">@ViewData["Title"]</h2>
+<h2 class="text-center mt-2">@ViewData["Title"]</h2>
 <hr />
 
 
@@ -22,7 +22,7 @@
                             <option value="@type.Id">@type.Name</option>
                         }
                     </select>
-                    <span asp-validation-for="ProductTypeId" class="text-danger"></span>
+                    <span asp-validation-for="ProductType" class="text-danger"></span>
                 </div>
                 <input class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Create" />
             </div>

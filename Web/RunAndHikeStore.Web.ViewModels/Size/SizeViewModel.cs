@@ -1,9 +1,6 @@
 ﻿using RunAndHikeStore.Web.ViewModels.Product;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace RunAndHikeStore.Web.ViewModels.Size
 {
@@ -13,8 +10,11 @@ namespace RunAndHikeStore.Web.ViewModels.Size
 
         public string Name { get; set; }
 
+        [Display(Name = "Product Type")]
         public string ProductType { get; set; }
 
         public string ProductTypeId { get; set; }
+
+        public IEnumerable<ProductTypeViewModel> ProductTypes { get; set; } = new List<ProductTypeViewModel>();
     }
 }
