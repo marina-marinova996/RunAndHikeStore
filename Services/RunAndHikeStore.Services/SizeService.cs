@@ -85,21 +85,40 @@
         /// Get all sizes.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<SizeViewModel>> GetAllAsync()
+        public async Task<AllSizesViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int sizesPerPage = 6)
         {
-            return await this.repo.AsNoTracking<Size>()
+            var sizesQuery = this.repo.AsNoTracking<Size>()
                                   .Where(s => s.IsDeleted == false)
                                   .Include(s => s.ProductType)
                                   .Where(s => s.ProductType.IsDeleted == false)
-                                  .Select(s => new SizeViewModel()
-                                  {
-                                      Id = s.Id,
-                                      Name = s.Name,
-                                      ProductTypeId = s.ProductTypeId,
-                                      ProductType = s.ProductType.Name,
-                                  }).OrderBy(s => s.ProductType)
-                                  .ThenBy(s => s.Name)
-                                  .ToListAsync();
+                                  .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                sizesQuery = sizesQuery.Where(s => s.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    s.ProductType.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var sizes = await sizesQuery
+                            .Skip((currentPage - 1) * sizesPerPage)
+                            .Take(sizesPerPage)
+                            .Select(s => new SizeViewModel()
+                            {
+                                Id = s.Id,
+                                Name = s.Name,
+                                ProductTypeId = s.ProductTypeId,
+                                ProductType = s.ProductType.Name,
+                            }).OrderBy(s => s.ProductType)
+                              .ThenBy(s => s.Name)
+                              .ToListAsync();
+
+            var totalRecords = sizesQuery.Count();
+
+            return new AllSizesViewModel()
+            {
+                Sizes = sizes,
+                TotalRecordsCount = totalRecords,
+            };
         }
 
         /// <summary>

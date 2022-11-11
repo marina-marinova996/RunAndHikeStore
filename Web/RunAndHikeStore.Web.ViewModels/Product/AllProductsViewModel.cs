@@ -4,19 +4,28 @@
     using System.ComponentModel.DataAnnotations;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
+    using RunAndHikeStore.Web.ViewModels.Product.Enum;
     using RunAndHikeStore.Web.ViewModels.Size;
 
     public class AllProductsViewModel
     {
-        public IEnumerable<ProductTypeViewModel> ProductTypes { get; set; } = new List<ProductTypeViewModel>();
+        public const int ProductsPerPage = 6;
 
-        public IEnumerable<GenderViewModel> Genders { get; set; } = new List<GenderViewModel>();
+        public int CurrentPage { get; set; } = 1;
 
-        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public ProductSorting Sorting { get; set; }
 
-        public IEnumerable<BrandViewModel> Brands { get; set; } = new List<BrandViewModel>();
+        public int TotalProductsCount { get; set; }
 
-        public IEnumerable<SizeViewModel> Sizes { get; set; } = new List<SizeViewModel>();
+        public IEnumerable<string> MultiCategoriesIds { get; set; }
+
+        public IEnumerable<string> MultiProductTypesIds { get; set; }
+
+        public IEnumerable<string> MultiGendersIds { get; set; }
+
+        public IEnumerable<string> MultiBrandsIds { get; set; }
+
+        public IEnumerable<string> MultiSizesIds { get; set; }
 
         public IEnumerable<ProductViewModel> Products { get; set; } = new List<ProductViewModel>();
 

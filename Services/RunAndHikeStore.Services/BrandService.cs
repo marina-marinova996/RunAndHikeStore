@@ -5,7 +5,7 @@
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Brand;
-
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -82,15 +82,38 @@
         /// Get all brands.
         /// </summary>
         /// <returns></returns>
-        public async Task<IEnumerable<BrandViewModel>> GetAllAsync()
+        public async Task<AllBrandsViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int brandsPerPage = 6)
         {
-            return await this.repo.AsNoTracking<Brand>()
+            var brandsQuery = this.repo.AsNoTracking<Brand>()
                                   .Where(b => b.IsDeleted == false)
-                                  .Select(b => new BrandViewModel()
-                                  {
-                                      Id = b.Id,
-                                      Name = b.Name,
-                                  }).ToListAsync();
+                                  .AsQueryable();
+
+            if (brandsQuery == null)
+            {
+                throw new ArgumentException("No stocks in stock");
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                brandsQuery = brandsQuery.Where(b => b.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var brands = brandsQuery
+                                    .Skip((currentPage - 1) * brandsPerPage)
+                                    .Take(brandsPerPage)
+                                    .Select(b => new EditBrandViewModel
+                                    {
+                                        Id = b.Id,
+                                        Name = b.Name,
+                                    }).ToList();
+
+            var totalRecords = brandsQuery.Count();
+
+            return new AllBrandsViewModel()
+            {
+                Brands = brands,
+                TotalRecordsCount = totalRecords,
+            };
         }
 
         /// <summary>

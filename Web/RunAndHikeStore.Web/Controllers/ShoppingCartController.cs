@@ -2,10 +2,10 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ClaimsPrincipalExtensions;
     using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.ShoppingCart;
     using System.Linq;
-    using System.Security.Claims;
     using System.Threading.Tasks;
 
     public class ShoppingCartController : BaseController
@@ -25,7 +25,7 @@
             var model = new ShoppingCartViewModel();
             try
             {
-                var userId = this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = this.User.Id();
 
                 var user = await this.shoppingCartService.FindUserById(userId);
 
@@ -48,7 +48,7 @@
         {
             try
             {
-                var userId = this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+                var userId = this.User.Id();
 
                 ProductViewModel product = await this.productService.GetByIdAsync(productId);
 
@@ -59,7 +59,14 @@
 
                 var cartModel = await this.shoppingCartService.FindCartItem(productId, userId);
 
-                await this.shoppingCartService.AddToCart(productId, userId, sizeId, 1);
+                if (await this.shoppingCartService.IsInStock(productId, sizeId))
+                {
+                    await this.shoppingCartService.AddToCart(productId, userId, sizeId, 1);
+                }
+                else
+                {
+                    this.ModelState.AddModelError("", "There is no unit in stock!");
+                }
             }
             catch (System.Exception)
             {
@@ -85,7 +92,7 @@
 
         public async Task<IActionResult> RemoveAllCartItems()
         {
-            var userId = this.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userId = this.User.Id();
 
             try
             {

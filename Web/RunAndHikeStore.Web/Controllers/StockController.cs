@@ -1,8 +1,11 @@
 ﻿namespace RunAndHikeStore.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.Stock;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class StockController : BaseController
@@ -71,20 +74,21 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ManageStocks()
+        public async Task<IActionResult> ManageStocks([FromQuery] AllStocksViewModel query)
         {
             this.ViewData["Title"] = "Manage Stocks";
 
             try
             {
-                var products = await this.stockService.GetAllStocksAsync();
+                var queryResult = await this.stockService.GetAllStocksAsync(query.SearchTerm,
+                                                                            query.CurrentPage,
+                                                                            AllStocksViewModel.ProductsPerPage);
 
-                foreach (var product in products)
-                {
-                    product.Sizes = await this.productService.GetSizesAsync();
-                }
+                query.Stocks = queryResult.Stocks;
+                query.TotalRecordsCount = queryResult.TotalRecordsCount;
 
-                return this.View(products);
+
+                return this.View(query);
             }
             catch (System.Exception)
             {
@@ -153,7 +157,6 @@
         /// <param name="productId"></param>
         /// <param name="sizeId"></param>
         /// <returns></returns>
-        [HttpPost]
         public async Task<IActionResult> DeleteStock(string productId, string sizeId)
         {
             try

@@ -10,6 +10,7 @@
     using Microsoft.EntityFrameworkCore.Metadata.Internal;
     using RunAndHikeStore.Common;
     using RunAndHikeStore.Data.Models.Enums;
+    using RunAndHikeStore.Web.ViewModels.Category;
 
     public class EditProductViewModel : AddProductViewModel
     {
@@ -20,5 +21,7 @@
         public string ProductType { get; set; }
 
         public string Gender { get; set; }
+
+        public IEnumerable<CategoryViewModel> Categories { get; set; }
     }
 }

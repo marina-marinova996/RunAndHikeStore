@@ -12,6 +12,8 @@ namespace RunAndHikeStore.Services.Contracts
 
         Task<ApplicationUser> FindUserById(string userId);
 
+        Task<bool> IsInStock(string productId, string sizeId);
+
         Task RemoveCartItem(string cartItemId);
 
         Task RemoveAllCartItems(string userId);

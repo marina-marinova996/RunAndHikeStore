@@ -2,6 +2,54 @@
 @model AllProductsViewModel
 
 <div class="row">
+    <div class="col-lg-3 sidebar mt-2">
+        <form method="get">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Search here..">
+            <label asp-for="Sorting"></label>
+            <select asp-for="Sorting" class="form-control">
+                <option value="0">Newest</option>
+                <option value="1">Lowest price first</option>
+                <option value="2">Highest price first</option>
+            </select>
+            <label>Product Type</label>
+            <select id="selectProductType" asp-for="@Model.MultiProductTypesIds" multiple>
+                @foreach (var productType in ViewBag.ProductTypes)
+                {
+                    <option asp-for="@productType.Value">@productType.Text</option>
+                }
+            </select>
+            <label class="mt-2">Gender</label>
+            <select id="selectGender" asp-for="@Model.MultiGendersIds" multiple>
+                @foreach (var gender in ViewBag.Genders)
+                {
+                    <option asp-for="@gender.Value">@gender.Text</option>
+                }
+            </select>
+            <label class="mt-2">Product Sizes</label>
+            <select id="selectProductSize" asp-for="@Model.MultiSizesIds" multiple>
+                @foreach (var size in ViewBag.Sizes)
+                {
+                    <option asp-for="@size.Value">@size.Text</option>
+                }
+            </select>
+            <label asp-for="@Model.MultiCategoriesIds" class="form-label">Categories</label>
+            <select id="selectCategories" asp-for="@Model.MultiCategoriesIds" class="form-control" multiple>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value=@category.Value>@category.Text</option>
+                }
+            </select>
+            <label class="mt-2">Brands</label>
+            <select id="selectBrands" asp-for="@Model.MultiBrandsIds" multiple>
+                @foreach (var brand in ViewBag.Brands)
+                {
+                    <option asp-for="@brand.Value">@brand.Text</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary mt-3">Search</button>
+        </form>
+    </div>
     <div class="col-lg-9">
         <section style="background-color: #eee;">
             <div class="row justify-content-center mb-2">
@@ -10,14 +58,41 @@
                 <img src="/images/clothing.svg" class="img-fluid ml-4 mt-2" style="width:4rem;height:5rem;" />
                 <img src="/images/gps-watch-1921457-1628524.png" class="img-fluid ml-4 mt-3" style="width:4rem;height:4rem;" />
             </div>
-            <div class="container">
-                <div class="row">
-                    <div class="input-group mb-3">
-                        <input asp-for="SearchTerm" class="form-control" placeholder="Search here.." aria-describedby="basic-addon2">
-                        <div class="input-group-append">
-                            <button class="btn btn-primary" type="button">Search</button>
-                        </div>
-                    </div>
+            @{
+                var previousPage = Model.CurrentPage - 1;
+                if (previousPage < 1)
+                {
+                    previousPage = 1;
+                }
+
+                var maxPage = Math.Ceiling((double)Model.TotalProductsCount / AllProductsViewModel.ProductsPerPage);
+            }
+            <div class="row mb-3">
+                <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                    <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+                       asp-controller="Product"
+                       asp-action="All"
+                       asp-route-currentPage="@previousPage"
+                       asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-sorting="@((int)Model.Sorting)"><<</a>
+                </div>
+
+                @{
+                    var shouldButtonBeDisabled = Model.CurrentPage == maxPage || !Model.Products.Any();
+                }
+                <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+                    <a class="btn btn-primary
+           @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+                       asp-controller="Product"
+                       asp-action="All"
+                       asp-route-currentPage="@(Model.CurrentPage + 1)"
+                       asp-route-searchTerm="@Model.SearchTerm"
+                       asp-route-sorting="@((int)Model.Sorting)">>></a>
+                </div>
+            </div>
+            <div class="row">
+                @if (Model.Products.Any())
+                {
                     @foreach (var item in Model.Products)
                     {
                         <div class="col-md-12 col-lg-4 mb-lg-4">
@@ -46,49 +121,13 @@
                             </div>
                         </div>
                     }
-                </div>
+                }
+                else
+                {
+                    <h2>There are no products by the given criteria!</h2>
+                }
             </div>
         </section>
-    </div>
-    <div class="col-lg-3 sidebar">
-        <label>Product Type</label>
-        <select id="selectProductType">
-            @foreach (var productType in Model.ProductTypes)
-            {
-                <option asp-for="@productType.Id">@productType.Name</option>
-            }
-        </select>
-        <label class="mt-2">Gender</label>
-        <select id="selectGender" multiple>
-            @foreach (var gender in Model.Genders)
-            {
-                <option asp-for="@gender.Id">@gender.Name</option>
-            }
-        </select>
-        <label class="mt-2">Product Sizes</label>
-        <select id="selectProductSize" multiple>
-            @foreach (var size in Model.Sizes)
-            {
-                <option asp-for="@size.Id">@size.Name</option>
-            }
-        </select>
-        <label class="mt-2">Categories</label>
-        <select id="selectCategories" multiple>
-            @foreach (var category in Model.Categories)
-            {
-                <option asp-for="@category.Id">@category.Name</option>
-            }
-        </select>
-        <label class="mt-2">Brands</label>
-        <select id="selectBrands" multiple>
-            @foreach (var brand in Model.Brands)
-            {
-                <option asp-for="@brand.Id">@brand.Name</option>
-            }
-        </select>
-        <form asp-action="Filter" asp-controller="Product" method="get">
-            <button type="button" class="btn btn-primary mt-3">Filter</button>
-        </form>
     </div>
 </div>
 

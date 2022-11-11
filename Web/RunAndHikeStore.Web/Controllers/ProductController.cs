@@ -1,13 +1,16 @@
 ﻿namespace RunAndHikeStore.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.Rendering;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Product;
+    using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
     public class ProductController : BaseController
     {
@@ -24,25 +27,67 @@
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All()
+        public async Task<IActionResult> All([FromQuery] AllProductsViewModel query)
         {
             this.ViewData["Title"] = "Our Products";
 
             try
             {
-                var products = await this.productService.GetAllAsync();
 
-                var model = new AllProductsViewModel()
+                var queryResult = await this.productService.GetAllSorted(query.SearchTerm,
+                                                                         query.Sorting,
+                                                                         query.CurrentPage,
+                                                                         AllProductsViewModel.ProductsPerPage);
+                query.Products = queryResult.Products;
+                query.TotalProductsCount = queryResult.TotalProductsCount;
+
+                // Sidebar ViewBags for filtering
+                this.ViewBag.Categories = new List<SelectListItem>();
+
+                var categories = await this.productService.GetCategoriesAsync();
+
+                foreach (var category in categories)
                 {
-                    ProductTypes = await this.productService.GetProductTypesAsync(),
-                    Brands = await this.productService.GetBrandsAsync(),
-                    Categories = await this.productService.GetCategoriesAsync(),
-                    Genders = this.productService.GetGenders(),
-                    Sizes = await this.productService.GetSizesAsync(),
-                    Products = products,
-                };
+                    this.ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                }
 
-                return this.View(model);
+                this.ViewBag.ProductTypes = new List<SelectListItem>();
+
+                var productTypes = await this.productService.GetProductTypesAsync();
+
+                foreach (var productType in productTypes)
+                {
+                    this.ViewBag.ProductTypes.Add(new SelectListItem() { Text = productType.Name, Value = productType.Id });
+                }
+
+                this.ViewBag.Sizes = new List<SelectListItem>();
+
+                var sizes = await this.productService.GetSizesAsync();
+
+                foreach (var size in sizes)
+                {
+                    this.ViewBag.Sizes.Add(new SelectListItem() { Text = size.Name, Value = size.Id });
+                }
+
+                this.ViewBag.Genders = new List<SelectListItem>();
+
+                var genders = this.productService.GetGenders();
+
+                foreach (var gender in genders)
+                {
+                    this.ViewBag.Genders.Add(new SelectListItem() { Text = gender.Name, Value = gender.Id.ToString() });
+                }
+
+                this.ViewBag.Brands = new List<SelectListItem>();
+
+                var brands = await this.productService.GetBrandsAsync();
+
+                foreach (var brand in brands)
+                {
+                    this.ViewBag.Brands.Add(new SelectListItem() { Text = brand.Name, Value = brand.Id });
+                }
+
+                return this.View(query);
             }
             catch (System.Exception)
             {
@@ -50,19 +95,10 @@
                 return this.View();
             }
         }
-
-        [HttpGet]
-        public async Task<IActionResult> Filter(AllProductsViewModel model)
-        {
-            this.ViewData["Title"] = "Our Products";
-
-            return this.View(model);
-        }
-
-       /// <summary>
-       /// Add new product.
-       /// </summary>
-       /// <returns></returns>
+        /// <summary>
+        /// Add new product.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Add()
         {
@@ -70,12 +106,20 @@
             {
                 ProductTypes = await this.productService.GetProductTypesAsync(),
                 Brands = await this.productService.GetBrandsAsync(),
-                Categories = await this.productService.GetCategoriesAsync(),
                 Genders = this.productService.GetGenders(),
                 Sizes = await this.productService.GetSizesAsync(),
             };
 
             this.ViewData["Title"] = "Add Product";
+
+            var categories = await this.productService.GetCategoriesAsync();
+
+            this.ViewBag.Categories = new List<SelectListItem>();
+
+            foreach (var category in categories)
+            {
+                this.ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+            }
 
             return this.View(model);
         }
@@ -96,6 +140,15 @@
 
             try
             {
+                this.ViewBag.Categories = new List<SelectListItem>();
+
+                var categories = await this.productService.GetCategoriesAsync();
+
+                foreach (var category in categories)
+                {
+                    this.ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                }
+
                 await this.productService.Add(model);
                 return this.RedirectToAction(nameof(this.All));
             }
@@ -111,12 +164,17 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ManageAll()
+        public async Task<IActionResult> ManageAll([FromQuery] AllProductsViewModel query)
         {
-            var products = await this.productService.GetAllAsync();
+            var queryResult = await this.productService.GetAllSorted(query.SearchTerm,
+                                                                     query.Sorting,
+                                                                     query.CurrentPage,
+                                                                     AllProductsViewModel.ProductsPerPage);
+            query.Products = queryResult.Products;
+            query.TotalProductsCount = queryResult.TotalProductsCount;
             this.ViewData["Title"] = "Manage Products";
 
-            return this.View(products);
+            return this.View(query);
         }
 
         /// <summary>
@@ -131,6 +189,15 @@
 
             try
             {
+                this.ViewBag.Categories = new List<SelectListItem>();
+
+                var categories = await this.productService.GetCategoriesAsync();
+
+                foreach (var category in categories)
+                {
+                    this.ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                }
+
                 EditProductViewModel product = await this.productService.GetViewModelForEditByIdAsync(id);
                 return this.View(product);
             }
@@ -149,9 +216,26 @@
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditProductViewModel model)
         {
-            await this.productService.Edit(id, model);
+            try
+            {
+                this.ViewBag.Categories = new List<SelectListItem>();
 
-            return this.View();
+                var categories = await this.productService.GetCategoriesAsync();
+
+                foreach (var category in categories)
+                {
+                    this.ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                }
+
+                await this.productService.Edit(id, model);
+
+                return this.RedirectToAction(nameof(this.ManageAll));
+            }
+            catch
+            {
+                this.ModelState.AddModelError("", "Something went wrong");
+                return this.View();
+            }
         }
 
         /// <summary>

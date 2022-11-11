@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RunAndHikeStore.Services.Contracts;
+using RunAndHikeStore.Web.ViewModels.Brand;
 using RunAndHikeStore.Web.ViewModels.Size;
 using System.Threading.Tasks;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace RunAndHikeStore.Web.Controllers
 {
@@ -21,12 +24,26 @@ namespace RunAndHikeStore.Web.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ManageAll()
+        public async Task<IActionResult> ManageAll([FromQuery] AllSizesViewModel query)
         {
-            var sizes = await this.sizeService.GetAllAsync();
-            this.ViewData["Title"] = "Manage Sizes";
+            try
+            {
+                var queryResult = await this.sizeService.GetAllAsync(query.SearchTerm,
+                                                             query.CurrentPage,
+                                                             AllSizesViewModel.SizesPerPage);
 
-            return this.View(sizes);
+                query.Sizes = queryResult.Sizes;
+                query.TotalRecordsCount = queryResult.TotalRecordsCount;
+
+                this.ViewData["Title"] = "Manage Sizes";
+
+                return this.View(query);
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                return View(query);
+            }
         }
 
         /// <summary>

@@ -126,6 +126,13 @@
                              }).ToListAsync();
         }
 
+        public async Task<bool> IsInStock(string productId, string sizeId)
+        {
+            return await this.repo.AsNoTracking<ProductSize>()
+                                  .Where(ps => ps.ProductId == productId && ps.SizeId == sizeId)
+                                  .AnyAsync(ps => ps.UnitsInStock > 0);
+        }
+
         public async Task RemoveAllCartItems(string userId)
         {
             var allCartItems = await this.repo.All<CartItem>()

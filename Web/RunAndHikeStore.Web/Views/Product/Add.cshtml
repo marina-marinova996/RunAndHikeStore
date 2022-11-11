@@ -46,8 +46,8 @@
                 </div>
                 <div class="mb-3">
                     <label asp-for="Color">Color</label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="small text-danger"></span>
+                    <input asp-for="Color" class="form-control" />
+                    <span asp-validation-for="Color" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.GenderId" class="form-label">Gender</label>
@@ -60,14 +60,14 @@
                     <span asp-validation-for="GenderId" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="@Model.CategoryId" class="form-label">Categories</label>
-                    <select id="selectCategories" asp-for="@Model.CategoryId" class="form-control" multiple>
-                        @foreach (var category in Model.Categories)
+                    <label asp-for="@Model.MultiCategoriesIds" class="form-label">Categories</label>
+                    <select id="selectCategories" asp-for="@Model.MultiCategoriesIds" class="form-control" multiple>
+                        @foreach (var category in ViewBag.Categories)
                         {
-                            <option value="@category.Id">@category.Name</option>
+                            <option value=@category.Value>@category.Text</option>
                         }
                     </select>
-                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    <span asp-validation-for="@Model.MultiCategoriesIds" class="text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="@Model.Size.SizeId" class="form-label">Product Size</label>

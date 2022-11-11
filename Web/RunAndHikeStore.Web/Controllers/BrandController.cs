@@ -24,12 +24,27 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ManageAll()
+        public async Task<IActionResult> ManageAll([FromQuery] AllBrandsViewModel query)
         {
-            var brands = await this.brandService.GetAllAsync();
-            this.ViewData["Title"] = "Manage Brands";
+            try
+            {
+                var queryResult = await this.brandService.GetAllAsync(query.SearchTerm,
+                                                             query.CurrentPage,
+                                                             AllBrandsViewModel.BrandsPerPage);
 
-            return this.View(brands);
+                query.Brands = queryResult.Brands;
+                query.TotalRecordsCount = queryResult.TotalRecordsCount;
+
+                this.ViewData["Title"] = "Manage Brands";
+
+                return this.View(query);
+            }
+            catch (System.Exception)
+            {
+                this.ModelState.AddModelError("", "Something went wrong");
+                return this.View(query);
+            }
+
         }
 
         /// <summary>
@@ -92,9 +107,18 @@
         [HttpPost]
         public async Task<IActionResult> Edit(EditBrandViewModel model)
         {
-            await this.brandService.Edit(model);
+            try
+            {
+                await this.brandService.Edit(model);
 
-            return this.RedirectToAction("ManageAll", "Brand");
+                return this.RedirectToAction("ManageAll", "Brand");
+            }
+            catch (System.Exception)
+            {
+
+                this.ModelState.AddModelError("", "Something went wrong");
+                return this.View(model);
+            }
         }
 
         /// <summary>

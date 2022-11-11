@@ -14,6 +14,7 @@
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Size;
 
+
     public class AddProductViewModel
     {
         [Required]
@@ -58,9 +59,6 @@
         [Required]
         public string ImageUrl { get; set; }
 
-        [Required]
-        public string CategoryId { get; set; }
-
-        public IEnumerable<CategoryViewModel> Categories { get; set; } = new List<CategoryViewModel>();
+        public IEnumerable<string> MultiCategoriesIds { get; set; }
     }
 }

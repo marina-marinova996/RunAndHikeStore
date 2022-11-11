@@ -80,15 +80,34 @@
         /// Gets all categories.
         /// </summary>
         /// <returns>List of categories.</returns>
-        public async Task<IEnumerable<CategoryViewModel>> GetAllAsync()
+        public async Task<AllCategoriesViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int categoriesPerPage = 6)
         {
-            return await this.repo.AsNoTracking<Category>()
+            var categoryQuery = this.repo.AsNoTracking<Category>()
                                   .Where(p => p.IsDeleted == false)
-                                  .Select(p => new CategoryViewModel()
-                                  {
-                                    Id = p.Id,
-                                    Name = p.Name,
-                                  }).ToListAsync();
+                                  .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                categoryQuery = categoryQuery.Where(s => s.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var categories = await categoryQuery
+                            .Skip((currentPage - 1) * categoriesPerPage)
+                            .Take(categoriesPerPage)
+                            .Select(c => new EditCategoryViewModel()
+                            {
+                                Id = c.Id,
+                                Name = c.Name,
+                            }).OrderBy(c => c.Name)
+                            .ToListAsync();
+
+            var totalRecords = categoryQuery.Count();
+
+            return new AllCategoriesViewModel()
+            {
+                Categories = categories,
+                TotalRecordsCount = totalRecords,
+            };
         }
 
         /// <summary>

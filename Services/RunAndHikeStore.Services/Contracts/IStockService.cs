@@ -1,16 +1,11 @@
-﻿using RunAndHikeStore.Web.ViewModels;
-using RunAndHikeStore.Web.ViewModels.Stock;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using RunAndHikeStore.Web.ViewModels.Stock;
 using System.Threading.Tasks;
 
 namespace RunAndHikeStore.Services.Contracts
 {
     public interface IStockService
     {
-        Task<IEnumerable<EditStockViewModel>> GetAllStocksAsync();
+        Task<AllStocksViewModel> GetAllStocksAsync(string searchTerm, int currentPage = 1, int productsPerPage = 6);
 
         Task AddStock(AddStockViewModel model);
 

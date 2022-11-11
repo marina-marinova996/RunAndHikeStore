@@ -20,6 +20,7 @@
                             <th scope="col">Product Number</th>
                             <th scope="col">Color</th>
                             <th scope="col">Gender</th>
+                            <th scope="col" class="center">Categories</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,13 +28,14 @@
                             <td>@Model.ProductNumber</td>
                             <td>@Model.Color</td>
                             <td>@Model.Gender</td>
+                            @{
+                                string categories = String.Join(", ", Model.Categories.Select(x => x.CategoryName));
+                            }
+                            <td>@categories</td>
                         </tr>
                     </tbody>
-                    <tr>
-                        <td>
-                        </td>
                 </table>
-                <div class="mb-2">
+                <div class="mt-4">
                     <form>
                         <div class="d-flex justify-content-between">
                             <label asp-for="Size"><b>Size</b></label>
@@ -49,7 +51,14 @@
                         </div>
                         <div class="d-flex justify-content-end mt-2">
                             <input type="hidden" name="productId" value="@Model.Id" />
-                            <input asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId=@Model.Id asp-route-sizeId=@Model.SizeId class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Add to cart" />
+                            @if (Model.Sizes.Any())
+                            {
+                                <input asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId=@Model.Id asp-route-sizeId=@Model.SizeId class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Add to cart" />
+                            }
+                            else
+                            {
+                                <button disabled class="btn-lg btn-warning col-md-4 mt-3">Out of Stock</button>
+                            }
                         </div>
                     </form>
                 </div>

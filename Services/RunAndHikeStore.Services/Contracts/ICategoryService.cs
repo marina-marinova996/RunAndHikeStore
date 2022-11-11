@@ -13,7 +13,7 @@ namespace RunAndHikeStore.Services.Contracts
         /// Gets all Categories.
         /// </summary>
         /// <returns>List of categories.</returns>
-        Task<IEnumerable<CategoryViewModel>> GetAllAsync();
+        Task<AllCategoriesViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int categoriesPerPage = 6);
 
         /// <summary>
         /// Add a new category.

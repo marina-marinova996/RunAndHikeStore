@@ -8,6 +8,7 @@
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
     using RunAndHikeStore.Web.ViewModels.Product;
+    using RunAndHikeStore.Web.ViewModels.Product.Enum;
     using RunAndHikeStore.Web.ViewModels.Size;
 
     using System.Collections.Generic;
@@ -56,13 +57,18 @@
             };
             product.Sizes.Add(productSize);
 
-            var productCategory = new CategoryProduct
+            if (model.MultiCategoriesIds.Any())
             {
-                ProductId = product.Id,
-                CategoryId = model.CategoryId,
-            };
-
-            product.Categories.Add(productCategory);
+                foreach (var categoryId in model.MultiCategoriesIds)
+                {
+                    var productCategory = new CategoryProduct
+                    {
+                        ProductId = product.Id,
+                        CategoryId = categoryId,
+                    };
+                    product.Categories.Add(productCategory);
+                }
+            }
 
             await this.repo.AddAsync(product);
             await this.repo.SaveChangesAsync();
@@ -93,13 +99,27 @@
                 product.Color = model.Color;
                 product.Gender = (Gender)model.GenderId;
                 product.UnitPrice = model.UnitPrice;
-                product.Categories = model.Categories
-                                                     .Select(c => new CategoryProduct
-                                                     {
-                                                         CategoryId = c.Id,
-                                                         ProductId = product.Id,
-                                                     }).ToList();
 
+                if (model.MultiCategoriesIds.Any())
+                {
+                    foreach (var category in product.Categories)
+                    {
+                        product.Categories.Remove(category);
+                    }
+
+                    foreach (var categoryId in model.MultiCategoriesIds)
+                    {
+                        if (!product.Categories.Any(x => x.CategoryId == categoryId))
+                        {
+                            var productCategory = new CategoryProduct
+                            {
+                                ProductId = product.Id,
+                                CategoryId = categoryId,
+                            };
+                            product.Categories.Add(productCategory);
+                        }
+                    }
+                }
                 await this.repo.SaveChangesAsync();
             }
         }
@@ -193,7 +213,7 @@
                                      GenderId = (int)p.Gender,
                                      Gender = GetGenderAsStringById((int)p.Gender),
                                      Sizes = p.Sizes
-                                              .Where(ps => ps.Size.IsDeleted == false)
+                                              .Where(ps => ps.IsDeleted == false)
                                               .Select(ps => new ProductSizeViewModel()
                                               {
                                                 ProductId = p.Id,
@@ -242,6 +262,7 @@
                             GenderId = (int)p.Gender,
                             Gender = GetGenderAsStringById((int)p.Gender),
                             Sizes = p.Sizes
+                                        .Where(ps => ps.IsDeleted == false)
                                         .Select(ps => new ProductSizeViewModel()
                                         {
                                             SizeId = ps.SizeId,
@@ -267,7 +288,7 @@
         /// <returns></returns>
         public async Task<EditProductViewModel> GetViewModelForEditByIdAsync(string id)
         {
-            var product = await this.repo
+            var model = await this.repo
                         .AsNoTracking<Product>(p => p.Id == id)
                         .Where(p => p.IsDeleted == false)
                         .Include(p => p.Brand)
@@ -297,12 +318,11 @@
                                             }),
                         }).FirstOrDefaultAsync();
 
-            product.ProductTypes = await this.GetProductTypesAsync();
-            product.Brands = await this.GetBrandsAsync();
-            product.Categories = await this.GetCategoriesAsync();
-            product.Genders = this.GetGenders();
+            model.ProductTypes = await this.GetProductTypesAsync();
+            model.Brands = await this.GetBrandsAsync();
+            model.Genders = this.GetGenders();
 
-            return product;
+            return model;
         }
 
         /// <summary>
@@ -419,6 +439,81 @@
             }
 
             return "Not specified";
+        }
+
+        public async Task<AllProductsViewModel> GetAllSorted(string searchTerm, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6)
+        {
+            var productsQuery = this.repo.AsNoTracking<Product>()
+                                         .Include(p => p.Brand)
+                                         .Include(p => p.Sizes)
+                                         .Include(p => p.ProductType)
+                                         .Include(p => p.Categories)
+                                         .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.ProductNumber.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.Color.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.ProductType.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.Brand.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.Description.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            productsQuery = sorting switch
+            {
+                ProductSorting.HighestPriceFirst => productsQuery
+                                                    .OrderByDescending(p => p.UnitPrice),
+                ProductSorting.LowestPriceFirst => productsQuery
+                                                    .OrderBy(p => p.UnitPrice),
+                 _ => productsQuery.OrderBy(p => p.CreatedOn),
+            };
+
+            var products = await productsQuery
+                                    .Skip((currentPage - 1) * productsPerPage)
+                                    .Take(productsPerPage)
+                                    .Select(p => new ProductViewModel
+                                    {
+                                        Id = p.Id,
+                                        Name = p.Name,
+                                        ProductNumber = p.ProductNumber,
+                                        ImageUrl = p.ImageUrl,
+                                        UnitPrice = p.UnitPrice,
+                                        Description = p.Description,
+                                        Color = p.Color,
+                                        Brand = p.Brand.Name,
+                                        ProductType = p.ProductType.Name,
+                                        BrandId = p.BrandId,
+                                        ProductTypeId = p.ProductTypeId,
+                                        GenderId = (int)p.Gender,
+                                        Gender = GetGenderAsStringById((int)p.Gender),
+                                        Sizes = p.Sizes
+                                        .Where(ps => ps.IsDeleted == false)
+                                        .Select(ps => new ProductSizeViewModel()
+                                        {
+                                            SizeId = ps.SizeId,
+                                            ProductId = ps.ProductId,
+                                            SizeName = ps.Size.Name,
+                                            UnitsInStock = ps.UnitsInStock,
+                                        }),
+                                        Categories = p.Categories
+                                          .Where(cp => cp.Category.IsDeleted == false)
+                                          .Select(cp => new ProductCategoryViewModel()
+                                          {
+                                              ProductId = cp.ProductId,
+                                              CategoryId = cp.CategoryId,
+                                              CategoryName = cp.Category.Name,
+                                          }),
+                                    })
+                                    .ToListAsync();
+
+            var totalProductsCount = productsQuery.Count();
+
+            return new AllProductsViewModel()
+            {
+                Products = products,
+                TotalProductsCount = totalProductsCount,
+            };
         }
     }
 }

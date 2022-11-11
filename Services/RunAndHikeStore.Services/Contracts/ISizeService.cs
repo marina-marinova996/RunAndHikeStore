@@ -12,7 +12,7 @@ namespace RunAndHikeStore.Services.Contracts
     {
         Task Add(AddSizeViewModel model);
 
-        Task<IEnumerable<SizeViewModel>> GetAllAsync();
+        Task<AllSizesViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int sizesPerPage = 6);
 
         Task<SizeViewModel> GetByIdAsync(string id);
 

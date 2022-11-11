@@ -91,12 +91,27 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ManageAll()
+        public async Task<IActionResult> ManageAll([FromQuery] AllCategoriesViewModel query)
         {
-            var categories = await this.categoryService.GetAllAsync();
-            this.ViewData["Title"] = "Manage Categories";
+            try
+            {
+                var queryResult = await this.categoryService.GetAllAsync(query.SearchTerm,
+                                                            query.CurrentPage,
+                                                            AllCategoriesViewModel.CategoriesPerPage);
 
-            return this.View(categories);
+                query.Categories = queryResult.Categories;
+                query.TotalRecordsCount = queryResult.TotalRecordsCount;
+
+                this.ViewData["Title"] = "Manage Categories";
+
+                return this.View(query);
+            }
+            catch (System.Exception)
+            {
+
+                this.ModelState.AddModelError("", "Something went wrong");
+                return this.View(query);
+            }
         }
 
         /// <summary>

@@ -49,7 +49,7 @@
                     <span asp-validation-for="Description" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="Gender" class="form-label">Gender</label>
+                    <label asp-for="GenderId" class="form-label">Gender</label>
                     <select asp-for="GenderId" class="form-control">
                         @foreach (var gender in Model.Genders)
                         {
@@ -69,14 +69,14 @@
                     <span asp-validation-for="UnitPrice" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="CategoryId" class="form-label">Categories</label>
-                    <select id="selectCategories" asp-for="CategoryId" class="form-control" multiple>
-                        @foreach (var category in Model.Categories)
+                    <label asp-for="@Model.MultiCategoriesIds" class="form-label">Categories</label>
+                    <select id="selectCategories" asp-for="@Model.MultiCategoriesIds" class="form-control" multiple>
+                        @foreach (var category in ViewBag.Categories)
                         {
-                            <option value="@category.Id">@category.Name</option>
+                            <option value=@category.Value>@category.Text</option>
                         }
                     </select>
-                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                    <span asp-validation-for="@Model.MultiCategoriesIds" class="text-danger"></span>
                 </div>
                 <input asp-for="Id" type="hidden" />
                 <input class="btn-lg btn-success col-md-4 mt-3 flex-fill-1" type="submit" value="Save" />

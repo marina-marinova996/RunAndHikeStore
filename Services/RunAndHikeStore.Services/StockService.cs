@@ -5,6 +5,8 @@
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Data.Models.Enums;
     using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.Product;
+    using RunAndHikeStore.Web.ViewModels.Product.Enum;
     using RunAndHikeStore.Web.ViewModels.Stock;
 
     using System;
@@ -182,9 +184,9 @@
         /// </summary>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task<IEnumerable<EditStockViewModel>> GetAllStocksAsync()
+        public async Task<AllStocksViewModel> GetAllStocksAsync(string searchTerm, int currentPage = 1, int productsPerPage = 6)
         {
-            var productsStocks = await this.repo.All<ProductSize>()
+            var stocksQuery = this.repo.AsNoTracking<ProductSize>()
                                                 .Where(ps => ps.IsDeleted == false)
                                                 .Include(ps => ps.Size)
                                                 .Include(ps => ps.Product)
@@ -195,29 +197,47 @@
                                                 .Where(ps => ps.Product.IsDeleted == false)
                                                 .Where(ps => ps.Size.IsDeleted == false)
                                                 .Where(ps => ps.Product.Brand.IsDeleted == false)
-                                                .ToListAsync();
+                                                .AsQueryable();
 
-            if (productsStocks == null)
+            if (stocksQuery == null)
             {
                 throw new ArgumentException("No products in stock");
             }
 
-            var stocks = productsStocks.Select(p => new EditStockViewModel()
+            if (!string.IsNullOrWhiteSpace(searchTerm))
             {
-                ProductId = p.ProductId,
-                ProductNumber = p.Product.ProductNumber,
-                Name = p.Product.Name,
-                Color = p.Product.Color,
-                ProductType = p.Product.ProductType.Name,
-                Brand = p.Product.Brand.Name,
-                Gender = GetGenderAsStringById((int)p.Product.Gender),
-                UnitPrice = p.Product.UnitPrice,
-                SizeId = p.SizeId,
-                SizeName = p.Size.Name,
-                UnitsInStock = p.UnitsInStock,
-            });
+                stocksQuery = stocksQuery.Where(s => s.Product.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    s.Product.ProductNumber.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    s.Size.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    s.Product.ProductType.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    s.Product.Brand.Name.ToLower().Contains(searchTerm.ToLower()));
+            }
 
-            return stocks;
+            var stocks = stocksQuery
+                                    .Skip((currentPage - 1) * productsPerPage)
+                                    .Take(productsPerPage)
+                                    .Select(p => new EditStockViewModel()
+                                    {
+                                        ProductId = p.ProductId,
+                                        ProductNumber = p.Product.ProductNumber,
+                                        Name = p.Product.Name,
+                                        Color = p.Product.Color,
+                                        ProductType = p.Product.ProductType.Name,
+                                        Brand = p.Product.Brand.Name,
+                                        Gender = GetGenderAsStringById((int)p.Product.Gender),
+                                        UnitPrice = p.Product.UnitPrice,
+                                        SizeId = p.SizeId,
+                                        SizeName = p.Size.Name,
+                                        UnitsInStock = p.UnitsInStock,
+                                    });
+
+            var totalRecords = stocksQuery.Count();
+
+            return new AllStocksViewModel()
+            {
+                Stocks = stocks,
+                TotalRecordsCount = totalRecords,
+            };
         }
 
         /// <summary>

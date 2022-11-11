@@ -9,7 +9,7 @@ namespace RunAndHikeStore.Services.Contracts
     {
         Task Add(AddBrandViewModel model);
 
-        Task<IEnumerable<BrandViewModel>> GetAllAsync();
+        Task<AllBrandsViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int brandsPerPage = 6);
 
         Task<BrandViewModel> GetByIdAsync(string id);
 
