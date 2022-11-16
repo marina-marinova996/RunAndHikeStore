@@ -1,0 +1,37 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Product
+@model EditProductViewModel
+
+<h2 class="text-center mt-3">@ViewData["Title"]</h2>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <img src=@Model.ImageUrl class="card-img-top img-thumbnail" alt="Product-photo" />
+    </div>
+    <div class="col-md-8">
+        <form method="post">
+            <partial name = "_ProductFormPartial" model= "@Model" />
+                <input asp-for="Id" type="hidden" />
+                <div class="text-center">
+                <input class="btn-lg btn-warning" type="submit" value="Save changes" />
+                <button asp-area="Admin" asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="btn-lg btn-danger ml-3" type="submit">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script type="text/javascript">
+        $("#selectCategories").selectize({
+            plugins: ["remove_button"],
+            delimiter: ",",
+            persist: false,
+            create: function (input) {
+                return {
+                    value: input,
+                    text: input,
+                };
+            },
+        });</script>
+}

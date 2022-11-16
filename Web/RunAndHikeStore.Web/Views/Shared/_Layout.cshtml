@@ -10,10 +10,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@this.ViewData["Title"] - "Run and Hike Store"</title>
-    <link rel="icon" type="image/x-icon" href="~/favicon.ico"/>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/css/bootswatchTheme.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/css/selectize.bootstrap5.min.css" />
 </head>
 <body>
@@ -35,7 +35,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="All">Products</a>
+                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Product" asp-action="All">Products</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Contact us</a>
@@ -45,21 +45,21 @@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Content Management</a>
                                 <div class="dropdown-menu" data-bs-popper="static">
-                                    <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Products</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Brand" asp-action="ManageAll" method="get">Manage Brands</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Category" asp-action="ManageAll" method ="get">Manage Categories</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Stock" asp-action="ManageStocks" method ="get">Manage Stocks</a>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Size" asp-action="ManageAll" method="get">Manage Sizes</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="ManageAll" method="get">Manage Products</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Brand" asp-action="ManageAll" method="get">Manage Brands</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="ManageAll" method="get">Manage Categories</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Stock" asp-action="ManageStocks" method="get">Manage Stocks</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Size" asp-action="ManageAll" method="get">Manage Sizes</a>
                                     @*                           <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Orders</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="ManageAll" method="get">Manage Users</a>*@
                                 </div>
                             </li>
                         }
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <partial name="_LoginPartial" asp-area="Identity"/>
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <partial name="_ShoppingCartPartial"/>
+                        <partial name="_ShoppingCartPartial" />
                     }
                 </div>
             </div>

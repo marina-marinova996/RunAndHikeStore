@@ -42,7 +42,7 @@ namespace RunAndHikeStore.Web
 
             services.ConfigureApplicationCookie(options =>
             {
-                options.LoginPath = "/Account/Login";
+                options.LoginPath = "/Identity/Account/Login";
             });
 
             services.Configure<CookiePolicyOptions>(
@@ -112,7 +112,6 @@ namespace RunAndHikeStore.Web
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
         }
     }
 }

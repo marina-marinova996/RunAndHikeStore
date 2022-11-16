@@ -1,0 +1,25 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Brand
+@model AddBrandViewModel
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-area="Admin" asp-controller="Brand" asp-action="Add" method="post">
+            <div class="form-group">
+                <div class="mb-3">
+                    <label asp-for="Name"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="small text-danger"></span>
+                </div>
+                <input class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Create" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

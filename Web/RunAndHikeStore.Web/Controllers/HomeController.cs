@@ -1,4 +1,6 @@
-﻿namespace RunAndHikeStore.Web.Controllers
+﻿using RunAndHikeStore.Web.Areas.Admin.Controllers;
+
+namespace RunAndHikeStore.Web.Controllers
 {
     using System.Diagnostics;
     using Microsoft.AspNetCore.Authorization;
@@ -24,7 +26,7 @@
         public IActionResult Error()
         {
             return this.View(
-                new ErrorViewModel { RequestId = Activity.Current?.Id ?? this.HttpContext.TraceIdentifier });
+                new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

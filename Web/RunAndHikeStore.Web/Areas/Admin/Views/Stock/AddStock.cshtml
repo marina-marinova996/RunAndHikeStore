@@ -1,0 +1,66 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Stock
+@model AddStockViewModel
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <form asp-area="Admin" method="post">
+            <div class="form-group">
+                <div class="mb-3">
+                    <input asp-for="ProductId" type="hidden" />
+                    <label asp-for="ProductNumber">Product Number</label>
+                    <input asp-for="ProductNumber" class="form-control" readonly />
+                    <span asp-validation-for="ProductNumber" class="small text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="ProductType" class="form-label">Product Type</label>
+                    <input asp-for="ProductType" class="form-control " readonly />
+                    <span asp-validation-for="ProductType" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Brand" class="form-label">Brand</label>
+                    <input asp-for="Brand" class="form-control " readonly />
+                    <span asp-validation-for="Brand" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Name">Product Name</label>
+                    <input asp-for="Name" class="form-control" readonly />
+                    <span asp-validation-for="Name" class="small text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Gender" class="form-label">Gender</label>
+                    <input asp-for="Gender" class="form-control " readonly />
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="UnitPrice">Unit Price</label>
+                    <input asp-for="UnitPrice" class="form-control" readonly />
+                    <span asp-validation-for="UnitPrice" class="small text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.Size" class="form-label">Product Size</label>
+                    <select asp-for="@Model.SizeId" class="form-control">
+                        @foreach (var size in Model.Sizes)
+                        {
+                            <option value="@size.Id">@size.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="@Model.SizeId" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="@Model.UnitsInStock">Units In Stock</label>
+                    <input asp-for="@Model.UnitsInStock" class="form-control" />
+                    <span asp-validation-for="@Model.UnitsInStock" class="small text-danger"></span>
+                </div>
+                <input class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Add Stock" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

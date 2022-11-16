@@ -7,6 +7,7 @@
     using RunAndHikeStore.Data.Common.Repositories;
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Services.Data;
+    using RunAndHikeStore.Web.Areas.Customer.Controllers;
     using RunAndHikeStore.Web.ViewModels.Settings;
 
     public class SettingsController : BaseController
