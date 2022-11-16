@@ -1,13 +1,10 @@
 ﻿namespace RunAndHikeStore.Web.ViewModels.Product
 {
+    using RunAndHikeStore.Web.ViewModels.Product.Enum;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using RunAndHikeStore.Web.ViewModels.Brand;
-    using RunAndHikeStore.Web.ViewModels.Category;
-    using RunAndHikeStore.Web.ViewModels.Product.Enum;
-    using RunAndHikeStore.Web.ViewModels.Size;
 
-    public class AllProductsViewModel
+    public class AllProductsQueryViewModel
     {
         public const int ProductsPerPage = 6;
 
@@ -19,15 +16,15 @@
 
         public IEnumerable<string> MultiCategoriesIds { get; set; }
 
-        public IEnumerable<string> MultiProductTypesIds { get; set; }
+        public string ProductTypeId { get; set; }
 
-        public IEnumerable<string> MultiGendersIds { get; set; }
+        public string GenderId { get; set; }
 
         public IEnumerable<string> MultiBrandsIds { get; set; }
 
         public IEnumerable<string> MultiSizesIds { get; set; }
 
-        public IEnumerable<ProductViewModel> Products { get; set; } = new List<ProductViewModel>();
+        public IEnumerable<ProductQueryViewModel> Products { get; set; } = new List<ProductQueryViewModel>();
 
         [Display(Name ="Search")]
         public string SearchTerm { get; set; }

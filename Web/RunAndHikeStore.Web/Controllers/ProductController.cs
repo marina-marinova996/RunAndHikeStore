@@ -1,16 +1,12 @@
 ﻿namespace RunAndHikeStore.Web.Controllers
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Product;
-    using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public class ProductController : BaseController
     {
@@ -27,20 +23,11 @@
         /// <returns></returns>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> All([FromQuery] AllProductsViewModel query)
+        public async Task<IActionResult> All([FromQuery] AllProductsQueryViewModel query)
         {
-            this.ViewData["Title"] = "Our Products";
-
             try
             {
-
-                var queryResult = await this.productService.GetAllSorted(query.SearchTerm,
-                                                                         query.Sorting,
-                                                                         query.CurrentPage,
-                                                                         AllProductsViewModel.ProductsPerPage);
-                query.Products = queryResult.Products;
-                query.TotalProductsCount = queryResult.TotalProductsCount;
-
+                this.ViewData["Title"] = "Our Products";
                 // Sidebar ViewBags for filtering
                 this.ViewBag.Categories = new List<SelectListItem>();
 
@@ -87,14 +74,32 @@
                     this.ViewBag.Brands.Add(new SelectListItem() { Text = brand.Name, Value = brand.Id });
                 }
 
+                var queryResult = await this.productService.GetAllSorted(
+                                                                         query.GenderId,
+                                                                         query.MultiCategoriesIds,
+                                                                         query.ProductTypeId,
+                                                                         query.MultiBrandsIds,
+                                                                         query.MultiSizesIds,
+                                                                         query.SearchTerm,
+                                                                         query.Sorting,
+                                                                         query.CurrentPage,
+                                                                         AllProductsQueryViewModel.ProductsPerPage);
+
+                query.Products = queryResult.Products;
+                query.TotalProductsCount = queryResult.TotalProductsCount;
+                query.MultiCategoriesIds = queryResult.MultiCategoriesIds;
+                query.MultiBrandsIds = queryResult.MultiBrandsIds;
+                query.MultiSizesIds = queryResult.MultiSizesIds;
+
                 return this.View(query);
             }
             catch (System.Exception)
             {
                 this.ModelState.AddModelError("", "Something went wrong");
-                return this.View();
+                return this.View(query);
             }
         }
+
         /// <summary>
         /// Add new product.
         /// </summary>
@@ -107,7 +112,6 @@
                 ProductTypes = await this.productService.GetProductTypesAsync(),
                 Brands = await this.productService.GetBrandsAsync(),
                 Genders = this.productService.GetGenders(),
-                Sizes = await this.productService.GetSizesAsync(),
             };
 
             this.ViewData["Title"] = "Add Product";
@@ -164,12 +168,13 @@
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> ManageAll([FromQuery] AllProductsViewModel query)
+        public async Task<IActionResult> ManageAll([FromQuery] ManageAllProductsViewModel query)
         {
-            var queryResult = await this.productService.GetAllSorted(query.SearchTerm,
+            var queryResult = await this.productService.GetManageAllSorted(
+                                                                     query.SearchTerm,
                                                                      query.Sorting,
                                                                      query.CurrentPage,
-                                                                     AllProductsViewModel.ProductsPerPage);
+                                                                     ManageAllProductsViewModel.ProductsPerPage);
             query.Products = queryResult.Products;
             query.TotalProductsCount = queryResult.TotalProductsCount;
             this.ViewData["Title"] = "Manage Products";
@@ -209,12 +214,12 @@
         }
 
         /// <summary>
-        /// Edit product.
+        /// Edit Product.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="model"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Edit(string id, EditProductViewModel model)
+        public async Task<IActionResult> Edit(EditProductViewModel model)
         {
             try
             {
@@ -227,7 +232,7 @@
                     this.ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
                 }
 
-                await this.productService.Edit(id, model);
+                await this.productService.Edit(model);
 
                 return this.RedirectToAction(nameof(this.ManageAll));
             }

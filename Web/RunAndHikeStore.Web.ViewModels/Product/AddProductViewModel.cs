@@ -46,11 +46,6 @@
 
         public IEnumerable<GenderViewModel> Genders { get; set; } = new List<GenderViewModel>();
 
-        [Required]
-        public ProductSizeViewModel Size { get; set; }
-
-        public IEnumerable<SizeViewModel> Sizes { get; set; } = new List<SizeViewModel>();
-
         [Column(TypeName = "decimal(18,2)")]
         [DisplayName("Unit Price")]
         [Range(typeof(decimal), "0", GlobalConstants.DecimalMaxValue, ConvertValueInInvariantCulture = true)]
@@ -59,6 +54,7 @@
         [Required]
         public string ImageUrl { get; set; }
 
+        [Required]
         public IEnumerable<string> MultiCategoriesIds { get; set; }
     }
 }

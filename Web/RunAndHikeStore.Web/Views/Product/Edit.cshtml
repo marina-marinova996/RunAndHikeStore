@@ -4,82 +4,17 @@
 <h2 class="text-center mt-3">@ViewData["Title"]</h2>
 <hr />
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <form>
-            <div class="form-group">
-                <div class="mb-3">
-                    <label asp-for="ProductNumber">Product Number</label>
-                    <input asp-for="ProductNumber" class="form-control" />
-                    <span asp-validation-for="ProductNumber" class="small text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="ProductType" class="form-label">Product Type</label>
-                    <select asp-for="ProductTypeId" class="form-control">
-                        @foreach (var type in Model.ProductTypes)
-                        {
-                            <option value="@type.Id">@type.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="ProductTypeId" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Brand" class="form-label">Brand</label>
-                    <select asp-for="BrandId" class="form-control">
-                        @foreach (var brand in Model.Brands)
-                        {
-                            <option value="@brand.Id">@brand.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="BrandId" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Name">Product Name</label>
-                    <input asp-for="Name" class="form-control" />
-                    <span asp-validation-for="Name" class="small text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Description">Description</label>
-                    <input asp-for="Description" class="form-control" />
-                    <span asp-validation-for="Description" class="small text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Color">Color</label>
-                    <input asp-for="Color" class="form-control" />
-                    <span asp-validation-for="Description" class="small text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="GenderId" class="form-label">Gender</label>
-                    <select asp-for="GenderId" class="form-control">
-                        @foreach (var gender in Model.Genders)
-                        {
-                            <option value="@gender.Id">@gender.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="GenderId" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="ImageUrl">Image URL</label>
-                    <input asp-for="ImageUrl" class="form-control" />
-                    <span asp-validation-for="ImageUrl" class="small text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="UnitPrice">Unit Price</label>
-                    <input asp-for="UnitPrice" class="form-control" />
-                    <span asp-validation-for="UnitPrice" class="small text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="@Model.MultiCategoriesIds" class="form-label">Categories</label>
-                    <select id="selectCategories" asp-for="@Model.MultiCategoriesIds" class="form-control" multiple>
-                        @foreach (var category in ViewBag.Categories)
-                        {
-                            <option value=@category.Value>@category.Text</option>
-                        }
-                    </select>
-                    <span asp-validation-for="@Model.MultiCategoriesIds" class="text-danger"></span>
-                </div>
+<div class="row">
+    <div class="col-md-4">
+        <img src=@Model.ImageUrl class="card-img-top img-thumbnail" alt="Product-photo" />
+    </div>
+    <div class="col-md-8">
+        <form method="post">
+            <partial name = "_ProductFormPartial" model= "@Model" />
                 <input asp-for="Id" type="hidden" />
-                <input class="btn-lg btn-success col-md-4 mt-3 flex-fill-1" type="submit" value="Save" />
+                <div class="text-center">
+                <input class="btn-lg btn-warning" type="submit" value="Save changes" />
+            <button asp-controller="Product" asp-action="Delete" asp-route-id="@Model.Id" class="btn-lg btn-danger ml-3" type="submit">Delete</button>
             </div>
         </form>
     </div>
@@ -89,6 +24,14 @@
     <partial name="_ValidationScriptsPartial" />
     <script type="text/javascript">
         $("#selectCategories").selectize({
-            sortField: "text",
+            plugins: ["remove_button"],
+            delimiter: ",",
+            persist: false,
+            create: function (input) {
+                return {
+                    value: input,
+                    text: input,
+                };
+            },
         });</script>
 }

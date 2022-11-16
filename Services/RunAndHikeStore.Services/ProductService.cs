@@ -49,14 +49,6 @@
                 ImageUrl = model.ImageUrl,
             };
 
-            var productSize = new ProductSize
-            {
-                ProductId = product.Id,
-                SizeId = model.Size.SizeId,
-                UnitsInStock = model.Size.UnitsInStock,
-            };
-            product.Sizes.Add(productSize);
-
             if (model.MultiCategoriesIds.Any())
             {
                 foreach (var categoryId in model.MultiCategoriesIds)
@@ -79,32 +71,33 @@
         /// </summary>
         /// <param name="model">Product model.</param>
         /// <returns></returns>
-        public async Task Edit(string id, EditProductViewModel model)
+        public async Task Edit(EditProductViewModel model)
         {
-            var product = await this.repo.All<Product>(x => x.Id == id)
+            var product = await this.repo.All<Product>(x => x.Id == model.Id)
                                          .Where(p => p.IsDeleted == false)
-                                         .Include(p => p.Brand)
-                                         .Include(p => p.Sizes)
-                                         .Include(p => p.ProductType)
                                          .Include(p => p.Categories)
                                          .FirstOrDefaultAsync();
 
-            if (product != null)
+            if (product != null && model != null)
             {
                 product.ProductNumber = model.ProductNumber;
                 product.ProductTypeId = model.ProductTypeId;
-                product.Brand.Id = model.BrandId;
+                product.BrandId = model.BrandId;
                 product.Name = model.Name;
                 product.Description = model.Description;
                 product.Color = model.Color;
+                product.ImageUrl = model.ImageUrl;
                 product.Gender = (Gender)model.GenderId;
                 product.UnitPrice = model.UnitPrice;
 
-                if (model.MultiCategoriesIds.Any())
+                if (model.MultiCategoriesIds != null)
                 {
                     foreach (var category in product.Categories)
                     {
-                        product.Categories.Remove(category);
+                        if (!model.MultiCategoriesIds.Contains(category.CategoryId))
+                        {
+                            product.Categories.Remove(category);
+                        }
                     }
 
                     foreach (var categoryId in model.MultiCategoriesIds)
@@ -120,6 +113,7 @@
                         }
                     }
                 }
+
                 await this.repo.SaveChangesAsync();
             }
         }
@@ -138,101 +132,6 @@
         }
 
         /// <summary>
-        /// Gets all products.
-        /// </summary>
-        /// <returns>List of products.</returns>
-        public async Task<IEnumerable<ProductViewModel>> GetAllAsync()
-        {
-            return await this.repo.AsNoTracking<Product>()
-                                  .Where(p => p.IsDeleted == false)
-                                  .Include(p => p.Brand)
-                                  .Include(p => p.Sizes)
-                                  .Include(p => p.ProductType)
-                                  .Include(p => p.Categories)
-                                  .Select(p => new ProductViewModel()
-                                  {
-                                      Id = p.Id,
-                                      Name = p.Name,
-                                      ProductNumber = p.ProductNumber,
-                                      ImageUrl = p.ImageUrl,
-                                      UnitPrice = p.UnitPrice,
-                                      Description = p.Description,
-                                      Color = p.Color,
-                                      BrandId = p.BrandId,
-                                      Brand = p.Brand.Name,
-                                      ProductType = p.ProductType.Name,
-                                      ProductTypeId = p.ProductTypeId,
-                                      GenderId = (int)p.Gender,
-                                      Gender = GetGenderAsStringById((int)p.Gender),
-                                      Sizes = p.Sizes
-                                               .Where(ps => ps.Size.IsDeleted == false)
-                                               .Select(ps => new ProductSizeViewModel()
-                                               {
-                                                    ProductId = p.Id,
-                                                    SizeId = ps.SizeId,
-                                                    SizeName = ps.Size.Name,
-                                                    UnitsInStock = ps.UnitsInStock,
-                                               }),
-                                      Categories = p.Categories
-                                                   .Where(cp => cp.Category.IsDeleted == false)
-                                                   .Select(c => new ProductCategoryViewModel()
-                                                   {
-                                                      ProductId = c.ProductId,
-                                                      CategoryId = c.CategoryId,
-                                                      CategoryName = c.Category.Name,
-                                                   }),
-                                  }).ToListAsync();
-        }
-
-        /// <summary>
-        /// Gets all products.
-        /// </summary>
-        /// <returns>List of products.</returns>
-        public async Task<IEnumerable<ProductViewModel>> GetAllByProductTypeAsync(string productTypeId)
-        {
-            return await this.repo.AsNoTracking<Product>()
-                                  .Where(p => p.IsDeleted == false)
-                                  .Include(p => p.Brand)
-                                  .Include(p => p.Sizes)
-                                  .Include(p => p.ProductType)
-                                  .Where(p => p.ProductTypeId == productTypeId)
-                                  .Include(p => p.Categories)
-                                  .Select(p => new ProductViewModel()
-                                  {
-                                     Id = p.Id,
-                                     Name = p.Name,
-                                     ProductNumber = p.ProductNumber,
-                                     ImageUrl = p.ImageUrl,
-                                     UnitPrice = p.UnitPrice,
-                                     Description = p.Description,
-                                     Color = p.Color,
-                                     BrandId = p.BrandId,
-                                     Brand = p.Brand.Name,
-                                     ProductType = p.ProductType.Name,
-                                     ProductTypeId = p.ProductTypeId,
-                                     GenderId = (int)p.Gender,
-                                     Gender = GetGenderAsStringById((int)p.Gender),
-                                     Sizes = p.Sizes
-                                              .Where(ps => ps.IsDeleted == false)
-                                              .Select(ps => new ProductSizeViewModel()
-                                              {
-                                                ProductId = p.Id,
-                                                SizeId = ps.SizeId,
-                                                SizeName = ps.Size.Name,
-                                                UnitsInStock = ps.UnitsInStock,
-                                              }),
-                                     Categories = p.Categories
-                                                   .Where(cp => cp.Category.IsDeleted == false)
-                                                   .Select(c => new ProductCategoryViewModel()
-                                                   {
-                                                     ProductId = p.Id,
-                                                     CategoryId = c.CategoryId,
-                                                     CategoryName = c.Category.Name,
-                                                   }),
-                                  }).ToListAsync();
-        }
-
-        /// <summary>
         /// Get product by Id.
         /// </summary>
         /// <param name="id"></param>
@@ -243,8 +142,10 @@
                         .AsNoTracking<Product>(p => p.Id == id)
                         .Where(p => p.IsDeleted == false)
                         .Include(p => p.Brand)
+                        .Where(p => p.Brand.IsDeleted == false)
                         .Include(p => p.Sizes)
                         .Include(p => p.ProductType)
+                        .Where(p => p.ProductType.IsDeleted == false)
                         .Include(p => p.Categories)
                         .Select(p => new ProductViewModel()
                         {
@@ -292,11 +193,14 @@
                         .AsNoTracking<Product>(p => p.Id == id)
                         .Where(p => p.IsDeleted == false)
                         .Include(p => p.Brand)
+                        .Where(p => p.Brand.IsDeleted == false)
                         .Include(p => p.Sizes)
                         .Include(p => p.ProductType)
+                        .Where(p => p.ProductType.IsDeleted == false)
                         .Include(p => p.Categories)
                         .Select(p => new EditProductViewModel()
                         {
+                            Id = p.Id,
                             Name = p.Name,
                             ProductNumber = p.ProductNumber,
                             ImageUrl = p.ImageUrl,
@@ -309,13 +213,10 @@
                             ProductType = p.ProductType.Name,
                             GenderId = (int)p.Gender,
                             Gender = GetGenderAsStringById((int)p.Gender),
-                            Categories = p.Categories
+                            MultiCategoriesIds = p.Categories
                                             .Where(c => c.Category.IsDeleted == false)
-                                            .Select(c => new CategoryViewModel()
-                                            {
-                                                Id = c.CategoryId,
-                                                Name = c.Category.Name,
-                                            }),
+                                            .Select(c => c.CategoryId)
+                                            .ToList(),
                         }).FirstOrDefaultAsync();
 
             model.ProductTypes = await this.GetProductTypesAsync();
@@ -411,7 +312,7 @@
 
             genders.Add(new GenderViewModel
             {
-                 Id = (int)Gender.Female,
+                 Id = (int)Gender.Unisex,
                  Name = "Unisex",
             });
 
@@ -441,14 +342,96 @@
             return "Not specified";
         }
 
-        public async Task<AllProductsViewModel> GetAllSorted(string searchTerm, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6)
+        public async Task<AllProductsQueryViewModel> GetAllSorted(string genderId, IEnumerable<string> multiCategoriesIds, string productTypeId, IEnumerable<string> multiBrandsIds, IEnumerable<string> multiSizesIds, string searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6)
         {
             var productsQuery = this.repo.AsNoTracking<Product>()
-                                         .Include(p => p.Brand)
-                                         .Include(p => p.Sizes)
-                                         .Include(p => p.ProductType)
-                                         .Include(p => p.Categories)
-                                         .AsQueryable();
+                              .Include(p => p.Brand)
+                              .Where(p => p.Brand.IsDeleted == false)
+                              .Include(p => p.ProductType)
+                              .Where(p => p.ProductType.IsDeleted == false)
+                              .Include(p => p.Categories)
+                              .Include(p => p.Sizes)
+                              .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                productsQuery = productsQuery.Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.ProductNumber.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.Color.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.ProductType.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.Brand.Name.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    p.Description.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            if (productTypeId != null)
+            {
+                productsQuery = productsQuery.Where(p => p.ProductTypeId == productTypeId);
+            }
+
+            if (genderId != null)
+            {
+                productsQuery = productsQuery.Where(p => (int)p.Gender == int.Parse(genderId));
+            }
+
+            productsQuery = sorting switch
+            {
+                ProductSorting.HighestPriceFirst => productsQuery
+                                                    .OrderByDescending(p => p.UnitPrice),
+                ProductSorting.LowestPriceFirst => productsQuery
+                                                    .OrderBy(p => p.UnitPrice),
+                _ => productsQuery.OrderBy(p => p.CreatedOn),
+            };
+
+            var result = new AllProductsQueryViewModel();
+
+            if (multiSizesIds != null)
+            {
+                result.MultiSizesIds = multiSizesIds;
+                productsQuery = productsQuery.Where(p => p.Sizes.Any(s => s.IsDeleted == false));
+                productsQuery = productsQuery.Where(p => p.Sizes.Any(s => multiSizesIds.Contains(s.SizeId)));
+            }
+
+            if (multiCategoriesIds != null)
+            {
+                result.MultiCategoriesIds = multiCategoriesIds;
+                productsQuery = productsQuery.Where(p => p.Categories.Any(c => c.IsDeleted == false));
+                productsQuery = productsQuery.Where(p => p.Categories.Any(c => multiCategoriesIds.Contains(c.CategoryId)));
+            }
+
+            if (multiBrandsIds != null)
+            {
+                result.MultiBrandsIds = multiBrandsIds;
+                productsQuery = productsQuery.Where(p => multiBrandsIds.Contains(p.BrandId));
+            }
+
+            var products = await productsQuery
+                                   .Skip((currentPage - 1) * productsPerPage)
+                                   .Take(productsPerPage)
+                                   .Select(p => new ProductQueryViewModel
+                                   {
+                                       Id = p.Id,
+                                       Name = p.Name,
+                                       ProductNumber = p.ProductNumber,
+                                       ImageUrl = p.ImageUrl,
+                                       UnitPrice = p.UnitPrice,
+                                       Brand = p.Brand.Name,
+                                       BrandId = p.BrandId,
+                                   }).ToListAsync();
+
+            result.TotalProductsCount = productsQuery.Count();
+            result.Products = products;
+
+            return result;
+        }
+
+        public async Task<ManageAllProductsViewModel> GetManageAllSorted(string searchTerm, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6)
+        {
+            var productsQuery = this.repo.AsNoTracking<Product>()
+                             .Include(p => p.Brand)
+                             .Where(p => p.Brand.IsDeleted == false)
+                             .Include(p => p.ProductType)
+                             .Where(p => p.ProductType.IsDeleted == false)
+                             .AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
@@ -466,20 +449,19 @@
                                                     .OrderByDescending(p => p.UnitPrice),
                 ProductSorting.LowestPriceFirst => productsQuery
                                                     .OrderBy(p => p.UnitPrice),
-                 _ => productsQuery.OrderBy(p => p.CreatedOn),
+                _ => productsQuery.OrderBy(p => p.CreatedOn),
             };
 
             var products = await productsQuery
                                     .Skip((currentPage - 1) * productsPerPage)
                                     .Take(productsPerPage)
-                                    .Select(p => new ProductViewModel
+                                    .Select(p => new ProductQueryManageAllViewModel
                                     {
                                         Id = p.Id,
                                         Name = p.Name,
                                         ProductNumber = p.ProductNumber,
                                         ImageUrl = p.ImageUrl,
                                         UnitPrice = p.UnitPrice,
-                                        Description = p.Description,
                                         Color = p.Color,
                                         Brand = p.Brand.Name,
                                         ProductType = p.ProductType.Name,
@@ -487,29 +469,12 @@
                                         ProductTypeId = p.ProductTypeId,
                                         GenderId = (int)p.Gender,
                                         Gender = GetGenderAsStringById((int)p.Gender),
-                                        Sizes = p.Sizes
-                                        .Where(ps => ps.IsDeleted == false)
-                                        .Select(ps => new ProductSizeViewModel()
-                                        {
-                                            SizeId = ps.SizeId,
-                                            ProductId = ps.ProductId,
-                                            SizeName = ps.Size.Name,
-                                            UnitsInStock = ps.UnitsInStock,
-                                        }),
-                                        Categories = p.Categories
-                                          .Where(cp => cp.Category.IsDeleted == false)
-                                          .Select(cp => new ProductCategoryViewModel()
-                                          {
-                                              ProductId = cp.ProductId,
-                                              CategoryId = cp.CategoryId,
-                                              CategoryName = cp.Category.Name,
-                                          }),
                                     })
                                     .ToListAsync();
 
             var totalProductsCount = productsQuery.Count();
 
-            return new AllProductsViewModel()
+            return new ManageAllProductsViewModel()
             {
                 Products = products,
                 TotalProductsCount = totalProductsCount,

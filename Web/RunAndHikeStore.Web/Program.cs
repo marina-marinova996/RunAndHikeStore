@@ -40,6 +40,11 @@ namespace RunAndHikeStore.Web
             services.AddDefaultIdentity<ApplicationUser>()
                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/Login";
+            });
+
             services.Configure<CookiePolicyOptions>(
                 options =>
                 {

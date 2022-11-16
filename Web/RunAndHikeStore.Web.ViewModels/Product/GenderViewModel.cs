@@ -7,7 +7,5 @@ namespace RunAndHikeStore.Web.ViewModels.Product
         public int Id { get; set; }
 
         public string Name { get; set; }
-
-        public IEnumerable<ProductViewModel> Products { get; set; }
     }
 }

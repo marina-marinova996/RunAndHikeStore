@@ -24,11 +24,13 @@
 
         public decimal UnitPrice { get; set; }
 
+        public string BrandId { get; set; }
+
         public string Brand { get; set; }
 
-        public string ProductType { get; set; }
+        public string ProductTypeId { get; set; }
 
-        public string BrandId { get; set; }
+        public string ProductType { get; set; }
 
         public string SizeId { get; set; }
 
@@ -43,6 +45,5 @@
 
         public IEnumerable<ProductCategoryViewModel> Categories { get; set; } = new List<ProductCategoryViewModel>();
 
-        public string ProductTypeId { get; set; }
     }
 }
