@@ -4,8 +4,6 @@
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Common;
 
-    [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
-    [Area("Admin")]
     public class AdministrationController : BaseController
     {
     }

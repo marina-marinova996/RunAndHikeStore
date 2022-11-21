@@ -7,8 +7,8 @@
     using RunAndHikeStore.Web.ViewModels.Stock;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using static RunAndHikeStore.Common.GlobalConstants;
 
-    [Area("Admin")]
     public class StockController : BaseController
     {
         private readonly IStockService stockService;
@@ -59,6 +59,7 @@
             try
             {
                 await stockService.AddStock(model);
+                TempData[MessageConstant.SuccessMessage] = "Successfully added!";
 
                 return this.RedirectToAction(nameof(this.ManageStocks));
             }
@@ -141,6 +142,7 @@
             try
             {
                 await stockService.EditStock(stockModel);
+                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
                 return RedirectToAction(nameof(this.ManageStocks));
 

@@ -5,8 +5,8 @@
     using RunAndHikeStore.Web.ViewModels.Brand;
 
     using System.Threading.Tasks;
+    using static RunAndHikeStore.Common.GlobalConstants;
 
-    [Area("Admin")]
     public class BrandController : BaseController
     {
         private IBrandService brandService;
@@ -75,6 +75,7 @@
             }
 
             await brandService.Add(model);
+            TempData[MessageConstant.SuccessMessage] = "Successfully added!";
 
             return RedirectToAction("ManageAll", "Brand");
         }
@@ -111,6 +112,7 @@
             try
             {
                 await brandService.Edit(model);
+                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
                 return RedirectToAction("ManageAll", "Brand");
             }

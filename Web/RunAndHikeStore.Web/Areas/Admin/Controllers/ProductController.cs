@@ -7,8 +7,8 @@
     using RunAndHikeStore.Web.ViewModels.Product;
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using static RunAndHikeStore.Common.GlobalConstants;
 
-    [Area("Admin")]
     public class ProductController : BaseController
     {
         private readonly IProductService productService;
@@ -72,6 +72,9 @@
                 }
 
                 await productService.Add(model);
+
+                TempData[MessageConstant.SuccessMessage] = "Successfully added!";
+
                 return RedirectToAction(nameof(this.ManageAll));
             }
             catch (System.Exception)
@@ -122,6 +125,7 @@
                 }
 
                 EditProductViewModel product = await productService.GetViewModelForEditByIdAsync(id);
+
                 return View(product);
             }
             catch (System.Exception)
@@ -151,6 +155,7 @@
                 }
 
                 await productService.Edit(model);
+                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
                 return RedirectToAction(nameof(this.ManageAll));
             }

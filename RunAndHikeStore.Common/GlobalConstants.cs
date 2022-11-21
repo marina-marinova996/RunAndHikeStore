@@ -87,5 +87,12 @@
             public const int OrderStatusMaxLength = 20;
             public const int PaymentStatusMaxLength = 20;
         }
+
+        public static class MessageConstant
+        {
+            public const string ErrorMessage = "ErrorMessage";
+            public const string SuccessMessage = "SuccessMessage";
+            public const string WarningMessage = "WarningMessage";
+        }
     }
 }

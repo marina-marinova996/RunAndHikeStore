@@ -16,6 +16,13 @@
 	<ItemGroup>
 		<InternalsVisibleTo Include="RunAndHikeStore.Web.Tests" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Include="wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.js" />
+	  <None Include="wwwroot\lib\jquery-validation-unobtrusive\dist\jquery.validate.unobtrusive.min.js" />
+	  <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.js" />
+	  <None Include="wwwroot\lib\jquery-validation\dist\jquery.validate.min.js" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.9" />

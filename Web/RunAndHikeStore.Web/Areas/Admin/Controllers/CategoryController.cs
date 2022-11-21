@@ -6,8 +6,8 @@
     using RunAndHikeStore.Web.ViewModels.Category;
     using RunAndHikeStore.Web.ViewModels.Product;
     using System.Threading.Tasks;
+    using static RunAndHikeStore.Common.GlobalConstants;
 
-    [Area("Admin")]
     public class CategoryController : BaseController
     {
         private ICategoryService categoryService;
@@ -48,6 +48,7 @@
             }
 
             await categoryService.Add(model);
+            TempData[MessageConstant.SuccessMessage] = "Successfully added!";
 
             return RedirectToAction("ManageAll", "Category");
         }

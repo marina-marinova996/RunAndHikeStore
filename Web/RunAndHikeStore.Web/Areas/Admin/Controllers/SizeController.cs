@@ -2,10 +2,10 @@
 using RunAndHikeStore.Services.Contracts;
 using RunAndHikeStore.Web.ViewModels.Size;
 using System.Threading.Tasks;
+using static RunAndHikeStore.Common.GlobalConstants;
 
 namespace RunAndHikeStore.Web.Areas.Admin.Controllers
 {
-    [Area("Admin")]
     public class SizeController : BaseController
     {
         private readonly ISizeService sizeService;
@@ -75,6 +75,7 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             }
 
             await this.sizeService.Add(model);
+            TempData[MessageConstant.SuccessMessage] = "Successfully added!";
 
             return this.RedirectToAction("ManageAll", "Size");
         }
@@ -111,6 +112,7 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Edit(SizeViewModel model)
         {
             await this.sizeService.Edit(model);
+            TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
             return this.RedirectToAction("ManageAll", "Brand");
         }

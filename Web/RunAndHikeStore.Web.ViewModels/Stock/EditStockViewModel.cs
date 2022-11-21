@@ -1,5 +1,6 @@
 ﻿using RunAndHikeStore.Web.ViewModels.Size;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace RunAndHikeStore.Web.ViewModels.Stock
 {
@@ -21,8 +22,10 @@ namespace RunAndHikeStore.Web.ViewModels.Stock
 
         public decimal UnitPrice { get; set; }
 
+        [Required]
         public int UnitsInStock { get; set; }
 
+        [Required]
         public string SizeId { get; set; }
 
         public string SizeName { get; set; }

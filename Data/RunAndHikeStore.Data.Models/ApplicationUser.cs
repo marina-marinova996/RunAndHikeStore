@@ -34,9 +34,6 @@ namespace RunAndHikeStore.Data.Models
         [StringLength(LastNameMaxLength)]
         public string LastName { get; set; }
 
-        [Required]
-        public DateTime BirthDate { get; set; }
-
         public ICollection<Address> Addresses { get; set; }
 
         public ICollection<Order> Orders { get; set; }
