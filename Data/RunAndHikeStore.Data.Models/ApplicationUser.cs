@@ -38,6 +38,7 @@ namespace RunAndHikeStore.Data.Models
 
         public ICollection<Order> Orders { get; set; }
 
+        [Required]
         public string ShoppingCartId { get; set; }
 
         [ForeignKey(nameof(ShoppingCartId))]

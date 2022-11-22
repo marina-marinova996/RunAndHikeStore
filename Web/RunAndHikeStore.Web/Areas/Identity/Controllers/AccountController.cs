@@ -5,6 +5,7 @@ namespace RunAndHikeStore.Web.Areas.Identity.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RunAndHikeStore.Common;
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Web.ViewModels;
     using System.Threading.Tasks;
@@ -122,13 +123,5 @@ namespace RunAndHikeStore.Web.Areas.Identity.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home", new { area = "" });
         }
-
-        ////public async Task<IActionResult> CreateRoles()
-        ////{
-
-        ////    await this.roleManager.CreateAsync(new ApplicationRole(GlobalConstants.AdministratorRoleName));
-
-        ////    return this.RedirectToAction("Index", "Home");
-        ////}
     }
 }

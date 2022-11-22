@@ -12,8 +12,8 @@ using RunAndHikeStore.Data;
 namespace RunAndHikeStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221108115224_AddedSizeIdToCartItem")]
-    partial class AddedSizeIdToCartItem
+    [Migration("20221122112542_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -232,9 +232,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("BirthDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -296,7 +293,8 @@ namespace RunAndHikeStore.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ShoppingCartId")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -316,6 +314,9 @@ namespace RunAndHikeStore.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ShoppingCartId")
+                        .IsUnique();
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -357,30 +358,25 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ProductId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("ShoppingCartId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SizeId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("IsDeleted");
 
                     b.HasIndex("ProductId");
 
@@ -668,10 +664,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ApplicationUserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -679,9 +671,6 @@ namespace RunAndHikeStore.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ApplicationUserId")
-                        .IsUnique();
 
                     b.ToTable("ShoppingCart");
                 });
@@ -779,21 +768,40 @@ namespace RunAndHikeStore.Data.Migrations
                         .HasForeignKey("ApplicationUserId");
                 });
 
+            modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationUser", b =>
+                {
+                    b.HasOne("RunAndHikeStore.Data.Models.ShoppingCart", "ShoppingCart")
+                        .WithOne("ApplicationUser")
+                        .HasForeignKey("RunAndHikeStore.Data.Models.ApplicationUser", "ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("ShoppingCart");
+                });
+
             modelBuilder.Entity("RunAndHikeStore.Data.Models.CartItem", b =>
                 {
                     b.HasOne("RunAndHikeStore.Data.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
-                    b.HasOne("RunAndHikeStore.Data.Models.ShoppingCart", null)
+                    b.HasOne("RunAndHikeStore.Data.Models.ShoppingCart", "ShoppingCart")
                         .WithMany("CartItems")
-                        .HasForeignKey("ShoppingCartId");
+                        .HasForeignKey("ShoppingCartId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RunAndHikeStore.Data.Models.Size", "Size")
                         .WithMany()
-                        .HasForeignKey("SizeId");
+                        .HasForeignKey("SizeId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("ShoppingCart");
 
                     b.Navigation("Size");
                 });
@@ -885,17 +893,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Navigation("Size");
                 });
 
-            modelBuilder.Entity("RunAndHikeStore.Data.Models.ShoppingCart", b =>
-                {
-                    b.HasOne("RunAndHikeStore.Data.Models.ApplicationUser", "ApplicationUser")
-                        .WithOne("ShoppingCart")
-                        .HasForeignKey("RunAndHikeStore.Data.Models.ShoppingCart", "ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("ApplicationUser");
-                });
-
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Size", b =>
                 {
                     b.HasOne("RunAndHikeStore.Data.Models.ProductType", "ProductType")
@@ -918,8 +915,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Navigation("Orders");
 
                     b.Navigation("Roles");
-
-                    b.Navigation("ShoppingCart");
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Brand", b =>
@@ -951,6 +946,8 @@ namespace RunAndHikeStore.Data.Migrations
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ShoppingCart", b =>
                 {
+                    b.Navigation("ApplicationUser");
+
                     b.Navigation("CartItems");
                 });
 

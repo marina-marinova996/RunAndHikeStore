@@ -1,13 +1,16 @@
 ﻿namespace RunAndHikeStore.Data
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using RunAndHikeStore.Data.Common.Models;
     using RunAndHikeStore.Data.Models;
 
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
+    using System.Reflection.Emit;
     using System.Threading;
     using System.Threading.Tasks;
     using static RunAndHikeStore.Common.GlobalConstants.ApplicationUser;
@@ -92,8 +95,7 @@
 
             builder.Entity<ApplicationUser>()
            .HasOne(u => u.ShoppingCart)
-           .WithOne(u => u.ApplicationUser)
-           .HasForeignKey<ShoppingCart>(s => s.ApplicationUserId);
+           .WithOne(u => u.ApplicationUser);
 
             // Needed for Identity models configuration
             base.OnModelCreating(builder);

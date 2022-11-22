@@ -1,35 +1,33 @@
 ﻿namespace RunAndHikeStore.Data.Seeding
 {
-    using System;
-    using System.Linq;
-    using System.Threading.Tasks;
-
     using RunAndHikeStore.Common;
     using RunAndHikeStore.Data.Models;
-
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.Extensions.DependencyInjection;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
 
     internal class RolesSeeder : ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            var roleManager = serviceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-
-            await SeedRoleAsync(roleManager, GlobalConstants.AdministratorRoleName);
-        }
-
-        private static async Task SeedRoleAsync(RoleManager<ApplicationRole> roleManager, string roleName)
-        {
-            var role = await roleManager.FindByNameAsync(roleName);
-            if (role == null)
+            if (dbContext.Roles.Any())
             {
-                var result = await roleManager.CreateAsync(new ApplicationRole(roleName));
-                if (!result.Succeeded)
-                {
-                    throw new Exception(string.Join(Environment.NewLine, result.Errors.Select(e => e.Description)));
-                }
+                return;
             }
+
+            var roles = new List<ApplicationRole>();
+
+            var adminRole = new ApplicationRole()
+            {
+                Id = "15852114-4f40-4748-95a0-77f1567d838f",
+                Name = GlobalConstants.AdministratorRoleName,
+                NormalizedName = GlobalConstants.NormalizedAdministratorRoleName,
+            };
+
+            roles.Add(adminRole);
+
+            await dbContext.Roles.AddRangeAsync(roles);
         }
     }
 }

@@ -61,7 +61,7 @@
             return await this.repo.AsNoTracking<CartItem>()
                                   .Include(c => c.ShoppingCart)
                                   .Include(c => c.ShoppingCart.ApplicationUser)
-                                  .Where(c => c.ShoppingCart.ApplicationUserId == userId)
+                                  .Where(c => c.ShoppingCart.ApplicationUser.Id == userId)
                                   .Where(c => c.ShoppingCart.ApplicationUser.IsDeleted == false)
                                   .Include(c => c.Product)
                                   .Where(c => c.Product.IsDeleted == false)
@@ -101,7 +101,7 @@
                              .Include(c => c.ShoppingCart)
                              .Include(c => c.ShoppingCart.ApplicationUser)
                              .Where(c => c.ShoppingCart.ApplicationUser.IsDeleted == false)
-                             .Where(c => c.ShoppingCart.ApplicationUserId == userId)
+                             .Where(c => c.ShoppingCart.ApplicationUser.Id == userId)
                              .Include(c => c.Product)
                              .Where(c => c.Product.IsDeleted == false)
                              .Include(c => c.Size)
@@ -111,7 +111,7 @@
                                  ShoppingCartId = c.ShoppingCartId,
                                  Quantity = c.Quantity,
                                  ProductId = c.ProductId,
-                                 ApplicationUserId = c.ShoppingCart.ApplicationUserId,
+                                 ApplicationUserId = c.ShoppingCart.ApplicationUser.Id,
                                  Product = new ProductViewModel
                                  {
                                      Id = c.Product.Id,
@@ -137,7 +137,7 @@
         {
             var allCartItems = await this.repo.All<CartItem>()
                                               .Include(c => c.ShoppingCart)
-                                              .Where(c => c.ShoppingCart.ApplicationUserId == userId)
+                                              .Where(c => c.ShoppingCart.ApplicationUser.Id == userId)
                                               .ToListAsync();
 
             this.repo.DeleteRange(allCartItems);

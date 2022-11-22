@@ -5,6 +5,7 @@
         public const string SystemName = "RunAndHikeStore";
 
         public const string AdministratorRoleName = "Administrator";
+        public const string NormalizedAdministratorRoleName = "ADMINISTRATOR";
 
         public const string UserRoleName = "User";
 

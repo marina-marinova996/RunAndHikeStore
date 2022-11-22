@@ -1,14 +1,15 @@
-﻿using RunAndHikeStore.Data.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using RunAndHikeStore.Data.Models;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace RunAndHikeStore.Data.Seeding
 {
     internal class UsersSeeder : ISeeder
     {
+
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
             if (dbContext.Users.Any())
@@ -16,25 +17,28 @@ namespace RunAndHikeStore.Data.Seeding
                 return;
             }
 
-            var initialUsers = new List<ApplicationUser>()
-                                            {
-                                              new ApplicationUser
-                                              {
-                                                  Id = "6a0e1278-6957-477f-bd05-4839e0f7de83",
-                                                  FirstName = "Marina",
-                                                  LastName = "Marinova",
-                                                  Email = "marina@gmail.com",
-                                              },
-                                              new ApplicationUser
-                                              {
-                                                  Id = "52cefad3-9f34-4256-bfbd-23a875436450",
-                                                  FirstName = "Ivan",
-                                                  LastName = "Petrov",
-                                                  Email = "ivan@gmail.com",
-                                              },
-                                            };
+            var firstUser = new ApplicationUser()
+            {
+                Id = "bc519db8-e466-49ed-a0b4-0ea89282c076",
+                FirstName = "Marina",
+                LastName = "Marinova",
+                Email = "marina@gmail.com",
+                UserName = "marina@gmail.com",
+            };
 
-            await dbContext.Users.AddRangeAsync(initialUsers);
+            var secondUser = new ApplicationUser()
+            {
+                Id = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                Email = "ivan@gmail.com",
+                UserName = "ivan@gmail.com",
+            };
+
+            var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+            var resultFirstUser = await userManager.CreateAsync(firstUser, "123456Ab!");
+            var resultSecondUser = await userManager.CreateAsync(secondUser, "Ab123456!");
         }
     }
 }

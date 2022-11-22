@@ -1,11 +1,9 @@
-﻿using RunAndHikeStore.Web.Areas.Admin.Controllers;
-
-namespace RunAndHikeStore.Web.Controllers
+﻿namespace RunAndHikeStore.Web.Controllers
 {
-    using System.Diagnostics;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Web.ViewModels;
+    using System.Diagnostics;
 
     public class HomeController : BaseController
     {
