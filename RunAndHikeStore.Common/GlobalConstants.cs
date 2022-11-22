@@ -24,6 +24,9 @@
 
             public const int LastNameMinLength = 2;
             public const int LastNameMaxLength = 50;
+
+            public const int PhoneNumberMinLength = 7;
+            public const int PhoneNumberMaxLength = 15;
         }
 
         public static class Address

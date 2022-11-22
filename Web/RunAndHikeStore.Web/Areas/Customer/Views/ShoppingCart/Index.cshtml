@@ -41,13 +41,13 @@
                 <td align="right" colspan="6">Total amount</td>
                 <td class="text-center">@Model.CartItems.Sum(x=> Convert.ToDecimal(x.Total)).ToString("f2") EUR</td>
                 <td class="text-center">
-                    <a asp-controller="Product" asp-action="All" class="btn btn-success">Next Step</a>
+                    <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="CreateOrder" class="btn btn-success">Next Step</a>
                 </td>
             </tr>
         </table>
         <div class="text-center">
-            <a asp-controller="Product" asp-action="All" class="btn btn-primary ml-2">Continue Shopping</a>
-            <a class="btn btn-danger ml-2" asp-controller="ShoppingCart" asp-action="RemoveAllCartItems">Clear Shopping Cart</a>
+            <a asp-area="Customer" asp-controller="Product" asp-action="All" class="btn btn-primary ml-2">Continue Shopping</a>
+            <a class="btn btn-danger ml-2" asp-area="Customer" asp-controller="ShoppingCart" asp-action="RemoveAllCartItems">Clear Shopping Cart</a>
         </div>
     }
     else

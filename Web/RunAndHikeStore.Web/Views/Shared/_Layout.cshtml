@@ -75,6 +75,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/fontawesome.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/js/standalone/selectize.min.js" asp-append-version="true"></script>
     @await this.RenderSectionAsync("Scripts", required: false)
-    @Html.Partial("_UserMessage")
+    <partial name="_UserMessage" />
 </body>
 </html>

@@ -53,7 +53,7 @@
                             <input type="hidden" name="productId" value="@Model.Id" />
                             @if (Model.Sizes.Any())
                             {
-                                <input asp-area="Admin" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId=@Model.Id asp-route-sizeId=@Model.SizeId class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Add to cart" />
+                                <input asp-area="Customer" asp-controller="ShoppingCart" asp-action="AddToCart" asp-route-productId=@Model.Id asp-route-sizeId=@Model.SizeId class="btn-lg btn-success col-md-4 mt-3" type="submit" value="Add to cart" />
                             }
                             else
                             {

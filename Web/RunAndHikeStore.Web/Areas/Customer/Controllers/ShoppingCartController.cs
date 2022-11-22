@@ -1,6 +1,8 @@
 ﻿namespace RunAndHikeStore.Web.Areas.Customer.Controllers
 {
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using RunAndHikeStore.Services;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ClaimsPrincipalExtensions;
     using RunAndHikeStore.Web.ViewModels.Product;
@@ -13,6 +15,7 @@
     {
         private readonly IShoppingCartService shoppingCartService;
         private readonly IProductService productService;
+        private readonly IOrderService orderService;
 
         public ShoppingCartController(IShoppingCartService shoppingCartService, IProductService productService)
         {
@@ -105,6 +108,44 @@
             }
 
             return RedirectToAction(nameof(this.Index));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CreateOrder()
+        {
+            var model = new ShoppingCartViewModel();
+            try
+            {
+                var userId = User.Id();
+
+                var user = await shoppingCartService.FindUserById(userId);
+
+                if (user != null && user.ShoppingCart.CartItems != null)
+                {
+                    model.CartItems = await shoppingCartService.GetAllCartItems(userId);
+                }
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Something went wrong");
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateOrder(ShoppingCartViewModel model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(model);
+            }
+
+            var customerId = User.Id();
+
+            await orderService.CreateAsync(model, customerId);
+
+            return this.RedirectToAction("Index", "Home", new { area = "" });
         }
     }
 }
