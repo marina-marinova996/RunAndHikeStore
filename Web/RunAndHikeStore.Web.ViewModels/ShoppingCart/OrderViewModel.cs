@@ -7,8 +7,6 @@
     {
         public DateTime OrderDate { get; set; } = DateTime.Now;
 
-        public DateTime ShipDate { get; set; }
-
         public decimal OrderTotalPrice { get; set; }
 
         public OrderStatus? OrderStatus { get; set; }
@@ -16,5 +14,7 @@
         public string CustomerId { get; set; }
 
         public IEnumerable<OrderDetailViewModel> OrderDetails { get; set; }
+
+        public IEnumerable<CartItemViewModel> CartItems { get; set; }
     }
 }

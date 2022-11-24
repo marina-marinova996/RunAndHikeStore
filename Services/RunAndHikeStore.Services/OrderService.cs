@@ -7,7 +7,7 @@ namespace RunAndHikeStore.Services
 {
     public class OrderService : IOrderService
     {
-        public Task CreateAsync(ShoppingCartViewModel model, string customerId)
+        public Task CreateAsync(OrderViewModel model, string customerId)
         {
             throw new System.NotImplementedException();
         }

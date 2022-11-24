@@ -25,7 +25,15 @@
                 NormalizedName = GlobalConstants.NormalizedAdministratorRoleName,
             };
 
+            var userRole = new ApplicationRole()
+            {
+                Id = "26852114-4f40-4748-95a0-77f1567d837a",
+                Name = GlobalConstants.UserRoleName,
+                NormalizedName = GlobalConstants.NormalizedUserRoleName,
+            };
+
             roles.Add(adminRole);
+            roles.Add(userRole);
 
             await dbContext.Roles.AddRangeAsync(roles);
         }

@@ -13,7 +13,6 @@ namespace RunAndHikeStore.Web.ViewModels.Stock
 
         public IEnumerable<EditStockViewModel> Stocks { get; set; } = new List<EditStockViewModel>();
 
-
         [Display(Name = "Search")]
         public string SearchTerm { get; set; }
     }

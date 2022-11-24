@@ -41,6 +41,20 @@
             await this.repo.SaveChangesAsync();
         }
 
+        public async Task<int> CountShoppingCartItemsQuantity(string userId)
+        {
+            var user = await this.FindUserById(userId);
+
+            var quantity = 0;
+
+            foreach (var count in user.ShoppingCart.CartItems)
+            {
+                quantity += count.Quantity;
+            }
+
+            return quantity;
+        }
+
         public async Task<CartItem> CreateCartItem(string productId, string userId, string sizeId, int quantity)
         {
             var user = await this.FindUserById(userId);

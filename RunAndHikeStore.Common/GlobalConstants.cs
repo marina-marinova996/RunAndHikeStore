@@ -8,6 +8,7 @@
         public const string NormalizedAdministratorRoleName = "ADMINISTRATOR";
 
         public const string UserRoleName = "User";
+        public const string NormalizedUserRoleName = "USER";
 
         public const string DecimalMaxValue = "79228162514264337593543950335";
 

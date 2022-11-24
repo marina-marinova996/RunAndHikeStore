@@ -113,7 +113,7 @@
         [HttpGet]
         public async Task<IActionResult> CreateOrder()
         {
-            var model = new ShoppingCartViewModel();
+            var model = new OrderViewModel();
             try
             {
                 var userId = User.Id();
@@ -134,7 +134,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(ShoppingCartViewModel model)
+        public async Task<IActionResult> CreateOrder(OrderViewModel model)
         {
             if (!this.ModelState.IsValid)
             {

@@ -6,7 +6,7 @@ namespace RunAndHikeStore.Services.Contracts
 {
     public interface IOrderService
     {
-        Task CreateAsync(ShoppingCartViewModel model, string customerId);
+        Task CreateAsync(OrderViewModel model, string customerId);
 
         Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync(string customerId);
     }

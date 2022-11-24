@@ -10,7 +10,7 @@ namespace RunAndHikeStore.Services.Contracts
 {
     public interface IUserService
     {
-        Task<IEnumerable<UserListViewModel>> GetUsers();
+        Task<AllUsersViewModel> GetUsers(string searchTerm, int currentPage = 1, int usersPerPage = 6);
 
         Task<UserEditViewModel> GetUserForEdit(string id);
 

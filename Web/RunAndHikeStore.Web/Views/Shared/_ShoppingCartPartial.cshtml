@@ -1,8 +1,18 @@
-﻿@using RunAndHikeStore.Web.ViewModels.ShoppingCart
+﻿@using RunAndHikeStore.Services.Contracts
+@using RunAndHikeStore.Web.ClaimsPrincipalExtensions
+@using RunAndHikeStore.Web.ViewModels.ShoppingCart
+@using System.Security.Claims
+@inject IShoppingCartService cartService
 
 <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="btn btn-primary btn-sm ml-3">
     <i class="fa-solid fa-cart-shopping">
     </i>
     Cart
-    <span class="badge badge-warning">0</span>
+
+    @{
+        var userId = User.Id();
+        <span class="badge badge-warning">
+            @await cartService.CountShoppingCartItemsQuantity(userId)
+            </span>
+    }
 </a>

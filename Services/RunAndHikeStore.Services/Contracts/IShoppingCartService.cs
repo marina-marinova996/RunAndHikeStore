@@ -24,6 +24,8 @@ namespace RunAndHikeStore.Services.Contracts
 
         Task<CartItem> CreateCartItem(string productId, string userId, string sizeId, int quantity);
 
+        Task<int> CountShoppingCartItemsQuantity(string userId);
+
         //void BuyProducts(string userId);
 
         //Task<IEnumerable<ShoppingCartViewModel>> GetProducts(string userId);

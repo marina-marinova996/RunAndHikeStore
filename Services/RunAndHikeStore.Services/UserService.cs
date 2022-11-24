@@ -2,7 +2,9 @@
 using RunAndHikeStore.Data.Common.Repositories;
 using RunAndHikeStore.Data.Models;
 using RunAndHikeStore.Services.Contracts;
+using RunAndHikeStore.Web.ViewModels.Stock;
 using RunAndHikeStore.Web.ViewModels.User;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,17 +38,35 @@ namespace RunAndHikeStore.Services
             };
         }
 
-        public async Task<IEnumerable<UserListViewModel>> GetUsers()
+        public async Task<AllUsersViewModel> GetUsers(string searchTerm, int currentPage = 1, int usersPerPage = 6)
         {
-            return await this.repo.All<ApplicationUser>()
-                .Select(u => new UserListViewModel()
-                {
-                    Id = u.Id,
-                    Email = u.Email,
-                    FirstName = u.FirstName,
-                    LastName = u.LastName,
-                })
-                .ToListAsync();
+            var usersQuery = this.repo.All<ApplicationUser>().AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                usersQuery = usersQuery.Where(u => u.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    u.LastName.ToLower().Contains(searchTerm.ToLower()) ||
+                                                    u.Email.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            var users = await usersQuery.Skip((currentPage - 1) * usersPerPage)
+                       .Take(usersPerPage)
+                       .Select(u => new UserListViewModel()
+                       {
+                           Id = u.Id,
+                           Email = u.Email,
+                           FirstName = u.FirstName,
+                           LastName = u.LastName,
+                       })
+                      .ToListAsync();
+
+            var totalRecords = usersQuery.Count();
+
+            return new AllUsersViewModel()
+            {
+                Users = users,
+                TotalRecordsCount = totalRecords,
+            };
         }
 
         public async Task<bool> UpdateUser(UserEditViewModel model)

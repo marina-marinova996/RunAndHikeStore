@@ -18,12 +18,19 @@ namespace RunAndHikeStore.Data.Seeding
                 return;
             }
 
-            var userRole = new IdentityUserRole<string>()
+            var adminRole = new IdentityUserRole<string>()
             {
                 UserId = "bc519db8-e466-49ed-a0b4-0ea89282c076",
                 RoleId = "15852114-4f40-4748-95a0-77f1567d838f",
             };
 
+            var userRole = new IdentityUserRole<string>()
+            {
+                UserId = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                RoleId = "26852114-4f40-4748-95a0-77f1567d837a",
+            };
+
+            await dbContext.UserRoles.AddAsync(adminRole);
             await dbContext.UserRoles.AddAsync(userRole);
         }
     }

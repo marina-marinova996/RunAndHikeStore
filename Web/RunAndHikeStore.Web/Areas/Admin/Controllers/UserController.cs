@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using RunAndHikeStore.Common;
 using RunAndHikeStore.Data.Models;
 using RunAndHikeStore.Services.Contracts;
+using RunAndHikeStore.Web.ViewModels.Stock;
 using RunAndHikeStore.Web.ViewModels.User;
 using System.Linq;
 using System.Threading.Tasks;
@@ -35,11 +36,19 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ManageUsers()
+        public async Task<IActionResult> ManageUsers([FromQuery] AllUsersViewModel query)
         {
-            var users = await userService.GetUsers();
+            this.ViewData["Title"] = "Manage Users";
 
-            return View(users);
+            var result = await userService.GetUsers(
+                                                    query.SearchTerm,
+                                                    query.CurrentPage,
+                                                    AllUsersViewModel.UsersPerPage);
+
+            query.Users = result.Users;
+            query.TotalRecordsCount = result.TotalRecordsCount;
+
+            return View(query);
         }
 
         public async Task<IActionResult> Roles(string id)
