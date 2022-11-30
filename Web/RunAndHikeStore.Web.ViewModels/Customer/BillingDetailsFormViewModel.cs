@@ -1,28 +1,18 @@
-﻿namespace RunAndHikeStore.Web.ViewModels.ShoppingCart
+﻿using System.ComponentModel.DataAnnotations;
+using static RunAndHikeStore.Common.GlobalConstants.Address;
+using static RunAndHikeStore.Common.GlobalConstants.ApplicationUser;
+
+namespace RunAndHikeStore.Web.ViewModels.Customer
 {
-    using RunAndHikeStore.Web.ViewModels.Product;
-    using System.ComponentModel.DataAnnotations;
-    using static RunAndHikeStore.Common.GlobalConstants.ApplicationUser;
-    using static RunAndHikeStore.Common.GlobalConstants.Address;
-
-    public class OrderDetailViewModel
+    public class BillingDetailsFormViewModel
     {
-        public string OrderId { get; set; }
-
-        public int OrderQuantity { get; set; }
-
-        public string ProductId { get; set; }
-
-        public ProductViewModel Product { get; set; }
-
-        [Required]
-        [StringLength(FirstNameMaxLength, MinimumLength = FirstNameMinLength )]
+        [StringLength(FirstNameMaxLength, MinimumLength = FirstNameMinLength)]
         public string FirstName { get; set; }
 
-        [Required]
-        [StringLength(LastNameMaxLength, MinimumLength = LastNameMaxLength)]
+        [StringLength(LastNameMaxLength, MinimumLength = LastNameMinLength)]
         public string LastName { get; set; }
 
+        [Required]
         [StringLength(StreetAddressMaxLength, MinimumLength = StreetAddressMinLength)]
         public string StreetAddress { get; set; }
 

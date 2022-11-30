@@ -1,14 +1,13 @@
 ﻿namespace RunAndHikeStore.Data.Models
 {
+    using Microsoft.EntityFrameworkCore;
+    using RunAndHikeStore.Data.Common.Models;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using static RunAndHikeStore.Common.GlobalConstants.ApplicationUser;
-    using static RunAndHikeStore.Common.GlobalConstants.Address;
+    using static RunAndHikeStore.Common.GlobalConstants.Size;
 
-    using RunAndHikeStore.Data.Common.Models;
-
-    public class OrderDetail : BaseModel<string>
+    public class OrderDetail : BaseDeletableModel<string>
     {
         public OrderDetail()
         {
@@ -34,6 +33,19 @@
         public int OrderQuantity { get; set; }
 
         /// <summary>
+        /// Gets or sets the Unit Price.
+        /// </summary>
+        [Required]
+        [Precision(18, 2)]
+        public decimal UnitPrice { get; set; }
+        /// <summary>
+        /// Gets or sets the Size.
+        /// </summary>
+        [Required]
+        [StringLength(ProductSizeNameMaxLength)]
+        public string Size { get; set; }
+
+        /// <summary>
         /// Foreign key to Products Table.
         /// </summary>
         [Required]
@@ -44,54 +56,5 @@
         /// </summary>
         [ForeignKey(nameof(ProductId))]
         public Product Product { get; set; }
-
-        /// <summary>
-        /// Recipient First Name.
-        /// </summary>
-
-        [Required]
-        [StringLength(FirstNameMaxLength)]
-        public string FirstName { get; set; }
-
-        [Required]
-        [StringLength(LastNameMaxLength)]
-        /// <summary>
-        /// Recipient Last Name.
-        /// </summary>
-        public string LastName { get; set; }
-
-        /// <summary>
-        /// Recipient Street Address.
-        /// </summary>
-        [StringLength(StreetAddressMaxLength)]
-        public string StreetAddress { get; set; }
-
-        /// <summary>
-        /// Recipient City.
-        /// </summary>
-        [Required]
-        [StringLength(CityMaxLength)]
-        public string City { get; set; }
-
-        /// <summary>
-        /// Recipient Country.
-        /// </summary>
-        [Required]
-        [StringLength(CountryMaxLength)]
-        public string Country { get; set; }
-
-        /// <summary>
-        /// Postal code of the address.
-        /// </summary>
-        [Required]
-        [StringLength(PostalCodeMaxLength)]
-        public string PostalCode { get; set; }
-
-        /// <summary>
-        /// Recipient Phone Number.
-        /// </summary>
-        [Required]
-        [StringLength(PhoneNumberMaxLength)]
-        public string PhoneNumber { get; set; }
     }
 }

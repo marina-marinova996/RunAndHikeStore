@@ -4,6 +4,7 @@
     using RunAndHikeStore.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
     using static RunAndHikeStore.Common.GlobalConstants.Address;
 
     public class Address : BaseDeletableModel<string>
@@ -45,6 +46,20 @@
         /// </summary>
         [Required]
         [StringLength(AddressTypeMaxLength)]
-        public AddressType AddressType { get; set; }
+        public AddressType AddressType { get; set; } = (AddressType)2;
+        /// <summary>
+        /// Foreign Key to ApplicationUsers Table.
+        /// </summary>
+        [Required]
+        public string CustomerId { get; set; }
+
+        /// <summary>
+        /// Navigation property to ApplicationUsers Table.
+        /// </summary>
+        [ForeignKey("CustomerId")]
+        public ApplicationUser Customer
+        {
+            get; set;
+        }
     }
 }

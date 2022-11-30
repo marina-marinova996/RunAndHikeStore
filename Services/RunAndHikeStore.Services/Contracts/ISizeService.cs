@@ -10,16 +10,48 @@ namespace RunAndHikeStore.Services.Contracts
 {
     public interface ISizeService
     {
+        /// <summary>
+        /// Add new size.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task Add(AddSizeViewModel model);
 
+        /// <summary>
+        /// Get all sizes.
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="sizesPerPage"></param>
+        /// <returns></returns>
         Task<AllSizesViewModel> GetAllAsync(string searchTerm, int currentPage = 1, int sizesPerPage = 6);
 
+        /// <summary>
+        /// Get size by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<SizeViewModel> GetByIdAsync(string id);
 
+        /// <summary>
+        /// Edit size.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         Task Edit(SizeViewModel model);
 
+        /// <summary>
+        /// Get View Model for Edit.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<SizeViewModel> GetViewModelForEditByIdAsync(string id);
 
+        /// <summary>
+        /// Delete size.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task Delete(string id);
     }
 }

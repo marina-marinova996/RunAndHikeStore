@@ -38,6 +38,8 @@ namespace RunAndHikeStore.Data.Models
 
         public ICollection<Order> Orders { get; set; }
 
+        public ICollection<BillingDetails> BillingDetails { get; set; }
+
         [Required]
         public string ShoppingCartId { get; set; }
 

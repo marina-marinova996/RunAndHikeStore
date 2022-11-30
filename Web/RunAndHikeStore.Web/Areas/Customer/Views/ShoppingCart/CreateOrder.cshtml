@@ -1,15 +1,68 @@
-﻿@using RunAndHikeStore.Web.ViewModels.ShoppingCart
+﻿@using RunAndHikeStore.Web.ViewModels.Order
 @model OrderViewModel
 
 <div class="row">
-    <div class="col-md-8 mb-4">
-        <div class="card mb-4">
-            <partial name="_BillingDetailsPartial"/>
+    <div class="col-md-8 mb-2">
+        <div class="card mb-2">
+            <div class="card-header py-3">
+                <h4 class="mb-0 text-center">Billing Details</h4>
+            </div>
+            <div class="card-body">
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label">First Name</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label">Last Name</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label">Street Address</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label" ">City</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label">Country</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col">
+                        <div class="form-outline">
+                            <label class="form-label">Postal Code</label>
+                            <input class="form-control" />
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-outline mb-4">
+                            <label class="form-label">Phone Number</label>
+                            <input type="number" class="form-control" />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-4 mb-4">
-        <div class="card mb-4">
+    <div class="col-md-4 mb-2">
+        <div class="card mb-2">
             <div class="card-header py-3">
                 <h4 class="mb-0 text-center">Summary</h4>
             </div>
@@ -36,6 +89,51 @@
                 <button type="button" class="btn btn-success btn-lg btn-block">Make purchase</button>
                 <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="btn btn-primary btn-lg btn-block">Return to Shopping Cart</a>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8 mb-2">
+        <div class="card mb-4">
+            <div class="card-header py-3">
+                <h4 class="mb-0 text-center">Delivery Address</h4>
+            </div>
+            <div class="card-body">
+            <div class="row mb-2">
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label">Street Address</label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label" ">City</label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label">Country</label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col">
+                    <div class="form-outline">
+                        <label class="form-label">Postal Code</label>
+                        <input class="form-control" />
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center">
+            <a asp-area="Customer" asp-controller="Customer" asp-action="Details" type="button" class="btn btn-warning btn-lg">Edit Details</a>
         </div>
     </div>
 </div>

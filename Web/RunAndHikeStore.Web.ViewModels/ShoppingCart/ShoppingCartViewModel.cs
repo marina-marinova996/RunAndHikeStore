@@ -1,4 +1,5 @@
 ﻿using RunAndHikeStore.Web.ViewModels.Customer;
+using RunAndHikeStore.Web.ViewModels.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,5 @@ namespace RunAndHikeStore.Web.ViewModels.ShoppingCart
         public IEnumerable<CartItemViewModel> CartItems { get; set; }
 
         public OrderViewModel Order { get; set; }
-
-        public AddressViewModel DeliveryAddress { get; set; }
     }
 }

@@ -34,7 +34,18 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         Task Delete(CategoryViewModel model);
 
+        /// <summary>
+        /// Get Category by Id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         Task<CategoryViewModel> GetByIdAsync(string id);
+
+        /// <summary>
+        /// Get View Model for edit.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
 
         Task<EditCategoryViewModel> GetViewModelForEditByIdAsync(string id);
     }

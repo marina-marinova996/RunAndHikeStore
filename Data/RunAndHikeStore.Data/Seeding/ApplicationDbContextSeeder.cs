@@ -35,6 +35,10 @@
                               new UsersSeeder(),
                               new RolesSeeder(),
                               new UserRolesSeeder(),
+                              new BillingDetailsSeeder(),
+                              new OrdersSeeder(),
+                              new OrderDetailsSeeder(),
+                              new AddressSeeder(),
                           };
 
             foreach (var seeder in seeders)

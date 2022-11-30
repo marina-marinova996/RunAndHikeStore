@@ -5,22 +5,23 @@
     using RunAndHikeStore.Services;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ClaimsPrincipalExtensions;
+    using RunAndHikeStore.Web.ViewModels.Order;
     using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.ShoppingCart;
     using System.Linq;
     using System.Threading.Tasks;
 
-    [Area("Customer")]
     public class ShoppingCartController : BaseController
     {
         private readonly IShoppingCartService shoppingCartService;
         private readonly IProductService productService;
         private readonly IOrderService orderService;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService, IProductService productService)
+        public ShoppingCartController(IShoppingCartService shoppingCartService, IProductService productService, IOrderService orderService)
         {
             this.shoppingCartService = shoppingCartService;
             this.productService = productService;
+            this.orderService = orderService;
         }
 
         [HttpGet]

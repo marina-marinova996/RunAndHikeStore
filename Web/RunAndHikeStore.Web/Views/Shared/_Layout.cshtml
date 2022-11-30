@@ -38,9 +38,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Customer" asp-controller="Product" asp-action="All">Products</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Contact us</a>
-                        </li>
+
                     </ul>
                     <partial name="_LoginPartial" asp-area="Identity"/>
                     @if (SignInManager.IsSignedIn(User))
@@ -62,7 +60,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container text-center">
-            &copy; @DateTime.Now.Year - @GlobalConstants.SystemName - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; @DateTime.Now.Year - Run and Hike Store
         </div>
     </footer>
 

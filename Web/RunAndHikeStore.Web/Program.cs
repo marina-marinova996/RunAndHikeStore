@@ -77,6 +77,8 @@ namespace RunAndHikeStore.Web
             services.AddScoped<ISizeService, SizeService>();
             services.AddScoped<IShoppingCartService, ShoppingCartService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICustomerService, CustomerService>();
         }
 
         private static void Configure(WebApplication app)

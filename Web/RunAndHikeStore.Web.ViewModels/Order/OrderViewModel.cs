@@ -1,8 +1,11 @@
-﻿namespace RunAndHikeStore.Web.ViewModels.ShoppingCart
+﻿using RunAndHikeStore.Web.ViewModels.ShoppingCart;
+
+namespace RunAndHikeStore.Web.ViewModels.Order
 {
     using RunAndHikeStore.Data.Models.Enums;
     using System;
     using System.Collections.Generic;
+
     public class OrderViewModel
     {
         public DateTime OrderDate { get; set; } = DateTime.Now;
@@ -13,7 +16,7 @@
 
         public string CustomerId { get; set; }
 
-        public IEnumerable<OrderDetailViewModel> OrderDetails { get; set; }
+        public IEnumerable<OrderDetailFormViewModel> OrderDetails { get; set; }
 
         public IEnumerable<CartItemViewModel> CartItems { get; set; }
     }

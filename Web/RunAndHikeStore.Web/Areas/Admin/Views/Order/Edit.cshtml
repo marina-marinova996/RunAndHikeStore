@@ -1,0 +1,107 @@
+﻿@using RunAndHikeStore.Web.ViewModels.Order
+@model EditOrderDetailViewModel
+
+<h2 class="text-center">@ViewData["Title"]</h2>
+<hr />
+
+<form asp-area="Admin" asp-controller="Order" asp-action="Edit" method="post">
+    <h3>Order Details</h3>
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-dark text-center">
+                <th scope="col">Order Number</th>
+                <th scope="col">Order Date</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Total Price</th>
+                <th scope="col">Order Status</th>
+                <th scope="col">Payment Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-dark text-center">
+                <input type="hidden" asp-for="@Model.OrderId" />
+                <td>@Model.OrderNumber</td>
+                <td>@Model.OrderDate</td>
+                <td>@Model.BillingDetails.FirstName</td>
+                <td>@Model.BillingDetails.LastName</td>
+                <td>@Model.Email</td>
+                <td asp-for="OrderStatusId">@Model.TotalPrice EUR</td>
+                <td>
+                    <select asp-for="OrderStatusId" class="form-control">
+                        @foreach (var orderStatus in Model.OrderStatuses)
+                        {
+                            <option value="@orderStatus.Id">@orderStatus.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="OrderStatusId" class="text-danger"></span>
+                </td>
+                <td asp-for="PaymentStatusId">
+                    <select asp-for="PaymentStatusId" class="form-control">
+                        @foreach (var paymentStatus in Model.PaymentStatuses)
+                        {
+                            <option value="@paymentStatus.Id">@paymentStatus.Name</option>
+                        }
+                    </select>
+                    <span asp-validation-for="PaymentStatusId" class="text-danger"></span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <h4>Purchased Products</h4>
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-dark text-center">
+                <th>Product Number</th>
+                <th>Product Name</th>
+                <th>Unit Price</th>
+                <th>Size</th>
+                <th>Quantity</th>
+                <th>Total amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-dark text-center">
+                <input type="hidden" asp-for="@Model.OrderId" />
+                <td>@Model.OrderNumber</td>
+                <td>@Model.OrderDate</td>
+                <td>@Model.BillingDetails.FirstName</td>
+                <td>@Model.BillingDetails.LastName</td>
+                <td>@Model.Email</td>
+                <td>@Model.Email</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3>Billing Details and Delivery Address</h3>
+    <table class="table table-hover">
+        <thead>
+            <tr class="table-dark text-center">
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Street Address</th>
+                <th scope="col">City</th>
+                <th scope="col">Country</th>
+                <th scope="col">Postal Code</th>
+                <th scope="col">Phone Number</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="table-dark text-center">
+                <td>@Model.BillingDetails.FirstName</td>
+                <td>@Model.BillingDetails.LastName</td>
+                <td>@Model.BillingDetails.StreetAddress</td>
+                <td>@Model.BillingDetails.City</td>
+                <td>@Model.BillingDetails.Country</td>
+                <td>@Model.BillingDetails.PostalCode</td>
+                <td>@Model.BillingDetails.PhoneNumber</td>
+        </tbody>
+    </table>
+    <div class="text-center">
+        <input class="btn-lg btn-warning col-md-4 mt-3 text-center" type="submit" value="Save Changes" />
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -5,5 +5,6 @@
         Approved = 1,
         Declined = 2,
         Shipped = 3,
+        Pending = 4,
     }
 }

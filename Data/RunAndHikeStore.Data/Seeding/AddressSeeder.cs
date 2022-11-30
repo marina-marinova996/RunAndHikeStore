@@ -1,4 +1,8 @@
-﻿using System;
+﻿using RunAndHikeStore.Data.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace RunAndHikeStore.Data.Seeding
@@ -7,22 +11,25 @@ namespace RunAndHikeStore.Data.Seeding
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            //if (dbContext.Addresses.Any())
-            //{
-            //    return;
-            //}
+            if (dbContext.Addresses.Any())
+            {
+                return;
+            }
 
-            //var initialAddresses = new List<Address>()
-            //                                {
-            //                                  new Address {},
-            //                                  new Address {},
-            //                                  new Address {},
-            //                                  new Address {},
-            //                                  new Address {},
-            //                                  new Address {},
-            //                                };
+            var initialAddresses = new List<Address>()
+                                            {
+                                              new Address
+                                              {
+                                                  Id = "579939b8-ea8e-4daa-8c81-0635a3f7ff73",
+                                                  StreetAddress = "Osmi Primorski Polk 2",
+                                                  City = "Varna",
+                                                  Country = "Bulgaria",
+                                                  PostalCode = "9000",
+                                                  CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                                              },
+                                            };
 
-            //await dbContext.Addresses.AddRangeAsync(initialAddresses);
+            await dbContext.Addresses.AddRangeAsync(initialAddresses);
         }
     }
 }

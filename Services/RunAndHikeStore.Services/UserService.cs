@@ -2,10 +2,7 @@
 using RunAndHikeStore.Data.Common.Repositories;
 using RunAndHikeStore.Data.Models;
 using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.Stock;
 using RunAndHikeStore.Web.ViewModels.User;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

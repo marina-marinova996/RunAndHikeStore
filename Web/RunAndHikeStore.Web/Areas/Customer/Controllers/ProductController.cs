@@ -8,7 +8,6 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    [Area("Customer")]
     public class ProductController : BaseController
     {
         private readonly IProductService productService;

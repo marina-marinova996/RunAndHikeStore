@@ -20,10 +20,10 @@ namespace RunAndHikeStore.Data.Seeding
             var firstUser = new ApplicationUser()
             {
                 Id = "bc519db8-e466-49ed-a0b4-0ea89282c076",
-                FirstName = "Marina",
-                LastName = "Marinova",
-                Email = "marina@gmail.com",
-                UserName = "marina@gmail.com",
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@runandhikestore.com",
+                UserName = "admin@runandhikestore.com",
             };
 
             var secondUser = new ApplicationUser()

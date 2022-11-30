@@ -1,20 +1,350 @@
-﻿using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.ShoppingCart;
+﻿using Microsoft.EntityFrameworkCore;
+using RunAndHikeStore.Data.Common.Repositories;
+using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Data.Models.Enums;
+using RunAndHikeStore.Services.Contracts;
+using RunAndHikeStore.Web.ViewModels.Customer;
+using RunAndHikeStore.Web.ViewModels.Order;
+using RunAndHikeStore.Web.ViewModels.Order.Enum;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace RunAndHikeStore.Services
 {
     public class OrderService : IOrderService
     {
+        private readonly IRepository repo;
+
+        /// <summary>
+        /// IoC.
+        /// </summary>
+        public OrderService(IRepository _repo)
+        {
+            this.repo = _repo;
+        }
+
+        /// <summary>
+        /// Create order.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <param name="customerId"></param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
         public Task CreateAsync(OrderViewModel model, string customerId)
         {
             throw new System.NotImplementedException();
         }
 
-        public Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync(string customerId)
+        /// <summary>
+        /// Get all orders.
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="ordersPerPage"></param>
+        /// <param name="sorting"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public async Task<AllOrdersViewModel> GetAllOrdersAsync(string searchTerm, int currentPage = 1, int ordersPerPage = 6, OrdersSorting sorting = OrdersSorting.Newest)
         {
-            throw new System.NotImplementedException();
+            var ordersQuery = this.repo.AsNoTracking<Order>()
+                                    .Where(o => o.IsDeleted == false)
+                                    .Include(o => o.Customer)
+                                    .Include(o => o.OrderDetails)
+                                    .Include(o => o.BillingDetails)
+                                    .AsQueryable();
+
+            if (ordersQuery == null)
+            {
+                throw new ArgumentException("No orders");
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                ordersQuery = ordersQuery.Where(o => o.BillingDetails.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
+                                                o.BillingDetails.LastName.ToLower().Contains(searchTerm.ToLower()) ||
+                                                o.Customer.Email.ToLower().Contains(searchTerm.ToLower()) ||
+                                                o.OrderNumber.ToLower().Contains(searchTerm.ToLower()) ||
+                                                o.OrderDate.ToString().Contains(searchTerm.ToLower()));
+            }
+
+            ordersQuery = sorting switch
+            {
+                OrdersSorting.Newest => ordersQuery
+                                                    .OrderByDescending(o => o.CreatedOn),
+                _ => ordersQuery.OrderBy(o => o.CreatedOn),
+            };
+
+            var orders = ordersQuery
+                                    .Skip((currentPage - 1) * ordersPerPage)
+                                    .Take(ordersPerPage)
+                                    .Select(o => new ManageOrderViewModel()
+                                    {
+                                        OrderId = o.Id,
+                                        OrderNumber = o.OrderNumber,
+                                        Email = o.Customer.Email,
+                                        TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
+                                        OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
+                                        OrderStatus = GetOrderStatusAsStringById((int)o.OrderStatus),
+                                        PaymentStatus = GetPaymentStatusAsStringById((int)o.PaymentStatus),
+                                        BillingDetails = new BillingDetailsFormViewModel()
+                                        {
+                                            FirstName = o.BillingDetails.FirstName,
+                                            LastName = o.BillingDetails.LastName,
+                                            StreetAddress = o.BillingDetails.StreetAddress,
+                                            City = o.BillingDetails.City,
+                                            Country = o.BillingDetails.Country,
+                                            PostalCode = o.BillingDetails.PostalCode,
+                                            PhoneNumber = o.BillingDetails.PhoneNumber,
+                                        },
+                                    });
+
+            var totalRecords = ordersQuery.Count();
+
+            return new AllOrdersViewModel()
+            {
+                Orders = orders,
+                TotalRecordsCount = totalRecords,
+            };
+        }
+
+        /// <summary>
+        /// Get Order Status as string.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetOrderStatusAsStringById(int statusId)
+        {
+            switch (statusId)
+            {
+                case (int)OrderStatus.Approved:
+                    return "Approved";
+                    break;
+                case (int)OrderStatus.Declined:
+                    return "Declined";
+                    break;
+                case (int)OrderStatus.Shipped:
+                    return "Shipped";
+                case (int)OrderStatus.Pending:
+                    return "Pending";
+                    break;
+            }
+
+            return "Error";
+        }
+
+        /// <summary>
+        /// Get Payment Status as string.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetPaymentStatusAsStringById(int statusId)
+        {
+            switch (statusId)
+            {
+                case (int)PaymentStatus.Paid:
+                    return "Paid";
+                    break;
+                case (int)PaymentStatus.NotPaid:
+                    return "Not Paid";
+                    break;
+            }
+
+            return "Error";
+        }
+
+        /// <summary>
+        /// Delete Order.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task Delete(string id)
+        {
+            var order = await this.repo.All<Order>()
+                                       .Where(o => o.IsDeleted == false)
+                                       .FirstOrDefaultAsync();
+
+            if (order != null)
+            {
+                order.IsDeleted = true;
+
+                await this.repo.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Edit Order.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public async Task Edit(EditOrderDetailViewModel model)
+        {
+            var order = await this.repo.All<Order>()
+                                       .Where(o => o.IsDeleted == false)
+                                       .Include(o => o.OrderDetails.Where(d => d.IsDeleted == false))
+                                       .FirstOrDefaultAsync();
+
+            if (order != null)
+            {
+                order.OrderStatus = (OrderStatus)model.OrderStatusId;
+                order.PaymentStatus = (PaymentStatus)model.OrderStatusId;
+
+                await this.repo.SaveChangesAsync();
+            }
+        }
+
+        /// <summary>
+        /// Get View Model for Edit.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(string id)
+        {
+                var model = await this.repo.All<Order>()
+                                  .Where(o => o.IsDeleted == false)
+                                  .Where(o => o.Id == id)
+                                  .Include(o => o.OrderDetails.Where(d => d.IsDeleted == false))
+                                  .Select(o => new EditOrderDetailViewModel()
+                                  {
+                                      OrderId = o.Id,
+                                      OrderNumber = o.OrderNumber,
+                                      OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
+                                      Email = o.Customer.Email,
+                                      OrderStatusId = (int)o.OrderStatus,
+                                      PaymentStatusId = (int)o.PaymentStatus,
+                                      TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
+                                      BillingDetails = new EditBillingDetailsViewModel()
+                                      {
+                                          Id = o.BillingDetailsId,
+                                          FirstName = o.BillingDetails.FirstName,
+                                          LastName = o.BillingDetails.LastName,
+                                          StreetAddress = o.BillingDetails.StreetAddress,
+                                          City = o.BillingDetails.City,
+                                          Country = o.BillingDetails.Country,
+                                          PostalCode = o.BillingDetails.PostalCode,
+                                          PhoneNumber = o.BillingDetails.PhoneNumber,
+                                      },
+                                  }).FirstOrDefaultAsync();
+
+                return model;
+        }
+
+        /// <summary>
+        /// Add Billing details for order.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Task<BillingDetails> AddBillingDetails(BillingDetailsFormViewModel model)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Get all order statuses.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<OrderStatusViewModel> GetOrderStatuses()
+        {
+            List<OrderStatusViewModel> orderStatuses = new List<OrderStatusViewModel>();
+
+            orderStatuses.Add(new OrderStatusViewModel
+            {
+                Id = (int)OrderStatus.Approved,
+                Name = "Approved",
+            });
+
+            orderStatuses.Add(new OrderStatusViewModel
+            {
+                Id = (int)OrderStatus.Declined,
+                Name = "Declined",
+            });
+
+            orderStatuses.Add(new OrderStatusViewModel
+            {
+                Id = (int)OrderStatus.Shipped,
+                Name = "Shipped",
+            });
+
+            orderStatuses.Add(new OrderStatusViewModel
+            {
+                Id = (int)OrderStatus.Pending,
+                Name = "Pending",
+            });
+
+            return orderStatuses;
+        }
+
+        /// <summary>
+        /// Get all payment statuses.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<PaymentStatusViewModel> GetPaymentStatuses()
+        {
+            List<PaymentStatusViewModel> paymentStatuses = new List<PaymentStatusViewModel>();
+
+            paymentStatuses.Add(new PaymentStatusViewModel
+            {
+                Id = (int)PaymentStatus.Paid,
+                Name = "Paid",
+            });
+
+            paymentStatuses.Add(new PaymentStatusViewModel
+            {
+                Id = (int)PaymentStatus.NotPaid,
+                Name = "Not Paid",
+            });
+
+            return paymentStatuses;
+        }
+
+        public async Task<CustomerOrdersViewModel> GetAllOrdersByUserIdAsync(string userId, int currentPage = 1, int ordersPerPage = 6, OrdersSorting sorting = OrdersSorting.Newest)
+        {
+            var ordersQuery = this.repo.AsNoTracking<Order>()
+                        .Where(o => o.IsDeleted == false)
+                        .Include(o => o.Customer)
+                        .Where(o => o.CustomerId == userId)
+                        .Include(o => o.OrderDetails)
+                        .Include(o => o.BillingDetails)
+                        .AsQueryable();
+
+            ordersQuery = sorting switch
+            {
+                OrdersSorting.Newest => ordersQuery
+                                                    .OrderByDescending(o => o.CreatedOn),
+                _ => ordersQuery.OrderBy(o => o.CreatedOn),
+            };
+
+            var orders = ordersQuery
+                                    .Skip((currentPage - 1) * ordersPerPage)
+                                    .Take(ordersPerPage)
+                                    .Select(o => new CustomerOrderViewModel()
+                                    {
+                                        OrderId = o.Id,
+                                        OrderNumber = o.OrderNumber,
+                                        Email = o.Customer.Email,
+                                        TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
+                                        OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
+                                        OrderStatus = GetOrderStatusAsStringById((int)o.OrderStatus),
+                                        PaymentStatus = GetPaymentStatusAsStringById((int)o.PaymentStatus),
+                                        BillingDetails = new BillingDetailsFormViewModel()
+                                        {
+                                            FirstName = o.BillingDetails.FirstName,
+                                            LastName = o.BillingDetails.LastName,
+                                            StreetAddress = o.BillingDetails.StreetAddress,
+                                            City = o.BillingDetails.City,
+                                            Country = o.BillingDetails.Country,
+                                            PostalCode = o.BillingDetails.PostalCode,
+                                            PhoneNumber = o.BillingDetails.PhoneNumber,
+                                        },
+                                    });
+
+            var totalRecords = ordersQuery.Count();
+
+            return new CustomerOrdersViewModel()
+            {
+                Orders = orders,
+                TotalRecordsCount = totalRecords,
+            };
         }
     }
 }

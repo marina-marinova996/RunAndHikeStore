@@ -8,13 +8,18 @@
     using RunAndHikeStore.Data.Models.Enums;
     using static RunAndHikeStore.Common.GlobalConstants.Order;
 
-    public class Order : BaseModel<string>
+    public class Order : BaseDeletableModel<string>
     {
         public Order()
         {
             this.Id = Guid.NewGuid().ToString();
             this.OrderDetails = new HashSet<OrderDetail>();
         }
+
+        /// <summary>
+        /// Order Number.
+        /// </summary>
+        public string OrderNumber { get; set; }
 
         /// <summary>
         /// Gets or sets order Date.
@@ -25,13 +30,7 @@
         /// <summary>
         /// Gets or sets ship Date.
         /// </summary>
-        public DateTime ShipDate { get; set; }
-
-        /// <summary>
-        /// Gets or sets total price of the order.
-        /// </summary>
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal OrderTotalPrice { get; set; }
+        public DateTime? ShipDate { get; set; }
 
         /// <summary>
         /// Gets or sets order status.
@@ -43,7 +42,7 @@
         /// Gets or sets payment status.
         /// </summary>
         [StringLength(PaymentStatusMaxLength)]
-        public string PaymentStatus { get; set; }
+        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.NotPaid;
 
         /// <summary>
         /// Gets or sets payment date.
@@ -63,5 +62,16 @@
         public ApplicationUser Customer { get; set; }
 
         public ICollection<OrderDetail> OrderDetails { get; set; }
+
+        /// <summary>
+        /// Foreign Key to Billing details for the order.
+        /// </summary>
+        [Required]
+        public string BillingDetailsId { get; set; }
+
+        /// <summary>
+        /// Billing details for the order.
+        /// </summary>
+        public BillingDetails BillingDetails { get; set; }
     }
 }
