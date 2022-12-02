@@ -1,6 +1,5 @@
 ﻿namespace RunAndHikeStore.Web.Areas.Admin.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
     using RunAndHikeStore.Services.Contracts;

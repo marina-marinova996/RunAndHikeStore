@@ -2,9 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Services.Contracts;
-    using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
-    using RunAndHikeStore.Web.ViewModels.Product;
     using System.Threading.Tasks;
     using static RunAndHikeStore.Common.GlobalConstants;
 

@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using RunAndHikeStore.Common;
 using RunAndHikeStore.Data.Models;
 using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.Stock;
 using RunAndHikeStore.Web.ViewModels.User;
 using System.Linq;
 using System.Threading.Tasks;
@@ -36,6 +34,11 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Manage Users.
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public async Task<IActionResult> ManageUsers([FromQuery] AllUsersViewModel query)
         {
             this.ViewData["Title"] = "Manage Users";
@@ -51,6 +54,11 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             return View(query);
         }
 
+        /// <summary>
+        /// See roles.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Roles(string id)
         {
             var user = await userService.GetUserById(id);
@@ -74,6 +82,11 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Add/Edit Roles.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Roles(UserRolesViewModel model)
         {
@@ -89,6 +102,11 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             return RedirectToAction(nameof(ManageUsers));
         }
 
+        /// <summary>
+        /// Get user for edit.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<IActionResult> Edit(string id)
         {
             var model = await userService.GetUserForEdit(id);
@@ -96,6 +114,11 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Edit user.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditViewModel model)
         {
