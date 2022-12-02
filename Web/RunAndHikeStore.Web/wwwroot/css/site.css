@@ -11,6 +11,15 @@
     height: 2rem;
 }
 
+.sidebar .nav-link {
+    font-weight: 500;
+    color: var(--bs-dark);
+}
+
+    .sidebar .nav-link:hover {
+        background: var(--bs-light);
+        color: var(--bs-primary);
+    }
 /* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 
@@ -74,8 +83,8 @@ button.accept-policy {
 }
 
 body {*/
-    /* Margin bottom by footer height */
-    /*margin-bottom: 60px;
+/* Margin bottom by footer height */
+/*margin-bottom: 60px;
 }
 
 .footer {

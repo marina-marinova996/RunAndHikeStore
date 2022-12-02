@@ -10,7 +10,7 @@
     @if (this.SignInManager.IsSignedIn(this.User))
     {
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                 <i class="fa-solid fa-user mr-2"></i> @(this.User.Identity.Name)
             </a>
             <div class="dropdown-menu" data-bs-popper="static">
@@ -20,17 +20,17 @@
         </li>
         <li class="nav-item">
             <form class="form-inline" asp-area="Identity" asp-controller="Account" asp-action="Logout" asp-route-returnUrl="@(this.Url.Action("Index", "Home", new { area = string.Empty }))">
-                <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                <button type="submit" class="nav-link btn btn-link text-white">Logout</button>
             </form>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="nav-link text-white" asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="nav-link text-white" asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
         </li>
     }
 </ul>

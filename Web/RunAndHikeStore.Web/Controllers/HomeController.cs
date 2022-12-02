@@ -4,12 +4,17 @@
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Web.ViewModels;
     using System.Diagnostics;
+    using static RunAndHikeStore.Common.GlobalConstants;
 
     public class HomeController : BaseController
     {
         [AllowAnonymous]
         public IActionResult Index()
         {
+            if (User.IsInRole(AdministratorRoleName))
+            {
+                return RedirectToAction("Home", "Admin", new { area = "Admin" });
+            }
             return this.View();
         }
 

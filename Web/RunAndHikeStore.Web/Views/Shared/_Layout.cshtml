@@ -38,7 +38,21 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Customer" asp-controller="Product" asp-action="All">Products</a>
                         </li>
-
+                         @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a>
+                        <div class="dropdown-menu" data-bs-popper="static">
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Order" asp-action="ManageOrders" method="get">Manage Orders</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="ManageAll" method="get">Manage Products</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Stock" asp-action="ManageStocks" method="get">Manage Stocks</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Brand" asp-action="ManageAll" method="get">Manage Brands</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="ManageAll" method="get">Manage Categories</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="Size" asp-action="ManageAll" method="get">Manage Sizes</a>
+                            <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="ManageUsers" method="get">Manage Users</a>
+                        </div>
+                    </li>
+                    }
                     </ul>
                     <partial name="_LoginPartial" asp-area="Identity"/>
                     @if (SignInManager.IsSignedIn(User))

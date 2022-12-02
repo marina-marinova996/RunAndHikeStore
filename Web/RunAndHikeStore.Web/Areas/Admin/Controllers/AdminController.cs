@@ -3,8 +3,13 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Common;
+    using System.Threading.Tasks;
 
-    public class AdministrationController : BaseController
+    public class AdminController : BaseController
     {
+        public async Task<IActionResult> Home()
+        {
+           return View();
+        }
     }
 }
