@@ -32,7 +32,7 @@ namespace RunAndHikeStore.Services
         /// <param name="customerId"></param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public Task CreateAsync(OrderViewModel model, string customerId)
+        public Task CreateAsync(CreateOrderViewModel model, string customerId)
         {
             throw new System.NotImplementedException();
         }
@@ -125,12 +125,10 @@ namespace RunAndHikeStore.Services
                     break;
                 case (int)OrderStatus.Shipped:
                     return "Shipped";
-                case (int)OrderStatus.Pending:
-                    return "Pending";
                     break;
             }
 
-            return "Error";
+            return "Pending";
         }
 
         /// <summary>
@@ -144,12 +142,9 @@ namespace RunAndHikeStore.Services
                 case (int)PaymentStatus.Paid:
                     return "Paid";
                     break;
-                case (int)PaymentStatus.NotPaid:
-                    return "Not Paid";
-                    break;
             }
 
-            return "Error";
+            return "Not Paid";
         }
 
         /// <summary>
@@ -226,17 +221,6 @@ namespace RunAndHikeStore.Services
                                   }).FirstOrDefaultAsync();
 
                 return model;
-        }
-
-        /// <summary>
-        /// Add Billing details for order.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Task<BillingDetails> AddBillingDetails(BillingDetailsFormViewModel model)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

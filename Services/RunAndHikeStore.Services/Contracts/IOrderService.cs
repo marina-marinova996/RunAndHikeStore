@@ -15,7 +15,7 @@ namespace RunAndHikeStore.Services.Contracts
         /// <param name="model"></param>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        Task CreateAsync(OrderViewModel model, string customerId);
+        Task CreateAsync(CreateOrderViewModel model, string customerId);
 
         /// <summary>
         /// Get all orders.
@@ -47,13 +47,6 @@ namespace RunAndHikeStore.Services.Contracts
         /// <param name="id"></param>
         /// <returns></returns>
         Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(string id);
-
-        /// <summary>
-        /// Add Billing Details for order.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        Task<BillingDetails> AddBillingDetails(BillingDetailsFormViewModel model);
 
         /// <summary>
         /// Get all Order Statuses.

@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -25,7 +26,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\RunAndHikeStore.Data.Models\RunAndHikeStore.Data.Models.csproj" />
     <ProjectReference Include="..\..\RunAndHikeStore.Common\RunAndHikeStore.Common.csproj" />
-    <ProjectReference Include="..\..\Services\RunAndHikeStore.Services.Mapping\RunAndHikeStore.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\RunAndHikeStore.Services.Mapping\RunAndHikeStore.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

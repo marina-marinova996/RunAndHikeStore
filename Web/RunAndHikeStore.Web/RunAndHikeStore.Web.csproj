@@ -55,10 +55,7 @@
     <ProjectReference Include="..\..\Data\RunAndHikeStore.Data.Models\RunAndHikeStore.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\RunAndHikeStore.Data\RunAndHikeStore.Data.csproj" />
     <ProjectReference Include="..\..\Services\RunAndHikeStore.Services.Data\RunAndHikeStore.Services.Data.csproj" />
-    <ProjectReference Include="..\..\Services\RunAndHikeStore.Services.Mapping\RunAndHikeStore.Services.Mapping.csproj" />
-    <ProjectReference Include="..\..\Services\RunAndHikeStore.Services.Messaging\RunAndHikeStore.Services.Messaging.csproj" />
     <ProjectReference Include="..\..\Services\RunAndHikeStore.Services\RunAndHikeStore.Services.csproj" />
-    <ProjectReference Include="..\RunAndHikeStore.Web.Infrastructure\RunAndHikeStore.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\RunAndHikeStore.Web.ViewModels\RunAndHikeStore.Web.ViewModels.csproj" />
   </ItemGroup>
 

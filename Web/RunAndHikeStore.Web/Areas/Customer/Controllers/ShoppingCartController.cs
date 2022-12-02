@@ -16,12 +16,14 @@
         private readonly IShoppingCartService shoppingCartService;
         private readonly IProductService productService;
         private readonly IOrderService orderService;
+        private readonly ICustomerService customerService;
 
-        public ShoppingCartController(IShoppingCartService shoppingCartService, IProductService productService, IOrderService orderService)
+        public ShoppingCartController(IShoppingCartService shoppingCartService, ICustomerService customerService, IProductService productService, IOrderService orderService)
         {
             this.shoppingCartService = shoppingCartService;
             this.productService = productService;
             this.orderService = orderService;
+            this.customerService = customerService;
         }
 
         [HttpGet]
@@ -114,7 +116,7 @@
         [HttpGet]
         public async Task<IActionResult> CreateOrder()
         {
-            var model = new OrderViewModel();
+            var model = new CreateOrderViewModel();
             try
             {
                 var userId = User.Id();
@@ -124,6 +126,8 @@
                 if (user != null && user.ShoppingCart.CartItems != null)
                 {
                     model.CartItems = await shoppingCartService.GetAllCartItems(userId);
+                    model.BillingDetails = await customerService.GetCustomerBillingDetailsByUserId(userId);
+                    model.DeliveryAddress = await customerService.GetCustomerDeliveryAddressByUserId(userId);
                 }
             }
             catch
@@ -135,8 +139,9 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(OrderViewModel model)
+        public async Task<IActionResult> CreateOrder(CreateOrderViewModel model)
         {
+
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);

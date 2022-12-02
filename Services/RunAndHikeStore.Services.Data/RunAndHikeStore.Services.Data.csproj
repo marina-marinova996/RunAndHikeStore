@@ -25,7 +25,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\RunAndHikeStore.Data.Common\RunAndHikeStore.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\RunAndHikeStore.Data.Models\RunAndHikeStore.Data.Models.csproj" />
-    <ProjectReference Include="..\RunAndHikeStore.Services.Mapping\RunAndHikeStore.Services.Mapping.csproj" />
+    <ProjectReference Include="..\..\RunAndHikeStore.Services.Mapping\RunAndHikeStore.Services.Mapping.csproj" />
   </ItemGroup>
 
 </Project>

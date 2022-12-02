@@ -17,7 +17,6 @@ namespace RunAndHikeStore.Web
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Services.Data;
     using RunAndHikeStore.Services.Mapping;
-    using RunAndHikeStore.Services.Messaging;
     using RunAndHikeStore.Web.ViewModels;
     using System.Reflection;
 
@@ -68,7 +67,6 @@ namespace RunAndHikeStore.Web
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IStockService, StockService>();

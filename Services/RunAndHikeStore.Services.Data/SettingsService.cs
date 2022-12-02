@@ -1,11 +1,8 @@
 ﻿using RunAndHikeStore.Data.Common.Repositories;
 using RunAndHikeStore.Data.Models;
 using RunAndHikeStore.Services.Mapping;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RunAndHikeStore.Services.Data
 {

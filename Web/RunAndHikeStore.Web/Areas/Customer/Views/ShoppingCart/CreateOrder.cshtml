@@ -1,5 +1,5 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.Order
-@model OrderViewModel
+@model CreateOrderViewModel
 
 <div class="row">
     <div class="col-md-8 mb-2">
@@ -12,13 +12,13 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">First Name</label>
-                            <input class="form-control" />
+                            <input asp-for="@Model.BillingDetails.FirstName" class="form-control" />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Last Name</label>
-                            <input class="form-control" />
+                            <input asp-for="@Model.BillingDetails.LastName" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -26,21 +26,21 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Street Address</label>
-                            <input class="form-control" />
+                            <input asp-for="@Model.BillingDetails.StreetAddress" class="form-control" />
                         </div>
                     </div>
                 </div>
                 <div class="row mb-2">
                     <div class="col">
                         <div class="form-outline">
-                            <label class="form-label" ">City</label>
-                            <input class="form-control" />
+                            <label class="form-label">City</label>
+                            <input asp-for="@Model.BillingDetails.City" class="form-control" />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Country</label>
-                            <input class="form-control" />
+                            <input asp-for="@Model.BillingDetails.Country" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -48,13 +48,13 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Postal Code</label>
-                            <input class="form-control" />
+                            <input asp-for="@Model.BillingDetails.PostalCode" class="form-control" />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline mb-4">
                             <label class="form-label">Phone Number</label>
-                            <input type="number" class="form-control" />
+                            <input asp-for="@Model.BillingDetails.PhoneNumber" class="form-control" />
                         </div>
                     </div>
                 </div>
@@ -92,7 +92,6 @@
         </div>
     </div>
 </div>
-
 <div class="row">
     <div class="col-md-8 mb-2">
         <div class="card mb-4">
@@ -104,21 +103,21 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">Street Address</label>
-                        <input class="form-control" />
+                        <input asp-for="@Model.DeliveryAddress.StreetAddress" class="form-control" />
                     </div>
                 </div>
             </div>
             <div class="row mb-2">
                 <div class="col">
                     <div class="form-outline">
-                        <label class="form-label" ">City</label>
-                        <input class="form-control" />
+                        <label class="form-label">City</label>
+                            <input asp-for="@Model.DeliveryAddress.StreetAddress" class ="form-control" />
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">Country</label>
-                        <input class="form-control" />
+                        <input asp-for="@Model.DeliveryAddress.Country" class="form-control" />
                     </div>
                 </div>
             </div>
@@ -126,14 +125,14 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">Postal Code</label>
-                        <input class="form-control" />
+                        <input asp-for="@Model.DeliveryAddress.PostalCode" class="form-control" />
                     </div>
                 </div>
                 </div>
             </div>
         </div>
         <div class="text-center">
-            <a asp-area="Customer" asp-controller="Customer" asp-action="Details" type="button" class="btn btn-warning btn-lg">Edit Details</a>
+            <a asp-area="Customer" asp-controller="Customer" asp-action="Details" asp-route-billingDetailsId="@Model.BillingDetails.Id" class="btn btn-warning btn-lg">Save Changes</a>
         </div>
     </div>
 </div>
