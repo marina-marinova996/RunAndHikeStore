@@ -19,6 +19,14 @@
             this.repo = repo;
         }
 
+        /// <summary>
+        /// Add Item to Cart.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="userId"></param>
+        /// <param name="sizeId"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
         public async Task AddToCart(string productId, string userId, string sizeId, int quantity)
         {
             var user = await this.FindUserById(userId);
@@ -41,6 +49,11 @@
             await this.repo.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Counter for Shopping Cart Items.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<int> CountShoppingCartItemsQuantity(string userId)
         {
             var user = await this.FindUserById(userId);
@@ -55,6 +68,14 @@
             return quantity;
         }
 
+        /// <summary>
+        /// Create new cart item.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="userId"></param>
+        /// <param name="sizeId"></param>
+        /// <param name="quantity"></param>
+        /// <returns></returns>
         public async Task<CartItem> CreateCartItem(string productId, string userId, string sizeId, int quantity)
         {
             var user = await this.FindUserById(userId);
@@ -70,6 +91,12 @@
             return cartItem;
         }
 
+        /// <summary>
+        /// Find Cart Item.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<CartItemViewModel> FindCartItem(string productId, string userId)
         {
             return await this.repo.AsNoTracking<CartItem>()
@@ -100,6 +127,11 @@
                                   }).FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Find user by id.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<ApplicationUser> FindUserById(string userId)
         {
             return await this.repo.All<ApplicationUser>()
@@ -109,6 +141,11 @@
                                       .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Get all cart items for user.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<CartItemViewModel>> GetAllCartItems(string userId)
         {
             return await this.repo.AsNoTracking<CartItem>()
@@ -140,6 +177,12 @@
                              }).ToListAsync();
         }
 
+        /// <summary>
+        /// Check if product is in stock.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="sizeId"></param>
+        /// <returns></returns>
         public async Task<bool> IsInStock(string productId, string sizeId)
         {
             return await this.repo.AsNoTracking<ProductSize>()
@@ -147,6 +190,11 @@
                                   .AnyAsync(ps => ps.UnitsInStock > 0);
         }
 
+        /// <summary>
+        /// Remove all cart items.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public async Task RemoveAllCartItems(string userId)
         {
             var allCartItems = await this.repo.All<CartItem>()
@@ -159,19 +207,11 @@
             await this.repo.SaveChangesAsync();
         }
 
-        //public async Task<ShoppingCartViewModel> GetShoppingCartByUserId(string userId)
-        //{
-        //    return await this.repo.AsNoTracking<ShoppingCart>()
-        //                    .Where(c => c.ApplicationUserId == userId)
-        //                    .Select(c => new ShoppingCartViewModel
-        //                    {
-        //                        Id = c.Id,
-        //                        Appli
-        //                    })
-        //                    .FirstOrDefaultAsync();
-
-        //}
-
+        /// <summary>
+        /// Remove cart item by id.
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <returns></returns>
         public async Task RemoveCartItem(string cartItemId)
         {
             var cartItem = await this.repo.All<CartItem>()
@@ -183,35 +223,5 @@
                 await this.repo.SaveChangesAsync();
             }
         }
-
-        //public async void BuyProducts(string userId)
-        //{
-        //    var user = this.repo.All<ApplicationUser>()
-        //                    .Where(u => u.Id == userId)
-        //                    .Include(u => u.ShoppingCart)
-        //                    .ThenInclude(s => s.Products)
-        //                    .FirstOrDefault();
-
-        //    user.ShoppingCart.CartItems.Clear();
-
-        //    await this.repo.SaveChangesAsync();
-        //}
-
-        //public async Task<ShoppingCartViewModel> GetProducts(string userId)
-        //{
-        //    var user = await this.repo.All<ApplicationUser>()
-        //                    .Where(u => u.Id == userId)
-        //                    .Include(u => u.ShoppingCart)
-        //                    .ThenInclude(s => s.CartItems)
-        //                    .FirstOrDefaultAsync();
-
-        //    return user
-        //               .ShoppingCart
-        //               .Select(c => new ShoppingCartViewModel()
-        //               {
-        //                   ProductName = p.Product.Name,
-        //                   ProductPrice = p.Price.ToString("F2"),
-        //               });
-        //}
     }
 }

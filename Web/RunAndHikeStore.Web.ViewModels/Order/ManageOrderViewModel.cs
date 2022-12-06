@@ -4,11 +4,9 @@
 
     public class ManageOrderViewModel
     {
-        public string OrderId { get; set; }
+        public int OrderId { get; set; }
 
         public int OrderQuantity { get; set; }
-
-        public string OrderNumber { get; set; }
 
         public string OrderStatus { get; set; }
 

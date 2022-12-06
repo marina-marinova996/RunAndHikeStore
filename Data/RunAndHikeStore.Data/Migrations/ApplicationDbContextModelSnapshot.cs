@@ -133,10 +133,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AddressType")
-                        .HasMaxLength(20)
-                        .HasColumnType("int");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -179,7 +175,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("DeliveryAddresses");
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationRole", b =>
@@ -501,8 +497,11 @@ namespace RunAndHikeStore.Data.Migrations
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BillingDetailsId")
                         .IsRequired()
@@ -527,14 +526,11 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderStatus")
+                    b.Property<int>("OrderStatus")
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("PaymentStatus")
@@ -572,9 +568,8 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int>("OrderQuantity")
                         .HasColumnType("int");
@@ -858,7 +853,7 @@ namespace RunAndHikeStore.Data.Migrations
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Address", b =>
                 {
                     b.HasOne("RunAndHikeStore.Data.Models.ApplicationUser", "Customer")
-                        .WithMany("Addresses")
+                        .WithMany("DeliveryAddresses")
                         .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -1023,11 +1018,11 @@ namespace RunAndHikeStore.Data.Migrations
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Addresses");
-
                     b.Navigation("BillingDetails");
 
                     b.Navigation("Claims");
+
+                    b.Navigation("DeliveryAddresses");
 
                     b.Navigation("Logins");
 

@@ -1,4 +1,5 @@
 ﻿using RunAndHikeStore.Data.Common.Models;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using static RunAndHikeStore.Common.GlobalConstants.Address;
@@ -8,6 +9,11 @@ namespace RunAndHikeStore.Data.Models
 {
     public class BillingDetails : BaseDeletableModel<string>
     {
+        public BillingDetails()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         /// <summary>
         /// Recipient First Name.
         /// </summary>

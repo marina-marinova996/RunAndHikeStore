@@ -12,6 +12,6 @@ namespace RunAndHikeStore.Web.ViewModels.ShoppingCart
     {
         public IEnumerable<CartItemViewModel> CartItems { get; set; }
 
-        public OrderViewModel Order { get; set; }
+        public CreateOrderViewModel Order { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿namespace RunAndHikeStore.Data.Models
 {
     using RunAndHikeStore.Data.Common.Models;
-    using RunAndHikeStore.Data.Models.Enums;
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -41,25 +40,17 @@
         [Required]
         [StringLength(PostalCodeMaxLength)]
         public string PostalCode { get; set; }
+
         /// <summary>
-        /// Type of the address.
-        /// </summary>
-        [Required]
-        [StringLength(AddressTypeMaxLength)]
-        public AddressType AddressType { get; set; } = (AddressType)2;
-        /// <summary>
-        /// Foreign Key to ApplicationUsers Table.
+        /// Foreign Key Application Users Table.
         /// </summary>
         [Required]
         public string CustomerId { get; set; }
 
         /// <summary>
-        /// Navigation property to ApplicationUsers Table.
+        /// Navigation property to Application Users Table.
         /// </summary>
         [ForeignKey("CustomerId")]
-        public ApplicationUser Customer
-        {
-            get; set;
-        }
+        public ApplicationUser Customer {get; set;}
     }
 }

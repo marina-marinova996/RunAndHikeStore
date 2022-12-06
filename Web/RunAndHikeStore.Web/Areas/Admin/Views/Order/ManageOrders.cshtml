@@ -9,8 +9,8 @@
         <div class="col-md-6">
             <label asp-for="Sorting"></label>
             <select asp-for="Sorting" class="form-control">
-                <option value="0">Newest</option>
-                <option value="1">Oldest</option>
+                <option value="1">Newest</option>
+                <option value="2">Oldest</option>
             </select>
         </div>
         <div class="col-md-6 mb-2">
@@ -75,7 +75,7 @@
         {
             <tr class="table-dark text-center">
                 <input type = "hidden" asp-for="@order.OrderId"/>
-                <td>@order.OrderNumber</td>
+                <td>@order.OrderId</td>
                 <td>@order.OrderDate</td>
                 <td>@order.BillingDetails.FirstName</td>
                 <td>@order.BillingDetails.LastName</td>

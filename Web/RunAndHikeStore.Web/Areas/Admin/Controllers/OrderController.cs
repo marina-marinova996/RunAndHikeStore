@@ -1,11 +1,8 @@
 ﻿namespace RunAndHikeStore.Web.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
-    using RunAndHikeStore.Services;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Order;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using static RunAndHikeStore.Common.GlobalConstants;
 
@@ -53,7 +50,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(int id)
         {
             this.ViewData["Title"] = "Edit Order";
             try

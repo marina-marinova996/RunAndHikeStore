@@ -311,32 +311,6 @@ namespace RunAndHikeStore.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Addresses",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StreetAddress = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    City = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Country = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    AddressType = table.Column<int>(type: "int", maxLength: 20, nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Addresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Addresses_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -422,19 +396,77 @@ namespace RunAndHikeStore.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "BillingDetails",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ShipDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderTotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    OrderStatus = table.Column<int>(type: "int", maxLength: 20, nullable: true),
-                    PaymentStatus = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    StreetAddress = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BillingDetails", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BillingDetails_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DeliveryAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StreetAddress = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    City = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Country = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DeliveryAddresses", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DeliveryAddresses_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ShipDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    OrderStatus = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", maxLength: 20, nullable: false),
+                    PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BillingDetailsId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -445,6 +477,12 @@ namespace RunAndHikeStore.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_BillingDetails_BillingDetailsId",
+                        column: x => x.BillingDetailsId,
+                        principalTable: "BillingDetails",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -452,11 +490,15 @@ namespace RunAndHikeStore.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
+                    UnitPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    Size = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     ProductId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -474,16 +516,6 @@ namespace RunAndHikeStore.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_ApplicationUserId",
-                table: "Addresses",
-                column: "ApplicationUserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Addresses_IsDeleted",
-                table: "Addresses",
-                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -541,6 +573,16 @@ namespace RunAndHikeStore.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BillingDetails_CustomerId",
+                table: "BillingDetails",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BillingDetails_IsDeleted",
+                table: "BillingDetails",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Brands_IsDeleted",
                 table: "Brands",
                 column: "IsDeleted");
@@ -571,6 +613,21 @@ namespace RunAndHikeStore.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DeliveryAddresses_CustomerId",
+                table: "DeliveryAddresses",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DeliveryAddresses_IsDeleted",
+                table: "DeliveryAddresses",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderDetails_IsDeleted",
+                table: "OrderDetails",
+                column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderDetails_OrderId",
                 table: "OrderDetails",
                 column: "OrderId");
@@ -581,9 +638,19 @@ namespace RunAndHikeStore.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_BillingDetailsId",
+                table: "Orders",
+                column: "BillingDetailsId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
                 table: "Orders",
                 column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_IsDeleted",
+                table: "Orders",
+                column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_BrandId",
@@ -629,9 +696,6 @@ namespace RunAndHikeStore.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Addresses");
-
-            migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
             migrationBuilder.DropTable(
@@ -651,6 +715,9 @@ namespace RunAndHikeStore.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "CategoriesProducts");
+
+            migrationBuilder.DropTable(
+                name: "DeliveryAddresses");
 
             migrationBuilder.DropTable(
                 name: "OrderDetails");
@@ -677,13 +744,16 @@ namespace RunAndHikeStore.Data.Migrations
                 name: "Sizes");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "BillingDetails");
 
             migrationBuilder.DropTable(
                 name: "Brands");
 
             migrationBuilder.DropTable(
                 name: "ProductTypes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "ShoppingCart");

@@ -1,6 +1,7 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.Order
 @model CreateOrderViewModel
 
+<form method="post">
 <div class="row">
     <div class="col-md-8 mb-2">
         <div class="card mb-2">
@@ -12,6 +13,7 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">First Name</label>
+                            <input type="hidden" asp-for="@Model.BillingDetails.Id" />
                             <input asp-for="@Model.BillingDetails.FirstName" class="form-control" />
                         </div>
                     </div>
@@ -86,7 +88,7 @@
                         <span><strong>@Model.CartItems.Sum(x=> Convert.ToDecimal(x.Total)).ToString("f2") EUR</strong></span>
                     </li>
                 </ul>
-                <button type="button" class="btn btn-success btn-lg btn-block">Make purchase</button>
+                <button asp-area="Customer" asp-controller="ShoppingCart" asp-action="CreateOrder" type="submit" class="btn btn-success btn-lg btn-block">Make purchase</button>
                 <a asp-area="Customer" asp-controller="ShoppingCart" asp-action="Index" class="btn btn-primary btn-lg btn-block">Return to Shopping Cart</a>
             </div>
         </div>
@@ -136,3 +138,4 @@
         </div>
     </div>
 </div>
+</form>

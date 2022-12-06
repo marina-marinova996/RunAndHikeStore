@@ -20,7 +20,8 @@ namespace RunAndHikeStore.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
-            this.Addresses = new HashSet<Address>();
+            this.DeliveryAddresses = new HashSet<Address>();
+            this.BillingDetails = new HashSet<BillingDetails>();
             this.ShoppingCart = new ShoppingCart();
             this.Orders = new HashSet<Order>();
             this.CreatedOn = DateTime.Now;
@@ -34,7 +35,7 @@ namespace RunAndHikeStore.Data.Models
         [StringLength(LastNameMaxLength)]
         public string LastName { get; set; }
 
-        public ICollection<Address> Addresses { get; set; }
+        public ICollection<Address> DeliveryAddresses { get; set; }
 
         public ICollection<Order> Orders { get; set; }
 

@@ -20,8 +20,6 @@ namespace RunAndHikeStore.Data.Seeding
                                             {
                                               new Order
                                               {
-                                                  Id = "618695c2-17cd-46ea-8ec7-d8c730295903",
-                                                  OrderNumber = "45869781",
                                                   OrderDate = new DateTime(2022, 11, 22),
                                                   OrderStatus = Models.Enums.OrderStatus.Approved,
                                                   PaymentStatus = Models.Enums.PaymentStatus.NotPaid,
@@ -30,8 +28,6 @@ namespace RunAndHikeStore.Data.Seeding
                                               },
                                               new Order
                                               {
-                                                  Id = "718695c2-17cd-46ea-8ec7-d8c730295904",
-                                                  OrderNumber = "5869782",
                                                   OrderDate = new DateTime(2022, 11, 18),
                                                   OrderStatus = Models.Enums.OrderStatus.Approved,
                                                   PaymentStatus = Models.Enums.PaymentStatus.Paid,

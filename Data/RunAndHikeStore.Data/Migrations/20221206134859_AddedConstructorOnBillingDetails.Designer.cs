@@ -12,8 +12,8 @@ using RunAndHikeStore.Data;
 namespace RunAndHikeStore.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221125123119_ChangeInOrderDetailModel")]
-    partial class ChangeInOrderDetailModel
+    [Migration("20221206134859_AddedConstructorOnBillingDetails")]
+    partial class AddedConstructorOnBillingDetails
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -135,13 +135,6 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("AddressType")
-                        .HasMaxLength(20)
-                        .HasColumnType("int");
-
-                    b.Property<string>("ApplicationUserId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -154,6 +147,10 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
@@ -176,11 +173,11 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("DeliveryAddresses");
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationRole", b =>
@@ -339,6 +336,10 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
@@ -373,6 +374,8 @@ namespace RunAndHikeStore.Data.Migrations
                         .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
 
                     b.HasIndex("IsDeleted");
 
@@ -496,8 +499,11 @@ namespace RunAndHikeStore.Data.Migrations
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Order", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("BillingDetailsId")
                         .IsRequired()
@@ -522,21 +528,18 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("OrderStatus")
+                    b.Property<int>("OrderStatus")
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("PaymentDate")
+                    b.Property<DateTime?>("PaymentDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("PaymentStatus")
                         .HasMaxLength(20)
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ShipDate")
+                    b.Property<DateTime?>("ShipDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
@@ -567,9 +570,8 @@ namespace RunAndHikeStore.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("OrderId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int>("OrderQuantity")
                         .HasColumnType("int");
@@ -852,9 +854,13 @@ namespace RunAndHikeStore.Data.Migrations
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Address", b =>
                 {
-                    b.HasOne("RunAndHikeStore.Data.Models.ApplicationUser", null)
-                        .WithMany("Addresses")
-                        .HasForeignKey("ApplicationUserId");
+                    b.HasOne("RunAndHikeStore.Data.Models.ApplicationUser", "Customer")
+                        .WithMany("DeliveryAddresses")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationUser", b =>
@@ -866,6 +872,17 @@ namespace RunAndHikeStore.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("ShoppingCart");
+                });
+
+            modelBuilder.Entity("RunAndHikeStore.Data.Models.BillingDetails", b =>
+                {
+                    b.HasOne("RunAndHikeStore.Data.Models.ApplicationUser", "Customer")
+                        .WithMany("BillingDetails")
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.CartItem", b =>
@@ -1003,9 +1020,11 @@ namespace RunAndHikeStore.Data.Migrations
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Addresses");
+                    b.Navigation("BillingDetails");
 
                     b.Navigation("Claims");
+
+                    b.Navigation("DeliveryAddresses");
 
                     b.Navigation("Logins");
 

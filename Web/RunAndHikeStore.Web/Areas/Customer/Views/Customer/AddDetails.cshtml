@@ -1,0 +1,110 @@
+﻿@using RunAndHikeStore.Services.Contracts
+@using RunAndHikeStore.Web.ClaimsPrincipalExtensions
+@using RunAndHikeStore.Web.ViewModels.Customer
+@model CustomerDetailsViewModel
+@inject ICustomerService customerService;
+
+
+<form method="post">
+    <div class="row">
+        <div class="col-md-7 mb-2">
+            <div class="card mb-4">
+                <div class="card-header py-3">
+                    <h4 class="mb-0 text-center">Billing Details</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">First Name</label>
+                                <input asp-for="@Model.BillingDetails.FirstName" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Last Name</label>
+                                <input asp-for="@Model.BillingDetails.LastName" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Street Address</label>
+                                <input asp-for="@Model.BillingDetails.StreetAddress" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">City</label>
+                                <input asp-for="@Model.BillingDetails.City" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Country</label>
+                                <input asp-for="@Model.BillingDetails.Country" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Postal Code</label>
+                                <input asp-for="@Model.BillingDetails.PostalCode" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline mb-4">
+                                <label class="form-label">Phone Number</label>
+                                <input asp-for="@Model.BillingDetails.PhoneNumber" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5 mb-2">
+            <div class="card mb-2">
+                <div class="card-header py-3">
+                    <h4 class="mb-0 text-center">Delivery Address</h4>
+                </div>
+                <div class="card-body mb-2">
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Street Address</label>
+                                <input asp-for="@Model.Address.StreetAddress" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">City</label>
+                                <input asp-for="@Model.Address.City" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Country</label>
+                                <input asp-for="@Model.Address.Country" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col">
+                            <div class="form-outline">
+                                <label class="form-label">Postal Code</label>
+                                <input asp-for="@Model.Address.PostalCode" class="form-control" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <button asp-area="Customer" asp-controller="Customer" asp-action="AddDetails" type="submit" class="btn btn-success btn-lg btn-block mt-4">Add</button>
+        </div>
+    </div>
+</form>

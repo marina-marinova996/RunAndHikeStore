@@ -10,7 +10,7 @@ namespace RunAndHikeStore.Data.Seeding
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Addresses.Any())
+            if (dbContext.DeliveryAddresses.Any())
             {
                 return;
             }
@@ -28,7 +28,7 @@ namespace RunAndHikeStore.Data.Seeding
                                               },
                                             };
 
-            await dbContext.Addresses.AddRangeAsync(initialAddresses);
+            await dbContext.DeliveryAddresses.AddRangeAsync(initialAddresses);
         }
     }
 }

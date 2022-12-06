@@ -6,7 +6,6 @@
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 

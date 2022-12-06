@@ -8,18 +8,12 @@
     using RunAndHikeStore.Data.Models.Enums;
     using static RunAndHikeStore.Common.GlobalConstants.Order;
 
-    public class Order : BaseDeletableModel<string>
+    public class Order : BaseDeletableModel<int>
     {
         public Order()
         {
-            this.Id = Guid.NewGuid().ToString();
             this.OrderDetails = new HashSet<OrderDetail>();
         }
-
-        /// <summary>
-        /// Order Number.
-        /// </summary>
-        public string OrderNumber { get; set; }
 
         /// <summary>
         /// Gets or sets order Date.
@@ -36,7 +30,7 @@
         /// Gets or sets order status.
         /// </summary>
         [StringLength(OrderStatusMaxLength)]
-        public OrderStatus? OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; } = OrderStatus.Pending;
 
         /// <summary>
         /// Gets or sets payment status.
@@ -47,7 +41,7 @@
         /// <summary>
         /// Gets or sets payment date.
         /// </summary>
-        public DateTime PaymentDate { get; set; }
+        public DateTime? PaymentDate { get; set; }
 
         /// <summary>
         /// Foreign Key to ApplicationUsers Table.

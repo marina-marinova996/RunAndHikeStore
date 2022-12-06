@@ -26,6 +26,10 @@
             this.customerService = customerService;
         }
 
+        /// <summary>
+        /// View Shopping Cart Items.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -50,7 +54,12 @@
 
             return View(model);
         }
-
+        /// <summary>
+        /// Add to Cart.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="sizeId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> AddToCart(string productId, string sizeId)
         {
             try
@@ -83,6 +92,11 @@
             return RedirectToAction("All", "Product");
         }
 
+        /// <summary>
+        /// Remove item from cart.
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <returns></returns>
         public async Task<IActionResult> RemoveCartItem(string cartItemId)
         {
             try
@@ -97,6 +111,10 @@
             return RedirectToAction(nameof(this.Index));
         }
 
+        /// <summary>
+        /// Remove all Cart items.
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> RemoveAllCartItems()
         {
             var userId = User.Id();
@@ -113,6 +131,10 @@
             return RedirectToAction(nameof(this.Index));
         }
 
+        /// <summary>
+        /// Get Create order view.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> CreateOrder()
         {
@@ -123,7 +145,7 @@
 
                 var user = await shoppingCartService.FindUserById(userId);
 
-                if (user != null && user.ShoppingCart.CartItems != null)
+                if (user != null)
                 {
                     model.CartItems = await shoppingCartService.GetAllCartItems(userId);
                     model.BillingDetails = await customerService.GetCustomerBillingDetailsByUserId(userId);
@@ -138,10 +160,14 @@
             return View(model);
         }
 
+        /// <summary>
+        /// Create order.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderViewModel model)
         {
-
             if (!this.ModelState.IsValid)
             {
                 return this.View(model);
@@ -149,6 +175,7 @@
 
             var customerId = User.Id();
 
+            model.CartItems = await shoppingCartService.GetAllCartItems(customerId);
             await orderService.CreateAsync(model, customerId);
 
             return this.RedirectToAction("Index", "Home", new { area = "" });

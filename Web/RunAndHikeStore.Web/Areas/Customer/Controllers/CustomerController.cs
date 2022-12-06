@@ -20,12 +20,78 @@ namespace RunAndHikeStore.Web.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Details()
         {
-            var userId = User.Id();
-            var model = new CustomerDetailsViewModel();
-            model.BillingDetails = await this.customerService.GetCustomerBillingDetailsByUserId(userId);
-            model.Address = await this.customerService.GetCustomerDeliveryAddressByUserId(userId);
+            try
+            {
+                var userId = User.Id();
 
-            return this.View(model);
+                if((await customerService.IsCustomerHavingBillingDetails(User.Id())))
+                {
+                    var model = new EditCustomerDetailsViewModel();
+
+                    model.BillingDetails = await this.customerService.GetCustomerBillingDetailsByUserId(userId);
+                    model.Address = await this.customerService.GetCustomerDeliveryAddressByUserId(userId);
+
+                    return this.View("EditDetails", model);
+                }
+                else
+                {
+                    var model = new CustomerDetailsViewModel();
+
+                    return this.View("AddDetails", model);
+                }
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditDetails(EditCustomerDetailsViewModel model)
+        {
+            try
+            {
+                var userId = User.Id();
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                await this.customerService.EditBillingDetails(model.BillingDetails);
+                await this.customerService.EditDeliveryAddress(model.Address);
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+            catch (System.Exception)
+            {
+                ModelState.AddModelError("", "Something went wrong");
+                throw;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDetails(CustomerDetailsViewModel model)
+        {
+            try
+            {
+                var userId = User.Id();
+
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                await this.customerService.AddBillingDetails(model.BillingDetails, userId);
+                await this.customerService.AddDeliveryAddress(model.Address, userId);
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
 
         /// <summary>

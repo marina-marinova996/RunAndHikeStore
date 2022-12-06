@@ -5,11 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace RunAndHikeStore.Web.ViewModels.Order
 {
-    public class EditOrderDetailViewModel : OrderDetailFormViewModel
+    public class EditOrderDetailViewModel
     {
-        public string OrderId { get; set; }
-
-        public string OrderNumber { get; set; }
+        public int OrderId { get; set; }
 
         public string OrderDate { get; set; }
 
@@ -26,5 +24,7 @@ namespace RunAndHikeStore.Web.ViewModels.Order
         public int PaymentStatusId { get; set; }
 
         public IEnumerable<PaymentStatusViewModel> PaymentStatuses { get; set; }
+
+        public EditBillingDetailsViewModel BillingDetails { get; set; }
     }
 }

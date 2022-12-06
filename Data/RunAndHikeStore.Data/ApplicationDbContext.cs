@@ -2,12 +2,14 @@
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.EntityFrameworkCore.Metadata;
     using RunAndHikeStore.Data.Common.Models;
     using RunAndHikeStore.Data.Models;
 
     using System;
     using System.Linq;
     using System.Reflection;
+    using System.Reflection.Emit;
     using System.Threading;
     using System.Threading.Tasks;
     using static RunAndHikeStore.Common.GlobalConstants.ApplicationUser;
@@ -26,7 +28,7 @@
 
         public DbSet<Setting> Settings { get; set; }
 
-        public DbSet<Address> Addresses { get; set; }
+        public DbSet<Address> DeliveryAddresses { get; set; }
 
         public DbSet<Brand> Brands { get; set; }
 

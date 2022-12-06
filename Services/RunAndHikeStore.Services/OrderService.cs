@@ -6,10 +6,14 @@ using RunAndHikeStore.Services.Contracts;
 using RunAndHikeStore.Web.ViewModels.Customer;
 using RunAndHikeStore.Web.ViewModels.Order;
 using RunAndHikeStore.Web.ViewModels.Order.Enum;
+using RunAndHikeStore.Web.ViewModels.Product;
+using RunAndHikeStore.Web.ViewModels.ShoppingCart;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static RunAndHikeStore.Common.GlobalConstants;
+using Order = RunAndHikeStore.Data.Models.Order;
 
 namespace RunAndHikeStore.Services
 {
@@ -31,10 +35,48 @@ namespace RunAndHikeStore.Services
         /// <param name="model"></param>
         /// <param name="customerId"></param>
         /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
-        public Task CreateAsync(CreateOrderViewModel model, string customerId)
+        public async Task CreateAsync(CreateOrderViewModel model, string customerId)
         {
-            throw new System.NotImplementedException();
+            if (customerId == null)
+            {
+                throw new ArgumentException("Unknown customer");
+            }
+
+            var order = new Order()
+            {
+                CustomerId = customerId,
+                BillingDetailsId = model.BillingDetails.Id,
+                OrderStatus = OrderStatus.Pending,
+            };
+
+            var orderDetails = model.CartItems.Select(c => new OrderDetail
+            {
+                OrderId = order.Id,
+                ProductId = c.ProductId,
+                OrderQuantity = c.Quantity,
+                Size = c.Size,
+                UnitPrice = c.Product.UnitPrice,
+            }).ToList();
+
+            order.OrderDetails = orderDetails;
+
+            foreach (var orderDetail in order.OrderDetails)
+            {
+                var productSize = await this.repo.All<ProductSize>().Where(ps => ps.ProductId == orderDetail.ProductId && ps.Size.Name == orderDetail.Size).FirstOrDefaultAsync();
+
+                if (productSize != null)
+                {
+                    if (orderDetail.OrderQuantity > productSize.UnitsInStock)
+                    {
+                        throw new ArgumentException("Not enough units in stock");
+                    }
+                }
+            }
+
+            await this.repo.AddAsync(order);
+            var cartItems = await this.repo.All<CartItem>().Include(c => c.ShoppingCart).Where(c => c.ShoppingCart.ApplicationUser.Id == customerId).ToListAsync();
+            this.repo.DeleteRange(cartItems);
+            await this.repo.SaveChangesAsync();
         }
 
         /// <summary>
@@ -65,15 +107,15 @@ namespace RunAndHikeStore.Services
                 ordersQuery = ordersQuery.Where(o => o.BillingDetails.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
                                                 o.BillingDetails.LastName.ToLower().Contains(searchTerm.ToLower()) ||
                                                 o.Customer.Email.ToLower().Contains(searchTerm.ToLower()) ||
-                                                o.OrderNumber.ToLower().Contains(searchTerm.ToLower()) ||
+                                                o.Id.ToString().ToLower().Contains(searchTerm.ToLower()) ||
                                                 o.OrderDate.ToString().Contains(searchTerm.ToLower()));
             }
 
             ordersQuery = sorting switch
             {
-                OrdersSorting.Newest => ordersQuery
-                                                    .OrderByDescending(o => o.CreatedOn),
-                _ => ordersQuery.OrderBy(o => o.CreatedOn),
+                OrdersSorting.Oldest => ordersQuery
+                                                    .OrderBy(o => o.Id),
+                _ => ordersQuery.OrderByDescending(o => o.Id),
             };
 
             var orders = ordersQuery
@@ -82,7 +124,6 @@ namespace RunAndHikeStore.Services
                                     .Select(o => new ManageOrderViewModel()
                                     {
                                         OrderId = o.Id,
-                                        OrderNumber = o.OrderNumber,
                                         Email = o.Customer.Email,
                                         TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
                                         OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
@@ -192,42 +233,41 @@ namespace RunAndHikeStore.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(string id)
+        public async Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(int id)
         {
-                var model = await this.repo.All<Order>()
-                                  .Where(o => o.IsDeleted == false)
-                                  .Where(o => o.Id == id)
-                                  .Include(o => o.OrderDetails.Where(d => d.IsDeleted == false))
-                                  .Select(o => new EditOrderDetailViewModel()
+            var model = await this.repo.All<Order>()
+                              .Where(o => o.IsDeleted == false)
+                              .Where(o => o.Id == id)
+                              .Include(o => o.OrderDetails.Where(d => d.IsDeleted == false))
+                              .Select(o => new EditOrderDetailViewModel()
+                              {
+                                  OrderId = o.Id,
+                                  OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
+                                  Email = o.Customer.Email,
+                                  OrderStatusId = (int)o.OrderStatus,
+                                  PaymentStatusId = (int)o.PaymentStatus,
+                                  TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
+                                  BillingDetails = new EditBillingDetailsViewModel()
                                   {
-                                      OrderId = o.Id,
-                                      OrderNumber = o.OrderNumber,
-                                      OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
-                                      Email = o.Customer.Email,
-                                      OrderStatusId = (int)o.OrderStatus,
-                                      PaymentStatusId = (int)o.PaymentStatus,
-                                      TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
-                                      BillingDetails = new EditBillingDetailsViewModel()
-                                      {
-                                          Id = o.BillingDetailsId,
-                                          FirstName = o.BillingDetails.FirstName,
-                                          LastName = o.BillingDetails.LastName,
-                                          StreetAddress = o.BillingDetails.StreetAddress,
-                                          City = o.BillingDetails.City,
-                                          Country = o.BillingDetails.Country,
-                                          PostalCode = o.BillingDetails.PostalCode,
-                                          PhoneNumber = o.BillingDetails.PhoneNumber,
-                                      },
-                                  }).FirstOrDefaultAsync();
+                                      Id = o.BillingDetailsId,
+                                      FirstName = o.BillingDetails.FirstName,
+                                      LastName = o.BillingDetails.LastName,
+                                      StreetAddress = o.BillingDetails.StreetAddress,
+                                      City = o.BillingDetails.City,
+                                      Country = o.BillingDetails.Country,
+                                      PostalCode = o.BillingDetails.PostalCode,
+                                      PhoneNumber = o.BillingDetails.PhoneNumber,
+                                  },
+                              }).FirstOrDefaultAsync();
 
-                return model;
+            return model;
         }
 
-        /// <summary>
-        /// Get all order statuses.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerable<OrderStatusViewModel> GetOrderStatuses()
+    /// <summary>
+    /// Get all order statuses.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerable<OrderStatusViewModel> GetOrderStatuses()
         {
             List<OrderStatusViewModel> orderStatuses = new List<OrderStatusViewModel>();
 
@@ -281,6 +321,14 @@ namespace RunAndHikeStore.Services
             return paymentStatuses;
         }
 
+        /// <summary>
+        /// Get all orders by user id.
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="ordersPerPage"></param>
+        /// <param name="sorting"></param>
+        /// <returns></returns>
         public async Task<CustomerOrdersViewModel> GetAllOrdersByUserIdAsync(string userId, int currentPage = 1, int ordersPerPage = 6, OrdersSorting sorting = OrdersSorting.Newest)
         {
             var ordersQuery = this.repo.AsNoTracking<Order>()
@@ -294,8 +342,8 @@ namespace RunAndHikeStore.Services
             ordersQuery = sorting switch
             {
                 OrdersSorting.Newest => ordersQuery
-                                                    .OrderByDescending(o => o.CreatedOn),
-                _ => ordersQuery.OrderBy(o => o.CreatedOn),
+                                                    .OrderByDescending(o => o.Id),
+                _ => ordersQuery.OrderBy(o => o.Id),
             };
 
             var orders = ordersQuery
@@ -304,7 +352,6 @@ namespace RunAndHikeStore.Services
                                     .Select(o => new CustomerOrderViewModel()
                                     {
                                         OrderId = o.Id,
-                                        OrderNumber = o.OrderNumber,
                                         Email = o.Customer.Email,
                                         TotalPrice = o.OrderDetails.Sum(od => od.UnitPrice * od.OrderQuantity).ToString("F2"),
                                         OrderDate = o.OrderDate.ToString("dd-MM-yyyy"),
