@@ -31,7 +31,7 @@ Password: Ab123456!
 
 ## Credits
 Using ASP.NET MVC Template originally developed by:
-•	Nikolay Kostov
+Nikolay Kostov (https://github.com/NikolayIT)
 
 ## Purpose
 The project is made for educational purposes in regards to ASP.NET Advanced course in Software University - "SoftUni".
