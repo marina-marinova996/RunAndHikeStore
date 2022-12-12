@@ -21,6 +21,14 @@ There are two main roles in the application -
 •	Admin Role - when the application user is in role administrator, he has access to Admin area - give roles and manage orderds, products, stocks, etc..
 •	User Role - user role is for the customer.
 
+## Credentials for seeded users
+•	Admin:  
+Email: admin@runandhikestore.com
+Password: 123456Ab!
+•	User: 
+Email: ivan@gmail.com
+Password: Ab123456!
+
 ## Credits
 Using ASP.NET MVC Template originally developed by:
 •	Nikolay Kostov
