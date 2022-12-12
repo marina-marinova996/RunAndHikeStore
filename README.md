@@ -18,7 +18,7 @@ There are two main areas in the application - Admin area and Customer area.
 
 ## Roles
 There are two main roles in the application - 
-•	Admin Role - when the application user is in role administrator, he has access to Admin area - give roles and manage orderds, products, stocks, etc..
+•	Admin Role - when the application user is in role administrator, he has access to Admin area - give roles and manage orders, products, stocks, etc..
 •	User Role - user role is for the customer.
 
 ## Credentials for seeded users
