@@ -1,4 +1,5 @@
-﻿using RunAndHikeStore.Web.ViewModels.Brand;
+﻿using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Web.ViewModels.Brand;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
@@ -18,5 +19,7 @@ namespace RunAndHikeStore.Services.Contracts
         Task<EditBrandViewModel> GetViewModelForEditByIdAsync(string id);
 
         Task Delete(string id);
+
+        Task<List<Brand>> GetAllBrands();
     }
 }

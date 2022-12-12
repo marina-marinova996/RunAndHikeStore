@@ -1,3 +1,11 @@
-﻿@{
-    this.Layout = "_Layout";
+﻿@using static RunAndHikeStore.Common.GlobalConstants;
+@{
+    if(this.User.IsInRole(AdministratorRoleName))
+    {
+        this.Layout = "_AdminLayout";
+    }
+    else
+    {
+        this.Layout = "_Layout";
+    }
 }

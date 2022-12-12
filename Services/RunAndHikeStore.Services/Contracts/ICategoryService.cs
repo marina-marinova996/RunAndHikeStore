@@ -1,4 +1,5 @@
-﻿using RunAndHikeStore.Web.ViewModels.Category;
+﻿using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Web.ViewModels.Category;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,7 +33,7 @@ namespace RunAndHikeStore.Services.Contracts
         /// <summary>
         /// Delete particular category.
         /// </summary>
-        Task Delete(CategoryViewModel model);
+        Task Delete(string id);
 
         /// <summary>
         /// Get Category by Id.
@@ -48,5 +49,11 @@ namespace RunAndHikeStore.Services.Contracts
         /// <returns></returns>
 
         Task<EditCategoryViewModel> GetViewModelForEditByIdAsync(string id);
+
+        /// <summary>
+        /// Get all categories.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Category>> GetAllCategories();
     }
 }

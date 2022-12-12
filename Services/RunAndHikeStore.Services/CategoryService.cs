@@ -45,10 +45,10 @@
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public async Task Delete(CategoryViewModel model)
+        public async Task Delete(string id)
         {
             var category = await this.repo.All<Category>()
-                .FirstOrDefaultAsync(p => p.Id == model.Id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (category != null)
             {
@@ -137,10 +137,20 @@
                                           .Where(c => c.IsDeleted == false)
                                           .Select(c => new EditCategoryViewModel()
                                           {
+                                              Id = c.Id,
                                               Name = c.Name,
                                           }).FirstOrDefaultAsync();
 
             return category;
+        }
+
+        /// <summary>
+        /// Get all categories.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Category>> GetAllCategories()
+        {
+            return await this.repo.All<Category>().ToListAsync();
         }
     }
 }

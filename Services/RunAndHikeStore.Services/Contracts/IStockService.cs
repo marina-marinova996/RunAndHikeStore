@@ -1,4 +1,6 @@
-﻿using RunAndHikeStore.Web.ViewModels.Stock;
+﻿using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Web.ViewModels.Stock;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace RunAndHikeStore.Services.Contracts
@@ -33,7 +35,7 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        Task DeleteStock(EditStockViewModel model);
+        Task DeleteStock(string productId, string sizeId);
 
         /// <summary>
         /// Edit Stock.
@@ -50,5 +52,11 @@ namespace RunAndHikeStore.Services.Contracts
         /// <returns></returns>
 
         Task<EditStockViewModel> GetViewModelForEdit(string productId, string sizeId);
+
+        /// <summary>
+        /// Get all stocks.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<ProductSize>> GetAllStocks();
     }
 }

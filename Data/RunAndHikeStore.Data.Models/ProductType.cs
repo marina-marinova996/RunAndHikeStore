@@ -11,7 +11,6 @@ namespace RunAndHikeStore.Data.Models
         public ProductType()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Products = new HashSet<Product>();
         }
 
         /// <summary>
@@ -20,7 +19,5 @@ namespace RunAndHikeStore.Data.Models
         [Required]
         [StringLength(ProductTypeNameMaxLength)]
         public string Name { get; set; }
-
-        public ICollection<Product> Products { get; set; }
     }
 }

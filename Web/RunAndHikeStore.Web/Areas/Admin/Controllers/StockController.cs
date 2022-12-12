@@ -164,9 +164,8 @@
         {
             try
             {
-                EditStockViewModel productStock = await this.stockService.GetViewModelForEdit(productId, sizeId);
 
-                await this.stockService.DeleteStock(productStock);
+                await this.stockService.DeleteStock(productId, sizeId);
 
                 return RedirectToAction(nameof(this.ManageStocks));
             }

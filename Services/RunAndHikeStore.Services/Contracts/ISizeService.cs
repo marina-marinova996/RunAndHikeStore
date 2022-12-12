@@ -1,4 +1,5 @@
-﻿using RunAndHikeStore.Web.ViewModels.Brand;
+﻿using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Web.ViewModels.Brand;
 using RunAndHikeStore.Web.ViewModels.Size;
 using System;
 using System.Collections.Generic;
@@ -53,5 +54,12 @@ namespace RunAndHikeStore.Services.Contracts
         /// <param name="id"></param>
         /// <returns></returns>
         Task Delete(string id);
+
+
+        /// <summary>
+        /// Get all sizes.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Size>> GetAllSizes();
     }
 }

@@ -176,7 +176,7 @@
             {
                 ProductViewModel product = await productService.GetByIdAsync(id);
 
-                await productService.Delete(product);
+                await productService.Delete(product.Id);
 
                 return RedirectToAction(nameof(this.ManageAll));
             }

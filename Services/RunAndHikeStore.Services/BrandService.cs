@@ -6,6 +6,7 @@
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -147,6 +148,15 @@
                                       Id = b.Id,
                                       Name = b.Name,
                                   }).FirstOrDefaultAsync();
+        }
+
+        /// <summary>
+        /// Get all brands.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Brand>> GetAllBrands()
+        {
+            return await this.repo.All<Brand>().ToListAsync();
         }
     }
 }

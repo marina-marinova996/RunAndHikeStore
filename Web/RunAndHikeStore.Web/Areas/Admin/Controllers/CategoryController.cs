@@ -122,9 +122,7 @@
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            CategoryViewModel category = await categoryService.GetByIdAsync(id);
-
-            await categoryService.Delete(category);
+            await categoryService.Delete(id);
 
             return RedirectToAction(nameof(this.ManageAll));
         }

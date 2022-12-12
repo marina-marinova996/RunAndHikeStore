@@ -46,14 +46,10 @@
                     <span asp-validation-for="UnitPrice" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
-                    <label asp-for="SizeId" class="form-label">Product Size</label>
-                    <select asp-for="SizeId" class="form-control">
-                        @foreach (var size in Model.Sizes)
-                        {
-                            <option value="@size.Id">@size.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="@Model.SizeId" class="text-danger"></span>
+                    <label asp-for="SizeName">Product Size</label>
+                    <input asp-for="SizeId" type="hidden" />
+                    <input asp-for="SizeName" class="form-control" readonly />
+                    <span asp-validation-for="SizeName" class="small text-danger"></span>
                 </div>
                 <div class="mb-3">
                     <label asp-for="UnitsInStock">Units In Stock</label>

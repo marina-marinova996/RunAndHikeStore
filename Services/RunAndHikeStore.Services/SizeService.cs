@@ -122,6 +122,15 @@
         }
 
         /// <summary>
+        /// Get all sizes.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Size>> GetAllSizes()
+        {
+            return await this.repo.All<Size>().ToListAsync();
+        }
+
+        /// <summary>
         /// Get size by Id.
         /// </summary>
         /// <param name="id"></param>

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Web.ViewModels.Brand;
     using RunAndHikeStore.Web.ViewModels.Category;
     using RunAndHikeStore.Web.ViewModels.Product;
@@ -20,7 +21,7 @@
         /// <summary>
         /// Delete particular product.
         /// </summary>
-        Task Delete(ProductViewModel model);
+        Task Delete(string id);
 
         /// <summary>
         /// Get particular product by Id.
@@ -93,5 +94,11 @@
         /// <param name="productsPerPage"></param>
         /// <returns></returns>
         Task<ManageAllProductsViewModel> GetManageAllSorted(string searchTerm, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6);
+
+        /// <summary>
+        /// Get all products.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Product>> GetAllProducts();
     }
 }

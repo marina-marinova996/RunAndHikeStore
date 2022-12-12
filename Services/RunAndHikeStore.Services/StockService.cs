@@ -5,11 +5,10 @@
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Data.Models.Enums;
     using RunAndHikeStore.Services.Contracts;
-    using RunAndHikeStore.Web.ViewModels.Product;
-    using RunAndHikeStore.Web.ViewModels.Product.Enum;
     using RunAndHikeStore.Web.ViewModels.Stock;
 
     using System;
+    using System.Collections;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -65,18 +64,17 @@
         /// <summary>
         /// Delete stock for a product.
         /// </summary>
-        /// <param name="model"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public async Task DeleteStock(EditStockViewModel model)
+        public async Task DeleteStock(string productId, string sizeId)
         {
             var product = await this.repo.All<Product>()
                                          .Where(p => p.IsDeleted == false)
-                                         .Where(p => p.Id == model.ProductId)
+                                         .Where(p => p.Id == productId)
                                          .Include(p => p.Sizes)
                                          .FirstOrDefaultAsync();
 
-            var size = product.Sizes.Where(s => s.SizeId == model.SizeId)
+            var size = product.Sizes.Where(s => s.SizeId == sizeId)
                                     .FirstOrDefault();
 
             if (product == null)
@@ -88,7 +86,7 @@
             {
                 var productSize = product.Sizes
                                          .Where(s => s.IsDeleted == false)
-                                         .Where(s => s.SizeId == model.SizeId)
+                                         .Where(s => s.SizeId == sizeId)
                                          .FirstOrDefault();
 
                 productSize.IsDeleted = true;
@@ -105,22 +103,17 @@
         /// <exception cref="ArgumentException"></exception>
         public async Task EditStock(EditStockViewModel model)
         {
-            var product = await this.repo.All<ProductSize>()
+            var productSize = await this.repo.All<ProductSize>()
                                            .Where(ps => ps.IsDeleted == false)
                                            .Where(ps => ps.ProductId == model.ProductId)
-                                           .Include(ps => ps.Product)
-                                           .Include(p => p.Size)
                                            .Where(ps => ps.SizeId == model.SizeId)
                                            .FirstOrDefaultAsync();
-
-
-            if (product == null)
+            if (productSize == null)
             {
                 throw new ArgumentException("Invalid product ID");
             }
 
-            product.SizeId = model.SizeId;
-            product.UnitsInStock = model.UnitsInStock;
+            productSize.UnitsInStock = model.UnitsInStock;
 
             await this.repo.SaveChangesAsync();
         }
@@ -273,6 +266,15 @@
                                               .FirstOrDefaultAsync();
 
             return modelForEdit;
+        }
+
+        /// <summary>
+        /// Get all stocks.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<ProductSize>> GetAllStocks()
+        {
+            return await this.repo.All<ProductSize>().ToListAsync();
         }
     }
 }

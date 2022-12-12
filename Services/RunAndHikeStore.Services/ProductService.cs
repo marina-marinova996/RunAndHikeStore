@@ -118,11 +118,11 @@
             }
         }
 
-        public async Task Delete(ProductViewModel model)
+        public async Task Delete(string id)
         {
             var product = await this.repo.All<Product>()
                                          .Where(p => p.IsDeleted == false)
-                                         .FirstOrDefaultAsync(p => p.Id == model.Id);
+                                         .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product != null)
             {
@@ -479,6 +479,15 @@
                 Products = products,
                 TotalProductsCount = totalProductsCount,
             };
+        }
+
+        /// <summary>
+        /// Get all products.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<Product>> GetAllProducts()
+        {
+            return await this.repo.All<Product>().ToListAsync();
         }
     }
 }
