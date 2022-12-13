@@ -1,5 +1,6 @@
-![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278926-27976e18-2503-4e3d-b291-ec1a21f7786f.png) # Run and Hike Store 
+# Run and Hike Store </br>
 
+![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278926-27976e18-2503-4e3d-b291-ec1a21f7786f.png) 
 
 ## Description 
 Run and Hike Store is a web platform application for selling products related to outdoor activies such as shoes, clothing and accessories. <br />
