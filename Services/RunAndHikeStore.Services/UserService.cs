@@ -1,13 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RunAndHikeStore.Data.Common.Repositories;
-using RunAndHikeStore.Data.Models;
-using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.User;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RunAndHikeStore.Services
+﻿namespace RunAndHikeStore.Services
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+
+    using RunAndHikeStore.Data.Common.Repositories;
+    using RunAndHikeStore.Data.Models;
+    using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.User;
+
     public class UserService : IUserService
     {
         private readonly IRepository repo;
@@ -17,11 +19,21 @@ namespace RunAndHikeStore.Services
             repo = _repo;
         }
 
+        /// <summary>
+        /// Get user by id.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<ApplicationUser> GetUserById(string id)
         {
             return await repo.GetByIdAsync<ApplicationUser>(id);
         }
 
+        /// <summary>
+        /// Get user for edit.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<UserEditViewModel> GetUserForEdit(string id)
         {
             var user = await repo.GetByIdAsync<ApplicationUser>(id);
@@ -35,6 +47,13 @@ namespace RunAndHikeStore.Services
             };
         }
 
+        /// <summary>
+        /// Get users.
+        /// </summary>
+        /// <param name="searchTerm"></param>
+        /// <param name="currentPage"></param>
+        /// <param name="usersPerPage"></param>
+        /// <returns></returns>
         public async Task<AllUsersViewModel> GetUsers(string searchTerm, int currentPage = 1, int usersPerPage = 6)
         {
             var usersQuery = this.repo.All<ApplicationUser>().AsQueryable();
@@ -66,6 +85,11 @@ namespace RunAndHikeStore.Services
             };
         }
 
+        /// <summary>
+        /// Update user.
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public async Task<bool> UpdateUser(UserEditViewModel model)
         {
             bool result = false;
