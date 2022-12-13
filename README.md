@@ -1,4 +1,4 @@
-# Run and Hike Store ! ![image](https://user-images.githubusercontent.com/81676022/207278319-78500e17-4d5b-4ae6-8f1a-66944970f4f2.png)
+# Run and Hike Store ! ![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278612-10de53b1-08ca-419a-b1a1-ced285fbb0de.png)
 
 
 ## Description
