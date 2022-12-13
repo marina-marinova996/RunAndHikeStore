@@ -1,4 +1,5 @@
-# Run and Hike Store
+# Run and Hike Store ! [logo-mountain](https://user-images.githubusercontent.com/81676022/207277898-428ea82e-e5e0-40ea-b32d-1c6975e5b114.PNG)
+
 
 ## Description
 Run and Hike Store is a web platform application for selling products related to outdoor activies such as shoes, clothing and accessories. <br />
