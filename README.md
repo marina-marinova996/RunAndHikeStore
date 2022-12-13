@@ -1,6 +1,4 @@
-<h1 class="text-center"> # Run and Hike Store </h1>
- ![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278926-27976e18-2503-4e3d-b291-ec1a21f7786f.png)
-
+# Run and Hike Store ![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278926-27976e18-2503-4e3d-b291-ec1a21f7786f.png)
 
 
 ## Description
