@@ -15,7 +15,7 @@ The application has an admin panel. Run and Hike Store is made using the MVC pat
 •	Toastr - https://codeseven.github.io/toastr/ <br />
 
 ## Areas
-There are two main areas in the application - Admin area and Customer area.
+There are three areas in the application - Admin, Customer and Identity.
 
 ## Roles
 There are two main roles in the application:  <br />
