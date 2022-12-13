@@ -1,7 +1,7 @@
-# Run and Hike Store     ![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278926-27976e18-2503-4e3d-b291-ec1a21f7786f.png)
+# Run and Hike Store 
 
 
-## Description
+## Description ![favicon-32x32](https://user-images.githubusercontent.com/81676022/207278926-27976e18-2503-4e3d-b291-ec1a21f7786f.png)
 Run and Hike Store is a web platform application for selling products related to outdoor activies such as shoes, clothing and accessories. <br />
 The application has an admin panel. Run and Hike Store is made using the MVC pattern, unit tests are written using NUnit. <br />
 
