@@ -137,7 +137,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
         }
 
         [Test]
-        public async Task TestGetAllProducts()
+        public async Task TestGetAllCategories()
         {
             repo = new Repository(dbContext);
             categoryService = new CategoryService(repo);

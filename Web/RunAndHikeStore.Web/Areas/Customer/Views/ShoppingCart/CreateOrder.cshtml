@@ -14,13 +14,13 @@
                         <div class="form-outline">
                             <label class="form-label">First Name</label>
                             <input type="hidden" asp-for="@Model.BillingDetails.Id" />
-                            <input asp-for="@Model.BillingDetails.FirstName" class="form-control" />
+                            <input asp-for="@Model.BillingDetails.FirstName" class="form-control" readonly />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Last Name</label>
-                            <input asp-for="@Model.BillingDetails.LastName" class="form-control" />
+                                <input asp-for="@Model.BillingDetails.LastName" class="form-control" readonly />
                         </div>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Street Address</label>
-                            <input asp-for="@Model.BillingDetails.StreetAddress" class="form-control" />
+                                <input asp-for="@Model.BillingDetails.StreetAddress" class="form-control" readonly />
                         </div>
                     </div>
                 </div>
@@ -36,13 +36,13 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">City</label>
-                            <input asp-for="@Model.BillingDetails.City" class="form-control" />
+                                <input asp-for="@Model.BillingDetails.City" class="form-control" readonly />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Country</label>
-                            <input asp-for="@Model.BillingDetails.Country" class="form-control" />
+                                <input asp-for="@Model.BillingDetails.Country" class="form-control" readonly />
                         </div>
                     </div>
                 </div>
@@ -50,13 +50,13 @@
                     <div class="col">
                         <div class="form-outline">
                             <label class="form-label">Postal Code</label>
-                            <input asp-for="@Model.BillingDetails.PostalCode" class="form-control" />
+                                <input asp-for="@Model.BillingDetails.PostalCode" class="form-control" readonly />
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-outline mb-4">
                             <label class="form-label">Phone Number</label>
-                            <input asp-for="@Model.BillingDetails.PhoneNumber" class="form-control" />
+                                <input asp-for="@Model.BillingDetails.PhoneNumber" class="form-control" readonly />
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">Street Address</label>
-                        <input asp-for="@Model.DeliveryAddress.StreetAddress" class="form-control" />
+                                <input asp-for="@Model.DeliveryAddress.StreetAddress" class="form-control" readonly />
                     </div>
                 </div>
             </div>
@@ -113,13 +113,13 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">City</label>
-                            <input asp-for="@Model.DeliveryAddress.StreetAddress" class ="form-control" />
+                                <input asp-for="@Model.DeliveryAddress.StreetAddress" class="form-control" readonly />
                     </div>
                 </div>
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">Country</label>
-                        <input asp-for="@Model.DeliveryAddress.Country" class="form-control" />
+                                <input asp-for="@Model.DeliveryAddress.Country" class="form-control" readonly />
                     </div>
                 </div>
             </div>
@@ -127,14 +127,14 @@
                 <div class="col">
                     <div class="form-outline">
                         <label class="form-label">Postal Code</label>
-                        <input asp-for="@Model.DeliveryAddress.PostalCode" class="form-control" />
+                                <input asp-for="@Model.DeliveryAddress.PostalCode" class="form-control" readonly />
                     </div>
                 </div>
                 </div>
             </div>
         </div>
         <div class="text-center">
-            <a asp-area="Customer" asp-controller="Customer" asp-action="Details" asp-route-billingDetailsId="@Model.BillingDetails.Id" class="btn btn-warning btn-lg">Save Changes</a>
+            <a asp-area="Customer" asp-controller="Customer" asp-action="Details" asp-route-billingDetailsId="@Model.BillingDetails.Id" class="btn btn-warning btn-lg">Edit Details</a>
         </div>
     </div>
 </div>

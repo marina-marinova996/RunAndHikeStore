@@ -40,41 +40,48 @@ namespace RunAndHikeStore.Services
                 throw new ArgumentException("Unknown customer");
             }
 
-            var order = new Order()
+            if (model.CartItems.Any())
             {
-                CustomerId = customerId,
-                BillingDetailsId = model.BillingDetails.Id,
-                OrderStatus = OrderStatus.Pending,
-            };
-
-            var orderDetails = model.CartItems.Select(c => new OrderDetail
-            {
-                OrderId = order.Id,
-                ProductId = c.ProductId,
-                OrderQuantity = c.Quantity,
-                Size = c.Size,
-                UnitPrice = c.Product.UnitPrice,
-            }).ToList();
-
-            order.OrderDetails = orderDetails;
-
-            foreach (var orderDetail in order.OrderDetails)
-            {
-                var productSize = await this.repo.All<ProductSize>().Where(ps => ps.ProductId == orderDetail.ProductId && ps.Size.Name == orderDetail.Size).FirstOrDefaultAsync();
-
-                if (productSize != null)
+                var order = new Order()
                 {
-                    if (orderDetail.OrderQuantity > productSize.UnitsInStock)
+                    CustomerId = customerId,
+                    BillingDetailsId = model.BillingDetails.Id,
+                    OrderStatus = OrderStatus.Pending,
+                };
+
+                var orderDetails = model.CartItems.Select(c => new OrderDetail
+                {
+                    OrderId = order.Id,
+                    ProductId = c.ProductId,
+                    OrderQuantity = c.Quantity,
+                    Size = c.Size,
+                    UnitPrice = c.Product.UnitPrice,
+                }).ToList();
+
+                order.OrderDetails = orderDetails;
+
+                foreach (var orderDetail in order.OrderDetails)
+                {
+                    var productSize = await this.repo.All<ProductSize>().Where(ps => ps.ProductId == orderDetail.ProductId && ps.Size.Name == orderDetail.Size).FirstOrDefaultAsync();
+
+                    if (productSize != null)
                     {
-                        throw new ArgumentException("Not enough units in stock");
+                        if (orderDetail.OrderQuantity > productSize.UnitsInStock)
+                        {
+                            throw new ArgumentException("Not enough units in stock");
+                        }
                     }
                 }
-            }
 
-            await this.repo.AddAsync(order);
-            var cartItems = await this.repo.All<CartItem>().Include(c => c.ShoppingCart).Where(c => c.ShoppingCart.ApplicationUser.Id == customerId).ToListAsync();
-            this.repo.DeleteRange(cartItems);
-            await this.repo.SaveChangesAsync();
+                await this.repo.AddAsync(order);
+                var cartItems = await this.repo.All<CartItem>().Include(c => c.ShoppingCart).Where(c => c.ShoppingCart.ApplicationUser.Id == customerId).ToListAsync();
+                this.repo.DeleteRange(cartItems);
+                await this.repo.SaveChangesAsync();
+            }
+            else
+            {
+                throw new ArgumentException("Missing cart items");
+            }
         }
 
         /// <summary>
@@ -231,7 +238,7 @@ namespace RunAndHikeStore.Services
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        public async Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(int id)
+        public async Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(string id)
         {
             var model = await this.repo.All<Order>()
                               .Where(o => o.IsDeleted == false)
@@ -374,6 +381,11 @@ namespace RunAndHikeStore.Services
                 Orders = orders,
                 TotalRecordsCount = totalRecords,
             };
+        }
+
+        public async Task<List<Order>> GetAllOrders()
+        {
+            return await this.repo.All<Order>().Include(o => o.OrderDetails).ToListAsync();
         }
     }
 }

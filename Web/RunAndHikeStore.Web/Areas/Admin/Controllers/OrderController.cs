@@ -50,7 +50,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> Edit(int id)
+        public async Task<IActionResult> Edit(string id)
         {
             this.ViewData["Title"] = "Edit Order";
             try

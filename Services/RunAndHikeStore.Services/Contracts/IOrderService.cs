@@ -1,4 +1,5 @@
-﻿using RunAndHikeStore.Web.ViewModels.Customer;
+﻿using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Web.ViewModels.Customer;
 using RunAndHikeStore.Web.ViewModels.Order;
 using RunAndHikeStore.Web.ViewModels.Order.Enum;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(int id);
+        Task<EditOrderDetailViewModel> GetViewModelForEditByIdAsync(string id);
 
         /// <summary>
         /// Get all Order Statuses.
@@ -67,5 +68,11 @@ namespace RunAndHikeStore.Services.Contracts
         /// <param name="sorting"></param>
         /// <returns></returns>
         Task<CustomerOrdersViewModel> GetAllOrdersByUserIdAsync(string userId, int currentPage = 1, int ordersPerPage = 6, OrdersSorting sorting = OrdersSorting.Newest);
+
+        /// <summary>
+        /// Get all orders.
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Order>> GetAllOrders();
     }
 }

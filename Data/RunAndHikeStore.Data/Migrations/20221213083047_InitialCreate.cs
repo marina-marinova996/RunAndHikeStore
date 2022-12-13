@@ -454,8 +454,7 @@ namespace RunAndHikeStore.Data.Migrations
                 name: "Orders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ShipDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     OrderStatus = table.Column<int>(type: "int", maxLength: 20, nullable: false),
@@ -490,7 +489,7 @@ namespace RunAndHikeStore.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     OrderQuantity = table.Column<int>(type: "int", nullable: false),
                     UnitPrice = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
                     Size = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),

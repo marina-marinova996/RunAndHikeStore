@@ -20,6 +20,7 @@ namespace RunAndHikeStore.Data.Seeding
                                             {
                                               new Order
                                               {
+                                                  Id = "1",
                                                   OrderDate = new DateTime(2022, 11, 22),
                                                   OrderStatus = Models.Enums.OrderStatus.Approved,
                                                   PaymentStatus = Models.Enums.PaymentStatus.NotPaid,
@@ -28,6 +29,7 @@ namespace RunAndHikeStore.Data.Seeding
                                               },
                                               new Order
                                               {
+                                                  Id = "2",
                                                   OrderDate = new DateTime(2022, 11, 18),
                                                   OrderStatus = Models.Enums.OrderStatus.Approved,
                                                   PaymentStatus = Models.Enums.PaymentStatus.Paid,

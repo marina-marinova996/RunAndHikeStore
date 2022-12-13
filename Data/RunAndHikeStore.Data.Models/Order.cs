@@ -8,10 +8,11 @@
     using RunAndHikeStore.Data.Models.Enums;
     using static RunAndHikeStore.Common.GlobalConstants.Order;
 
-    public class Order : BaseDeletableModel<int>
+    public class Order : BaseDeletableModel<string>
     {
         public Order()
         {
+            this.Id = Guid.NewGuid().ToString();
             this.OrderDetails = new HashSet<OrderDetail>();
         }
 

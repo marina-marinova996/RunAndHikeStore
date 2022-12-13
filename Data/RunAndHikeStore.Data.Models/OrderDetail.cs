@@ -18,7 +18,7 @@
         /// Foreign key to Orders Table.
         /// </summary>
         [Required]
-        public int OrderId { get; set; }
+        public string OrderId { get; set; }
 
         /// <summary>
         /// Navigation Property to Orders Table.

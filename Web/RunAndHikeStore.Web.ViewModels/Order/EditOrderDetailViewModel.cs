@@ -7,7 +7,7 @@ namespace RunAndHikeStore.Web.ViewModels.Order
 {
     public class EditOrderDetailViewModel
     {
-        public int OrderId { get; set; }
+        public string OrderId { get; set; }
 
         public string OrderDate { get; set; }
 
