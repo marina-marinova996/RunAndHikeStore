@@ -86,6 +86,9 @@
         {
             try
             {
+                model.PaymentStatuses = this.orderService.GetPaymentStatuses();
+                model.OrderStatuses = this.orderService.GetOrderStatuses();
+
                 await orderService.Edit(model);
                 TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 

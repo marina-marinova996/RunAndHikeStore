@@ -5,6 +5,9 @@
 
     public class AddCategoryViewModel
     {
+        /// <summary>
+        /// Category Name.
+        /// </summary>
         [Required]
         [StringLength(CategoryNameMaxLength, MinimumLength = CategoryNameMinLength)]
         public string Name { get; set; }

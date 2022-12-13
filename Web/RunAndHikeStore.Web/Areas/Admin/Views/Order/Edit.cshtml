@@ -1,7 +1,7 @@
 ﻿@using RunAndHikeStore.Web.ViewModels.Order
 @model EditOrderDetailViewModel
 
-<h2 class="text-center">@ViewData["Title"]</h2>
+<h2 class="text-center mt-2">@ViewData["Title"]</h2>
 <hr />
 
 <form asp-area="Admin" asp-controller="Order" asp-action="Edit" method="post">
@@ -15,8 +15,6 @@
                 <th scope="col">Last Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Total Price</th>
-                <th scope="col">Order Status</th>
-                <th scope="col">Payment Status</th>
             </tr>
         </thead>
         <tbody>
@@ -26,25 +24,7 @@
                 <td>@Model.BillingDetails.FirstName</td>
                 <td>@Model.BillingDetails.LastName</td>
                 <td>@Model.Email</td>
-                <td asp-for="OrderStatusId">@Model.TotalPrice EUR</td>
-                <td>
-                    <select asp-for="OrderStatusId" class="form-control">
-                        @foreach (var orderStatus in Model.OrderStatuses)
-                        {
-                            <option value="@orderStatus.Id">@orderStatus.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="OrderStatusId" class="text-danger"></span>
-                </td>
-                <td asp-for="PaymentStatusId">
-                    <select asp-for="PaymentStatusId" class="form-control">
-                        @foreach (var paymentStatus in Model.PaymentStatuses)
-                        {
-                            <option value="@paymentStatus.Id">@paymentStatus.Name</option>
-                        }
-                    </select>
-                    <span asp-validation-for="PaymentStatusId" class="text-danger"></span>
-                </td>
+                <td>@Model.TotalPrice EUR</td>
             </tr>
         </tbody>
     </table>
@@ -96,6 +76,28 @@
                 <td>@Model.BillingDetails.PhoneNumber</td>
         </tbody>
     </table>
+    <div class="row text-center mt-2 mb-2">
+        <div class="col-md-6">
+            <label asp-for="OrderStatusId">Order Status</label>
+            <select asp-for="OrderStatusId" class="form-control">
+                @foreach (var orderStatus in Model.OrderStatuses)
+                {
+                    <option value="@orderStatus.Id">@orderStatus.Name</option>
+                }
+            </select>
+            <span asp-validation-for="OrderStatusId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="PaymentStatusId">Payment Status</label>
+            <select asp-for="PaymentStatusId" class="form-control">
+                @foreach (var paymentStatus in Model.PaymentStatuses)
+                {
+                    <option value="@paymentStatus.Id">@paymentStatus.Name</option>
+                }
+            </select>
+            <span asp-validation-for="PaymentStatusId" class="text-danger"></span>
+        </div>
+    </div>
     <div class="text-center">
         <input class="btn-lg btn-warning col-md-4 mt-3 text-center" type="submit" value="Save Changes" />
     </div>

@@ -5,10 +5,14 @@
 
     public class CategoryViewModel
     {
+        /// <summary>
+        /// Category Id.
+        /// </summary>
         public string Id { get; set; }
 
+        /// <summary>
+        /// Category Name.
+        /// </summary>
         public string Name { get; set; }
-
-        public IEnumerable<ProductViewModel> Products { get; set; }
     }
 }

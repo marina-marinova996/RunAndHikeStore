@@ -5,6 +5,9 @@
 
     public class AddBrandViewModel
     {
+        /// <summary>
+        /// Brand name.
+        /// </summary>
         [Required]
         [StringLength(BrandNameMaxLength, MinimumLength = BrandNameMinLength)]
         public string Name { get; set; }

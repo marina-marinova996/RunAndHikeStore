@@ -1,14 +1,15 @@
 ﻿namespace RunAndHikeStore.Services
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using RunAndHikeStore.Data.Common.Repositories;
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.ShoppingCart;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class ShoppingCartService : IShoppingCartService
     {

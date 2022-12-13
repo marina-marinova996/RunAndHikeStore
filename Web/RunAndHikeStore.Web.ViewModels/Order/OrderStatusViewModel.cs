@@ -8,8 +8,14 @@ namespace RunAndHikeStore.Web.ViewModels.Order
 {
     public class OrderStatusViewModel
     {
+        /// <summary>
+        /// Order Status Id.
+        /// </summary>
         public int Id { get; set; }
 
+        /// <summary>
+        /// Order Status Name.
+        /// </summary>
         public string Name { get; set; }
     }
 }

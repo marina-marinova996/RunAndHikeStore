@@ -1,20 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RunAndHikeStore.Data.Common.Repositories;
-using RunAndHikeStore.Data.Models;
-using RunAndHikeStore.Data.Models.Enums;
-using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.Customer;
-using RunAndHikeStore.Web.ViewModels.Order;
-using RunAndHikeStore.Web.ViewModels.Order.Enum;
-using RunAndHikeStore.Web.ViewModels.Product;
-using RunAndHikeStore.Web.ViewModels.ShoppingCart;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RunAndHikeStore.Services
+﻿namespace RunAndHikeStore.Services
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore;
+
+    using RunAndHikeStore.Data.Common.Repositories;
+    using RunAndHikeStore.Data.Models;
+    using RunAndHikeStore.Data.Models.Enums;
+    using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.Customer;
+    using RunAndHikeStore.Web.ViewModels.Order;
+    using RunAndHikeStore.Web.ViewModels.Order.Enum;
+
     public class OrderService : IOrderService
     {
         private readonly IRepository repo;
@@ -222,12 +221,13 @@ namespace RunAndHikeStore.Services
             var order = await this.repo.All<Order>()
                                        .Where(o => o.IsDeleted == false)
                                        .Include(o => o.OrderDetails.Where(d => d.IsDeleted == false))
+                                       .Where(o => o.Id == model.OrderId)
                                        .FirstOrDefaultAsync();
 
             if (order != null)
             {
                 order.OrderStatus = (OrderStatus)model.OrderStatusId;
-                order.PaymentStatus = (PaymentStatus)model.OrderStatusId;
+                order.PaymentStatus = (PaymentStatus)model.PaymentStatusId;
 
                 await this.repo.SaveChangesAsync();
             }
@@ -383,6 +383,10 @@ namespace RunAndHikeStore.Services
             };
         }
 
+        /// <summary>
+        /// Get all orders from DB.
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Order>> GetAllOrders()
         {
             return await this.repo.All<Order>().Include(o => o.OrderDetails).ToListAsync();

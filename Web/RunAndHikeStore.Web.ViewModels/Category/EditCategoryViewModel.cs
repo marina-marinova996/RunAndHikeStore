@@ -5,6 +5,9 @@
 
     public class EditCategoryViewModel : AddCategoryViewModel
     {
+        /// <summary>
+        /// Category Id.
+        /// </summary>
         public string Id { get; set; }
     }
 }

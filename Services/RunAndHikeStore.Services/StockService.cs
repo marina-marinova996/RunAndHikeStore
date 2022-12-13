@@ -1,17 +1,17 @@
 ﻿namespace RunAndHikeStore.Services
 {
+
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     using Microsoft.EntityFrameworkCore;
     using RunAndHikeStore.Data.Common.Repositories;
     using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Data.Models.Enums;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ViewModels.Stock;
-
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
 
     public class StockService : IStockService
     {
