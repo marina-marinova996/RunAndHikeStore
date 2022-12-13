@@ -317,11 +317,11 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.That(billingDetails.City, Is.EqualTo(dbOrder.BillingDetails.City));
             Assert.That(billingDetails.StreetAddress, Is.EqualTo(dbOrder.BillingDetails.StreetAddress));
             Assert.That(billingDetails.PostalCode, Is.EqualTo(dbOrder.BillingDetails.PostalCode));
+            Assert.That(billingDetails.CustomerId, Is.EqualTo(dbOrder.BillingDetails.CustomerId));
             Assert.True(dbOrder.OrderDetails.Count == 1);
             Assert.True(dbOrderDetails.UnitPrice == product.UnitPrice);
             Assert.True(dbOrderDetails.OrderQuantity == cartItemModel.Quantity);
             Assert.True(dbOrderDetails.ProductId == productViewModel.Id);
-
         }
 
         [Test]

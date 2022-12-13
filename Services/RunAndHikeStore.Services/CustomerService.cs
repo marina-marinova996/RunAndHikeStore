@@ -1,13 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using RunAndHikeStore.Data.Common.Repositories;
-using RunAndHikeStore.Data.Models;
-using RunAndHikeStore.Services.Contracts;
-using RunAndHikeStore.Web.ViewModels.Customer;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace RunAndHikeStore.Services
+﻿namespace RunAndHikeStore.Services
 {
+    using System.Linq;
+    using System.Threading.Tasks;
+
+    using Microsoft.EntityFrameworkCore;
+    using RunAndHikeStore.Data.Common.Repositories;
+    using RunAndHikeStore.Data.Models;
+    using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.Customer;
+
     public class CustomerService : ICustomerService
     {
         private readonly IRepository repo;
@@ -113,36 +114,19 @@ namespace RunAndHikeStore.Services
         /// <returns></returns>
         public async Task<EditBillingDetailsViewModel> GetCustomerBillingDetailsByUserId(string userId)
         {
-             return await this.repo.AsNoTracking<ApplicationUser>()
-                                                .Where(u => u.IsDeleted == false)
-                                                .Where(u => u.Id == userId)
-                                                .Include(u => u.BillingDetails)
-                                                .Select(u => new EditBillingDetailsViewModel
+             return await this.repo.AsNoTracking<BillingDetails>()
+                                                .Where(b => b.IsDeleted == false)
+                                                .Where(b => b.CustomerId == userId)
+                                                .Select(b => new EditBillingDetailsViewModel
                                                 {
-                                                    Id = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.Id)
-                                                       .FirstOrDefault(),
-                                                    FirstName = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.FirstName)
-                                                       .FirstOrDefault(),
-                                                    LastName = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.LastName)
-                                                       .FirstOrDefault(),
-                                                    StreetAddress = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.StreetAddress)
-                                                       .FirstOrDefault(),
-                                                    City = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.City)
-                                                       .FirstOrDefault(),
-                                                    Country = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.Country)
-                                                       .FirstOrDefault(),
-                                                    PostalCode = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.PostalCode)
-                                                       .FirstOrDefault(),
-                                                    PhoneNumber = u.BillingDetails.Where(b => b.IsDeleted == false)
-                                                       .Select(b => b.PhoneNumber)
-                                                       .FirstOrDefault(),
+                                                    Id = b.Id,
+                                                    FirstName = b.FirstName,
+                                                    LastName = b.LastName,
+                                                    StreetAddress = b.StreetAddress,
+                                                    City = b.City,
+                                                    Country = b.Country,
+                                                    PostalCode = b.PostalCode,
+                                                    PhoneNumber = b.PhoneNumber,
                                                 }).FirstOrDefaultAsync();
         }
 
