@@ -1,4 +1,4 @@
-# Run and Hike Store ! [logo-mountain](https://user-images.githubusercontent.com/81676022/207277898-428ea82e-e5e0-40ea-b32d-1c6975e5b114.PNG)
+# Run and Hike Store ! ![image](https://user-images.githubusercontent.com/81676022/207278319-78500e17-4d5b-4ae6-8f1a-66944970f4f2.png)
 
 
 ## Description
