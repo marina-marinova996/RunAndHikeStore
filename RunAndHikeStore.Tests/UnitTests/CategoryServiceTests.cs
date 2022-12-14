@@ -166,6 +166,45 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.That(categories.Count, Is.EqualTo(dbCategories.Count()));
         }
 
+        [Test]
+        [TestCase("Walking", 1, 6)]
+        [TestCase("Running", 1, 6)]
+        [TestCase("Walk", 1, 6)]
+        [TestCase("Run", 1, 6)]
+        public async Task TestGetAllAsync(string searchTerm, int currentPage = 1, int brandsPerPage = 6)
+        {
+            repo = new Repository(dbContext);
+            categoryService = new CategoryService(repo);
+
+            var categories = new List<Category>();
+
+            var firstCategory = new Category()
+            {
+                Name = "Walking",
+            };
+
+            categories.Add(firstCategory);
+
+            var secondCategory = new Category()
+            {
+                Name = "Running",
+            };
+
+            categories.Add(secondCategory);
+
+            await repo.AddRangeAsync(categories);
+            await repo.SaveChangesAsync();
+
+            var allCategoriesViewModel = await this.categoryService.GetAllAsync(searchTerm, currentPage, brandsPerPage);
+
+            var IsContaining = allCategoriesViewModel.Categories.Any(x => x.Name.Contains(searchTerm));
+
+            Assert.That(allCategoriesViewModel.Categories.Count(), Is.EqualTo(1));
+            Assert.That(allCategoriesViewModel.Categories.Count(), Is.EqualTo(1));
+            Assert.That(allCategoriesViewModel.TotalRecordsCount, Is.EqualTo(1));
+            Assert.True(IsContaining);
+        }
+
         [TearDown]
         public void TearDown()
         {

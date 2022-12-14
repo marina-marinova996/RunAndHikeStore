@@ -169,6 +169,46 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.That(brands.Count, Is.EqualTo(dbBrands.Count()));
         }
 
+        [Test]
+        [TestCase("North", 1, 6)]
+        [TestCase("Jack", 1, 6)]
+        [TestCase("Face", 1, 6)]
+        [TestCase("Wolfskin", 1, 6)]
+        [TestCase("North Face", 1, 6)]
+        [TestCase("Jack Wolfskin", 1, 6)]
+        public async Task TestGetAllAsync(string searchTerm, int currentPage = 1, int brandsPerPage = 6)
+        {
+            repo = new Repository(dbContext);
+            brandService = new BrandService(repo);
+
+            var brands = new List<Brand>();
+
+            var firstBrand = new Brand()
+            {
+                Name = "Jack Wolfskin",
+            };
+
+            brands.Add(firstBrand);
+
+            var secondBrand = new Brand()
+            {
+                Name = "North Face",
+            };
+
+            brands.Add(secondBrand);
+
+            await repo.AddRangeAsync(brands);
+            await repo.SaveChangesAsync();
+
+            var allBrandsViewModel = await this.brandService.GetAllAsync(searchTerm, currentPage, brandsPerPage);
+
+            var IsContaining = allBrandsViewModel.Brands.Any(x => x.Name.Contains(searchTerm));
+
+            Assert.That(allBrandsViewModel.Brands.Count(), Is.EqualTo(1));
+            Assert.That(allBrandsViewModel.TotalRecordsCount, Is.EqualTo(1));
+            Assert.True(IsContaining);
+        }
+
         [TearDown]
         public void TearDown()
         {

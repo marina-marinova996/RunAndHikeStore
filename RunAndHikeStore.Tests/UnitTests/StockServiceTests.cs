@@ -214,7 +214,6 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.AreEqual(true, isDeleted);
         }
 
-
         [TearDown]
         public void TearDown()
         {

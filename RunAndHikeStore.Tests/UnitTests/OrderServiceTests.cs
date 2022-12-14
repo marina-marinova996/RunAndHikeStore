@@ -7,8 +7,10 @@ using RunAndHikeStore.Services;
 using RunAndHikeStore.Services.Contracts;
 using RunAndHikeStore.Web.ViewModels.Customer;
 using RunAndHikeStore.Web.ViewModels.Order;
+using RunAndHikeStore.Web.ViewModels.Order.Enum;
 using RunAndHikeStore.Web.ViewModels.Product;
 using RunAndHikeStore.Web.ViewModels.ShoppingCart;
+using System;
 
 namespace RunAndHikeStore.Tests.Services.UnitTests
 {
@@ -388,6 +390,116 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             var dbOrders = await this.orderService.GetAllOrders();
 
             Assert.That(orders.Count, Is.EqualTo(dbOrders.Count()));
+        }
+
+        [Test]
+        [TestCase("Ivan", 1, 6)]
+        [TestCase("Petrov", 1, 6)]
+        [TestCase("ivan@gmail.com", 1, 6)]
+        public async Task TestGetAllAsync(string searchTerm, int currentPage = 1, int brandsPerPage = 6, OrdersSorting sorting = OrdersSorting.Newest)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var orders = new List<Order>();
+
+            var user = new ApplicationUser()
+            {
+                Id = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                Email = "ivan@gmail.com",
+                UserName = "ivan@gmail.com",
+            };
+
+            var secondUser = new ApplicationUser()
+            {
+                Id = "bc519db8-e466-49ed-a0b4-0ea89282c076",
+                FirstName = "Admin",
+                LastName = "User",
+                Email = "admin@runandhikestore.com",
+                UserName = "admin@runandhikestore.com",
+            };
+
+            await repo.AddAsync(user);
+            await repo.AddAsync(secondUser);
+            await repo.SaveChangesAsync();
+
+            var billingDetails = new BillingDetails
+            {
+                Id = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                StreetAddress = "Osmi Primorski Polk 145",
+                City = "Varna",
+                Country = "Bulgaria",
+                PostalCode = "9000",
+                PhoneNumber = "+359899665543",
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2"
+            };
+
+            var billingDetailsSecondUser = new BillingDetails
+            {
+                Id = "79939b8-ea8e-4daa-8c81-0635a3f7ff2",
+                FirstName = "Admin",
+                LastName = "Admin",
+                StreetAddress = "Osmi Primorski Polk 12",
+                City = "Varna",
+                Country = "Bulgaria",
+                PostalCode = "9000",
+                PhoneNumber = "+359899665443",
+                CustomerId = "bc519db8-e466-49ed-a0b4-0ea89282c076"
+            };
+
+            await repo.AddAsync(billingDetails);
+            await repo.AddAsync(billingDetailsSecondUser);
+            await repo.SaveChangesAsync();
+
+            var firstOrderFirstUser = new Order
+            {
+                Id = "123456",
+                OrderDate = new DateTime(2022, 12, 10),
+                OrderStatus = Data.Models.Enums.OrderStatus.Pending,
+                PaymentStatus = Data.Models.Enums.PaymentStatus.NotPaid,
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                BillingDetailsId = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+            };
+
+            var secondOrderFirstUser = new Order
+            {
+                Id = "1234567",
+                OrderDate = new DateTime(2022, 12, 8),
+                OrderStatus = Data.Models.Enums.OrderStatus.Pending,
+                PaymentStatus = Data.Models.Enums.PaymentStatus.NotPaid,
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                BillingDetailsId = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+            };
+
+
+            var firstOrderSecondUser = new Order
+            {
+                Id = "1234548",
+                OrderDate = new DateTime(2022, 12, 8),
+                OrderStatus = Data.Models.Enums.OrderStatus.Pending,
+                PaymentStatus = Data.Models.Enums.PaymentStatus.NotPaid,
+                CustomerId = "bc519db8-e466-49ed-a0b4-0ea89282c076",
+                BillingDetailsId = "79939b8-ea8e-4daa-8c81-0635a3f7ff2",
+            };
+
+            orders.Add(firstOrderFirstUser);
+            orders.Add(secondOrderFirstUser);
+            orders.Add(firstOrderSecondUser);
+            await repo.AddRangeAsync(orders);
+            await repo.SaveChangesAsync();
+
+            var allOrdersViewModel = await this.orderService.GetAllOrdersAsync(searchTerm, currentPage, brandsPerPage, sorting = OrdersSorting.Newest);
+
+            var IsContaining = allOrdersViewModel.Orders.Any(x => x.BillingDetails.FirstName.Contains(searchTerm) || x.BillingDetails.LastName.Contains(searchTerm) || x.Email.Contains(searchTerm));
+
+            Assert.That(allOrdersViewModel.Orders.Count(), Is.EqualTo(2));
+            Assert.That(allOrdersViewModel.Orders.Count(), Is.EqualTo(2));
+            Assert.That(allOrdersViewModel.TotalRecordsCount, Is.EqualTo(2));
+            Assert.True(IsContaining);
         }
 
         [TearDown]

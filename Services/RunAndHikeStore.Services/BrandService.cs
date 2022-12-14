@@ -90,7 +90,7 @@
 
             if (brandsQuery == null)
             {
-                throw new ArgumentException("No stocks in stock");
+                throw new ArgumentException("No such brands");
             }
 
             if (!string.IsNullOrWhiteSpace(searchTerm))

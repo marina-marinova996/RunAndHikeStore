@@ -8,6 +8,7 @@ using RunAndHikeStore.Data.Repositories;
 using RunAndHikeStore.Services;
 using RunAndHikeStore.Services.Contracts;
 using RunAndHikeStore.Web.ViewModels.Product;
+using RunAndHikeStore.Web.ViewModels.Product.Enum;
 
 namespace RunAndHikeStore.Tests.Services.UnitTests
 {
