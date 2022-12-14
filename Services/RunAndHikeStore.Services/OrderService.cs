@@ -158,7 +158,7 @@
         /// Get Order Status as string.
         /// </summary>
         /// <returns></returns>
-        public static string GetOrderStatusAsStringById(int statusId)
+        public string GetOrderStatusAsStringById(int statusId)
         {
             switch (statusId)
             {
@@ -180,16 +180,18 @@
         /// Get Payment Status as string.
         /// </summary>
         /// <returns></returns>
-        public static string GetPaymentStatusAsStringById(int statusId)
+        public string GetPaymentStatusAsStringById(int statusId)
         {
             switch (statusId)
             {
                 case (int)PaymentStatus.Paid:
                     return "Paid";
                     break;
+                case (int)PaymentStatus.NotPaid:
+                    return "Not Paid";
             }
 
-            return "Not Paid";
+            return "Error";
         }
 
         /// <summary>

@@ -74,5 +74,19 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<Order>> GetAllOrders();
+
+        /// <summary>
+        /// Get order status as string.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        string GetOrderStatusAsStringById(int statusId);
+
+        /// <summary>
+        /// Get payment status as string.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        string GetPaymentStatusAsStringById(int statusId);
     }
 }

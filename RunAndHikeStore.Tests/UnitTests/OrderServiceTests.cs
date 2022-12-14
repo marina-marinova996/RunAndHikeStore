@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RunAndHikeStore.Data;
 using RunAndHikeStore.Data.Common.Repositories;
 using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Data.Models.Enums;
 using RunAndHikeStore.Data.Repositories;
 using RunAndHikeStore.Services;
 using RunAndHikeStore.Services.Contracts;
@@ -10,7 +11,6 @@ using RunAndHikeStore.Web.ViewModels.Order;
 using RunAndHikeStore.Web.ViewModels.Order.Enum;
 using RunAndHikeStore.Web.ViewModels.Product;
 using RunAndHikeStore.Web.ViewModels.ShoppingCart;
-using System;
 
 namespace RunAndHikeStore.Tests.Services.UnitTests
 {
@@ -500,6 +500,200 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.That(allOrdersViewModel.Orders.Count(), Is.EqualTo(2));
             Assert.That(allOrdersViewModel.TotalRecordsCount, Is.EqualTo(2));
             Assert.True(IsContaining);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public void TestGetOrderStatusAsStringByIdApproved(int id)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatus = "Approved";
+            var status = this.orderService.GetOrderStatusAsStringById(id);
+            Assert.True(expectedStatus == status);
+        }
+
+        [Test]
+        [TestCase(2)]
+        public void TestGetOrderStatusAsStringByIdDeclined(int id)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatus = "Declined";
+            var status = this.orderService.GetOrderStatusAsStringById(id);
+            Assert.True(expectedStatus == status);
+        }
+
+        [TestCase(3)]
+        public void TestGetOrderStatusAsStringByIdShipped(int id)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatus = "Shipped";
+            var status = this.orderService.GetOrderStatusAsStringById(id);
+            Assert.True(expectedStatus == status);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public void TestGetPaymentStatusAsStringById(int id)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatus = "Paid";
+            var status = this.orderService.GetPaymentStatusAsStringById(id);
+            Assert.True(expectedStatus == status);
+        }
+
+        [Test]
+        [TestCase(2)]
+        public void TestGetPaymentStatusAsStringByIdNotPaid(int id)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatus = "Not Paid";
+            var status = this.orderService.GetPaymentStatusAsStringById(id);
+            Assert.True(expectedStatus == status);
+        }
+
+        [Test]
+        public void TestGetPaymentStatuses()
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatuses = new List<PaymentStatusViewModel>();
+            var paidStatus = new PaymentStatusViewModel()
+            {
+                Id = (int)PaymentStatus.Paid,
+                Name = "Paid",
+            };
+            var notPaidStatus = new PaymentStatusViewModel()
+            {
+                Id = (int)PaymentStatus.NotPaid,
+                Name = "Not Paid",
+            };
+
+            expectedStatuses.Add(paidStatus);
+            expectedStatuses.Add(notPaidStatus);
+
+            var statuses = this.orderService.GetPaymentStatuses();
+            Assert.AreEqual(expectedStatuses.Count, statuses.Count());
+
+            Assert.IsTrue(statuses.Any(x => x.Id == (int)PaymentStatus.Paid));
+            Assert.IsTrue(statuses.Any(x => x.Id == (int)PaymentStatus.NotPaid));
+            Assert.IsTrue(statuses.Any(x => (x.Id == (int)PaymentStatus.Paid) && x.Name == "Paid"));
+            Assert.IsTrue(statuses.Any(x => (x.Id == (int)PaymentStatus.NotPaid) && x.Name == "Not Paid"));
+        }
+
+        [Test]
+        public void TestGetOrderStatuses()
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var expectedStatuses = new List<OrderStatusViewModel>();
+            var approvedStatus = new OrderStatusViewModel()
+            {
+                Id = (int)OrderStatus.Approved,
+                Name = "Approved",
+            };
+
+            var declinedStatus = new OrderStatusViewModel()
+            {
+                Id = (int)OrderStatus.Declined,
+                Name = "Declined",
+            };
+
+            var pendingStatus = new OrderStatusViewModel()
+            {
+                Id = (int)OrderStatus.Pending,
+                Name = "Pending",
+            };
+
+            var shippedStatus = new OrderStatusViewModel()
+            {
+                Id = (int)OrderStatus.Shipped,
+                Name = "Pending",
+            };
+
+            expectedStatuses.Add(approvedStatus);
+            expectedStatuses.Add(declinedStatus);
+            expectedStatuses.Add(pendingStatus);
+            expectedStatuses.Add(shippedStatus);
+
+            var statuses = this.orderService.GetOrderStatuses();
+
+            Assert.AreEqual(expectedStatuses.Count, statuses.Count());
+
+            Assert.IsTrue(statuses.Any(x => x.Id == (int)OrderStatus.Approved));
+            Assert.IsTrue(statuses.Any(x => x.Id == (int)OrderStatus.Declined));
+            Assert.IsTrue(statuses.Any(x => x.Id == (int)OrderStatus.Pending));
+            Assert.IsTrue(statuses.Any(x => x.Id == (int)OrderStatus.Shipped));
+            Assert.IsTrue(statuses.Any(x => (x.Id == (int)OrderStatus.Approved) && x.Name == "Approved"));
+            Assert.IsTrue(statuses.Any(x => (x.Id == (int)OrderStatus.Declined) && x.Name == "Declined"));
+            Assert.IsTrue(statuses.Any(x => (x.Id == (int)OrderStatus.Pending) && x.Name == "Pending"));
+            Assert.IsTrue(statuses.Any(x => (x.Id == (int)OrderStatus.Shipped) && x.Name == "Shipped"));
+        }
+
+        [Test]
+        [TestCase("123456")]
+        public async Task TestGetViewModelForEditById(string id)
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var user = new ApplicationUser()
+            {
+                Id = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                Email = "ivan@gmail.com",
+                UserName = "ivan@gmail.com",
+            };
+
+            await repo.AddAsync(user);
+            await repo.SaveChangesAsync();
+
+            var billingDetails = new BillingDetails
+            {
+                Id = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                StreetAddress = "Osmi Primorski Polk 145",
+                City = "Varna",
+                Country = "Bulgaria",
+                PostalCode = "9000",
+                PhoneNumber = "+359899665543",
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2"
+            };
+
+            await repo.AddAsync(billingDetails);
+            await repo.SaveChangesAsync();
+
+            var order = new Order
+            {
+                Id = "123456",
+                OrderDate = new DateTime(2022, 12, 10),
+                OrderStatus = Data.Models.Enums.OrderStatus.Pending,
+                PaymentStatus = Data.Models.Enums.PaymentStatus.NotPaid,
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                BillingDetailsId = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+            };
+
+            await repo.AddAsync(order);
+            await repo.SaveChangesAsync();
+
+            var model = await this.orderService.GetViewModelForEditByIdAsync(id);
+
+            Assert.True(order.Id == model.OrderId);
+            Assert.True((int)order.OrderStatus == model.OrderStatusId);
+            Assert.True((int)order.PaymentStatus == model.PaymentStatusId);
         }
 
         [TearDown]
