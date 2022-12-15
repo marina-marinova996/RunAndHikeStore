@@ -17,6 +17,7 @@ namespace RunAndHikeStore.Web
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Services.Data;
     using RunAndHikeStore.Services.Mapping;
+    using RunAndHikeStore.Web.ModelBinders;
     using RunAndHikeStore.Web.ViewModels;
     using System.Reflection;
 
@@ -55,6 +56,7 @@ namespace RunAndHikeStore.Web
                 options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
                 }).AddRazorRuntimeCompilation();
 
             services.AddRazorPages();
