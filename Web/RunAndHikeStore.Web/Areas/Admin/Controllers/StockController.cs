@@ -1,11 +1,8 @@
 ﻿namespace RunAndHikeStore.Web.Areas.Admin.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Rendering;
     using RunAndHikeStore.Services.Contracts;
-    using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.Stock;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using static RunAndHikeStore.Common.GlobalConstants;
 
@@ -33,12 +30,19 @@
         [HttpGet]
         public async Task<IActionResult> AddStock(string productId)
         {
-            var model = await stockService.GetStockViewModelByProductId(productId);
-            model.Sizes = await productService.GetSizesAsync();
+            if (await this.productService.ExistsById(productId))
+            {
+                var model = await stockService.GetStockViewModelByProductId(productId);
+                model.Sizes = await productService.GetSizesAsync();
 
-            ViewData["Title"] = "Add Stock";
+                ViewData["Title"] = "Add Stock";
 
-            return View(model);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -49,19 +53,26 @@
         [HttpPost]
         public async Task<IActionResult> AddStock(AddStockViewModel model)
         {
-            this.ViewData["Title"] = "Add Stock";
-
-            if (!this.ModelState.IsValid)
-            {
-                return View(model);
-            }
-
             try
             {
-                await stockService.AddStock(model);
-                TempData[MessageConstant.SuccessMessage] = "Successfully added!";
+                if (await this.productService.ExistsById(model.ProductId))
+                {
+                    this.ViewData["Title"] = "Add Stock";
 
-                return this.RedirectToAction(nameof(this.ManageStocks));
+                    if (!this.ModelState.IsValid)
+                    {
+                        return View(model);
+                    }
+
+                    await stockService.AddStock(model);
+                    TempData[MessageConstant.SuccessMessage] = "Successfully added!";
+
+                    return this.RedirectToAction(nameof(this.ManageStocks));
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {
@@ -110,12 +121,19 @@
         {
             try
             {
-                EditStockViewModel stockModel = await stockService.GetViewModelForEdit(productId, sizeId);
-                stockModel.Sizes = await productService.GetSizesAsync();
+                if (await this.stockService.ExistsById(productId, sizeId))
+                {
+                    EditStockViewModel stockModel = await stockService.GetViewModelForEdit(productId, sizeId);
+                    stockModel.Sizes = await productService.GetSizesAsync();
 
-                ViewData["Title"] = "Edit Stock";
+                    ViewData["Title"] = "Edit Stock";
 
-                return View(stockModel);
+                    return View(stockModel);
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {
@@ -141,11 +159,17 @@
 
             try
             {
-                await stockService.EditStock(stockModel);
-                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
+                if (await this.stockService.ExistsById(stockModel.ProductId, stockModel.SizeId))
+                {
+                    await stockService.EditStock(stockModel);
+                    TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
-                return RedirectToAction(nameof(this.ManageStocks));
-
+                    return RedirectToAction(nameof(this.ManageStocks));
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {
@@ -164,10 +188,16 @@
         {
             try
             {
+                if (await this.stockService.ExistsById(productId, sizeId))
+                {
+                    await this.stockService.DeleteStock(productId, sizeId);
 
-                await this.stockService.DeleteStock(productId, sizeId);
-
-                return RedirectToAction(nameof(this.ManageStocks));
+                    return RedirectToAction(nameof(this.ManageStocks));
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {

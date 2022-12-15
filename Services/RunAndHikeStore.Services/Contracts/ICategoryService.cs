@@ -55,5 +55,12 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<Category>> GetAllCategories();
+
+        /// <summary>
+        /// Check if Category exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsById(string id);
     }
 }

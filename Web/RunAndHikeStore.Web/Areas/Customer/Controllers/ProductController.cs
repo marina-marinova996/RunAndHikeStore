@@ -111,13 +111,20 @@
         {
             try
             {
-                ProductViewModel product = await productService.GetByIdAsync(id);
-                return View(product);
+                if (await this.productService.ExistsById(id))
+                {
+                    ProductViewModel product = await productService.GetByIdAsync(id);
+                    return View(product);
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {
                 ModelState.AddModelError("", "Something went wrong");
-                return View();
+                return RedirectToAction("Index", "Home", new { area = "" });
             }
         }
     }

@@ -276,5 +276,17 @@
         {
             return await this.repo.All<ProductSize>().ToListAsync();
         }
+
+        /// <summary>
+        /// Check if stock exists.
+        /// </summary>
+        /// <param name="productId"></param>
+        /// <param name="sizeId"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsById(string productId, string sizeId)
+        {
+            return await repo.All<ProductSize>()
+                             .AnyAsync(ps => ps.ProductId == productId && ps.SizeId == sizeId);
+        }
     }
 }

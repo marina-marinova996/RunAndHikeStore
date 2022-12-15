@@ -171,5 +171,16 @@
                                       ProductType = s.ProductType.Name,
                                   }).FirstOrDefaultAsync();
         }
+
+        /// <summary>
+        /// Check if size exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsById(string id)
+        {
+            return await repo.All<Size>()
+                            .AnyAsync(o => o.Id == id);
+        }
     }
 }

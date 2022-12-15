@@ -224,5 +224,16 @@
                 await this.repo.SaveChangesAsync();
             }
         }
+
+        /// <summary>
+        /// Check if CartItem exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsCartItemById(string cartItemId)
+        {
+            return await repo.All<CartItem>()
+                            .AnyAsync(c => c.Id == cartItemId);
+        }
     }
 }

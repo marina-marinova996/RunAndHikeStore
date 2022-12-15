@@ -114,18 +114,26 @@
 
             try
             {
-                ViewBag.Categories = new List<SelectListItem>();
-
-                var categories = await productService.GetCategoriesAsync();
-
-                foreach (var category in categories)
+                if (await this.productService.ExistsById(id))
                 {
-                    ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                    ViewBag.Categories = new List<SelectListItem>();
+
+                    var categories = await productService.GetCategoriesAsync();
+
+                    foreach (var category in categories)
+                    {
+                        ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                    }
+
+                    EditProductViewModel product = await productService.GetViewModelForEditByIdAsync(id);
+
+                    return View(product);
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
                 }
 
-                EditProductViewModel product = await productService.GetViewModelForEditByIdAsync(id);
-
-                return View(product);
             }
             catch (System.Exception)
             {
@@ -144,19 +152,26 @@
         {
             try
             {
-                ViewBag.Categories = new List<SelectListItem>();
-
-                var categories = await productService.GetCategoriesAsync();
-
-                foreach (var category in categories)
+                if (await this.productService.ExistsById(model.Id))
                 {
-                    ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                    ViewBag.Categories = new List<SelectListItem>();
+
+                    var categories = await productService.GetCategoriesAsync();
+
+                    foreach (var category in categories)
+                    {
+                        ViewBag.Categories.Add(new SelectListItem() { Text = category.Name, Value = category.Id });
+                    }
+
+                    await productService.Edit(model);
+                    TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
+
+                    return RedirectToAction(nameof(this.ManageAll));
                 }
-
-                await productService.Edit(model);
-                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
-
-                return RedirectToAction(nameof(this.ManageAll));
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch
             {
@@ -174,11 +189,18 @@
         {
             try
             {
-                ProductViewModel product = await productService.GetByIdAsync(id);
+                if (await this.productService.ExistsById(id))
+                {
+                    ProductViewModel product = await productService.GetByIdAsync(id);
 
-                await productService.Delete(product.Id);
+                    await productService.Delete(product.Id);
 
-                return RedirectToAction(nameof(this.ManageAll));
+                    return RedirectToAction(nameof(this.ManageAll));
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {

@@ -34,6 +34,47 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             dbContext.Database.EnsureCreated();
         }
 
+        /// <summary>
+        /// Get Order Status as string.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetOrderStatusAsStringById(int statusId)
+        {
+            switch (statusId)
+            {
+                case (int)OrderStatus.Approved:
+                    return "Approved";
+                    break;
+                case (int)OrderStatus.Declined:
+                    return "Declined";
+                    break;
+                case (int)OrderStatus.Shipped:
+                    return "Shipped";
+                    break;
+            }
+
+            return "Pending";
+        }
+
+        /// <summary>
+        /// Get Payment Status as string.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetPaymentStatusAsStringById(int statusId)
+        {
+            switch (statusId)
+            {
+                case (int)PaymentStatus.Paid:
+                    return "Paid";
+                    break;
+                case (int)PaymentStatus.NotPaid:
+                    return "Not Paid";
+            }
+
+            return "Error";
+        }
+
+
         [Test]
         public async Task TestDeleteOrder()
         {
@@ -511,7 +552,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             orderService = new OrderService(repo);
 
             var expectedStatus = "Approved";
-            var status = this.orderService.GetOrderStatusAsStringById(id);
+            var status = GetOrderStatusAsStringById(id);
             Assert.True(expectedStatus == status);
         }
 
@@ -523,7 +564,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             orderService = new OrderService(repo);
 
             var expectedStatus = "Declined";
-            var status = this.orderService.GetOrderStatusAsStringById(id);
+            var status = GetOrderStatusAsStringById(id);
             Assert.True(expectedStatus == status);
         }
 
@@ -534,7 +575,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             orderService = new OrderService(repo);
 
             var expectedStatus = "Shipped";
-            var status = this.orderService.GetOrderStatusAsStringById(id);
+            var status = GetOrderStatusAsStringById(id);
             Assert.True(expectedStatus == status);
         }
 
@@ -546,7 +587,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             orderService = new OrderService(repo);
 
             var expectedStatus = "Paid";
-            var status = this.orderService.GetPaymentStatusAsStringById(id);
+            var status = GetPaymentStatusAsStringById(id);
             Assert.True(expectedStatus == status);
         }
 
@@ -558,7 +599,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             orderService = new OrderService(repo);
 
             var expectedStatus = "Not Paid";
-            var status = this.orderService.GetPaymentStatusAsStringById(id);
+            var status = GetPaymentStatusAsStringById(id);
             Assert.True(expectedStatus == status);
         }
 

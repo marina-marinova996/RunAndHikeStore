@@ -61,5 +61,12 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<Size>> GetAllSizes();
+
+        /// <summary>
+        /// Check if size exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsById(string id);
     }
 }

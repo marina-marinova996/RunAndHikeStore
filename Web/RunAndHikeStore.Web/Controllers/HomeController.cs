@@ -31,5 +31,12 @@
             return this.View(
                 new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [AllowAnonymous]
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error404NotFound()
+        {
+            return this.View();
+        }
     }
 }

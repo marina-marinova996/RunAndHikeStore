@@ -159,7 +159,7 @@ namespace RunAndHikeStore.Services
         /// Get Order Status as string.
         /// </summary>
         /// <returns></returns>
-        public string GetOrderStatusAsStringById(int statusId)
+        public static string GetOrderStatusAsStringById(int statusId)
         {
             switch (statusId)
             {
@@ -181,7 +181,7 @@ namespace RunAndHikeStore.Services
         /// Get Payment Status as string.
         /// </summary>
         /// <returns></returns>
-        public string GetPaymentStatusAsStringById(int statusId)
+        public static string GetPaymentStatusAsStringById(int statusId)
         {
             switch (statusId)
             {
@@ -393,6 +393,17 @@ namespace RunAndHikeStore.Services
         public async Task<List<Order>> GetAllOrders()
         {
             return await this.repo.All<Order>().Include(o => o.OrderDetails).ToListAsync();
+        }
+
+        /// <summary>
+        /// Check if order exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsById(string id)
+        {
+            return await repo.All<Order>()
+                            .AnyAsync(o => o.Id == id);
         }
     }
 }

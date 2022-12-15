@@ -77,17 +77,9 @@ namespace RunAndHikeStore.Services.Contracts
         Task<List<Order>> GetAllOrders();
 
         /// <summary>
-        /// Get order status as string.
+        /// Check if order exists.
         /// </summary>
-        /// <param name="id"></param>
         /// <returns></returns>
-        string GetOrderStatusAsStringById(int statusId);
-
-        /// <summary>
-        /// Get payment status as string.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        string GetPaymentStatusAsStringById(int statusId);
+        Task<bool> ExistsById(string id);
     }
 }

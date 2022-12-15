@@ -1,5 +1,4 @@
 ﻿using RunAndHikeStore.Data.Models;
-using RunAndHikeStore.Web.ViewModels;
 using RunAndHikeStore.Web.ViewModels.ShoppingCart;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -73,14 +72,18 @@ namespace RunAndHikeStore.Services.Contracts
         Task<CartItem> CreateCartItem(string productId, string userId, string sizeId, int quantity);
 
         /// <summary>
-        /// Count Shoppingcart items.
+        /// Count Shopping cart items.
         /// </summary>
         /// <param name="userId"></param>
         /// <returns></returns>
         Task<int> CountShoppingCartItemsQuantity(string userId);
 
-        //void BuyProducts(string userId);
+        /// <summary>
+        /// Check if CartItem exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsCartItemById(string cartItemId);
 
-        //Task<IEnumerable<ShoppingCartViewModel>> GetProducts(string userId);
     }
 }

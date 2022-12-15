@@ -58,5 +58,11 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<ProductSize>> GetAllStocks();
+
+        /// <summary>
+        /// Check if order exists.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> ExistsById(string productId, string sizeId);
     }
 }

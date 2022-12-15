@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RunAndHikeStore.Data;
 using RunAndHikeStore.Data.Common.Repositories;
 using RunAndHikeStore.Data.Models;
+using RunAndHikeStore.Data.Models.Enums;
 using RunAndHikeStore.Data.Repositories;
 using RunAndHikeStore.Services;
 using RunAndHikeStore.Services.Contracts;
@@ -26,7 +27,50 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
 
             dbContext.Database.EnsureDeleted();
             dbContext.Database.EnsureCreated();
+
+
         }
+
+        /// <summary>
+        /// Get Order Status as string.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetOrderStatusAsStringById(int statusId)
+        {
+            switch (statusId)
+            {
+                case (int)OrderStatus.Approved:
+                    return "Approved";
+                    break;
+                case (int)OrderStatus.Declined:
+                    return "Declined";
+                    break;
+                case (int)OrderStatus.Shipped:
+                    return "Shipped";
+                    break;
+            }
+
+            return "Pending";
+        }
+
+        /// <summary>
+        /// Get Payment Status as string.
+        /// </summary>
+        /// <returns></returns>
+        public static string GetPaymentStatusAsStringById(int statusId)
+        {
+            switch (statusId)
+            {
+                case (int)PaymentStatus.Paid:
+                    return "Paid";
+                    break;
+                case (int)PaymentStatus.NotPaid:
+                    return "Not Paid";
+            }
+
+            return "Error";
+        }
+
         [Test]
         public async Task TestAddBillingDetails()
         {

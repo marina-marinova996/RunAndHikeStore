@@ -158,5 +158,16 @@
         {
             return await this.repo.All<Brand>().ToListAsync();
         }
+
+        /// <summary>
+        /// Check if brand exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsById(string id)
+        {
+            return await repo.All<Brand>()
+                            .AnyAsync(b => b.Id == id);
+        }
     }
 }

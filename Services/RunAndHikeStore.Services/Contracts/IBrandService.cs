@@ -56,5 +56,12 @@ namespace RunAndHikeStore.Services.Contracts
         /// </summary>
         /// <returns></returns>
         Task<List<Brand>> GetAllBrands();
+
+        /// <summary>
+        /// Check if Brand exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsById(string id);
     }
 }

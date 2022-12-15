@@ -59,17 +59,17 @@
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            EditCategoryViewModel category = await categoryService.GetViewModelForEditByIdAsync(id);
-
-            if (category == null)
+            if (await this.categoryService.ExistsById(id))
             {
-                // When product with this Id doesn't exists
-                return BadRequest();
+                ViewData["Title"] = "Edit Category";
+
+                EditCategoryViewModel category = await categoryService.GetViewModelForEditByIdAsync(id);
+                return View(category);
             }
-
-            ViewData["Title"] = "Edit Category";
-
-            return View(category);
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -81,9 +81,16 @@
         [HttpPost]
         public async Task<IActionResult> Edit(string id, EditCategoryViewModel model)
         {
-            await categoryService.Edit(id, model);
+            if (await this.categoryService.ExistsById(id))
+            {
+                await categoryService.Edit(id, model);
 
-            return RedirectToAction("ManageAll", "Category");
+                return RedirectToAction("ManageAll", "Category");
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -122,9 +129,17 @@
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            await categoryService.Delete(id);
+            if (await this.categoryService.ExistsById(id))
+            {
+                await categoryService.Delete(id);
 
-            return RedirectToAction(nameof(this.ManageAll));
+                return RedirectToAction(nameof(this.ManageAll));
+
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
     }
 }

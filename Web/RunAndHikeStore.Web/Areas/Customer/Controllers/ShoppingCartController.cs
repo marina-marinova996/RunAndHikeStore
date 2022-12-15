@@ -1,14 +1,11 @@
 ﻿namespace RunAndHikeStore.Web.Areas.Customer.Controllers
 {
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using RunAndHikeStore.Services;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ClaimsPrincipalExtensions;
     using RunAndHikeStore.Web.ViewModels.Order;
     using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.ShoppingCart;
-    using System.Linq;
     using System.Threading.Tasks;
 
     public class ShoppingCartController : BaseController
@@ -101,7 +98,14 @@
         {
             try
             {
-                await shoppingCartService.RemoveCartItem(cartItemId);
+                if (await this.shoppingCartService.ExistsCartItemById(cartItemId))
+                {
+                    await shoppingCartService.RemoveCartItem(cartItemId);
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {

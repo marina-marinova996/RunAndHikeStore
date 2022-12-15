@@ -100,5 +100,11 @@
         /// </summary>
         /// <returns></returns>
         Task<List<Product>> GetAllProducts();
+
+        /// <summary>
+        /// Check if product exists.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> ExistsById(string id);
     }
 }

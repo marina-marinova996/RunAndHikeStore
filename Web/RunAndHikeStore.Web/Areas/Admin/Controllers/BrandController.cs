@@ -88,17 +88,24 @@
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            EditBrandViewModel brand = await brandService.GetViewModelForEditByIdAsync(id);
-
-            if (brand == null)
+            if (await this.brandService.ExistsById(id))
             {
-                // When product with this Id doesn't exists
-                return BadRequest();
+                EditBrandViewModel brand = await brandService.GetViewModelForEditByIdAsync(id);
+
+                if (brand == null)
+                {
+                    // When product with this Id doesn't exists
+                    return BadRequest();
+                }
+
+                ViewData["Title"] = "Edit Brand";
+
+                return View(brand);
             }
-
-            ViewData["Title"] = "Edit Brand";
-
-            return View(brand);
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -111,10 +118,17 @@
         {
             try
             {
-                await brandService.Edit(model);
-                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
+                if (await this.brandService.ExistsById(model.Id))
+                {
+                    await brandService.Edit(model);
+                    TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
-                return RedirectToAction("ManageAll", "Brand");
+                    return RedirectToAction("ManageAll", "Brand");
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
             }
             catch (System.Exception)
             {
@@ -132,9 +146,17 @@
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            await brandService.Delete(id);
+            if (await this.brandService.ExistsById(id))
+            {
+                await brandService.Delete(id);
 
-            return RedirectToAction(nameof(this.ManageAll));
+                return RedirectToAction(nameof(this.ManageAll));
+
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
     }
 }

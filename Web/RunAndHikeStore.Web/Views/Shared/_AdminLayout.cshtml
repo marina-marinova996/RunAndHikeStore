@@ -1,0 +1,84 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using RunAndHikeStore.Common
+@using RunAndHikeStore.Data.Models
+@inject SignInManager<ApplicationUser> SignInManager
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title class="text-white">@this.ViewData["Title"] - "Run and Hike Store - Admin"</title>
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="stylesheet" href="~/css/bootswatchTheme.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/css/selectize.bootstrap5.min.css" />
+    <link rel="stylesheet" href="~/lib/toastr/toastr.min.css" />
+</head>
+<body>
+    <!--Container Main end-->
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom box-shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" asp-area="Admin" asp-controller="Admin" asp-action="Home">Run and Hike Store - Admin</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" asp-area="Customer" asp-controller="Product" asp-action="All">Products</a>
+                    </li>
+                    @if (this.User.IsInRole(GlobalConstants.AdministratorRoleName))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-white" data-bs-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin Dashboard</a>
+                            <div class="dropdown-menu" data-bs-popper="static">
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Order" asp-action="ManageOrders" method="get">Manage Orders</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Product" asp-action="ManageAll" method="get">Manage Products</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Stock" asp-action="ManageStocks" method="get">Manage Stocks</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Brand" asp-action="ManageAll" method="get">Manage Brands</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Category" asp-action="ManageAll" method="get">Manage Categories</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="Size" asp-action="ManageAll" method="get">Manage Sizes</a>
+                                <a class="dropdown-item" asp-area="Admin" asp-controller="User" asp-action="ManageUsers" method="get">Manage Users</a>
+                            </div>
+                        </li>
+                    }
+                    <li class="nav-item">
+                </ul>
+                <partial name="_LoginPartialAdmin" asp-area="Identity" />
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <partial name="_ShoppingCartPartial" />
+                }
+            </div>
+        </div>
+    </nav>
+    <!-- End of Navigation -->
+    <div class="container">
+        <partial name="_CookieConsentPartial" />
+        <main role="main" class="pb-3">
+            @this.RenderBody()
+        </main>
+    </div>
+    <footer class="border-top footer text-muted">
+        <div class="container text-center">
+            &copy; @DateTime.Now.Year - Run and Hike Store
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/lib/toastr/toastr.min.js"></script>
+    <script src="~/js/site.min.js" asp-append-version="true"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/fontawesome.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.14.0/js/standalone/selectize.min.js" asp-append-version="true"></script>
+    @await this.RenderSectionAsync("Scripts", required: false)
+    <partial name="_UserMessage" />
+</body>
+</html>

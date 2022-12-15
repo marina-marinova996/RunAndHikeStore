@@ -152,5 +152,16 @@
         {
             return await this.repo.All<Category>().ToListAsync();
         }
+
+        /// <summary>
+        /// Check if category exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsById(string id)
+        {
+            return await repo.All<Category>()
+                            .AnyAsync(c => c.Id == id);
+        }
     }
 }

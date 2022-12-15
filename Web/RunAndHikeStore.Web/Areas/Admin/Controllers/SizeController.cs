@@ -88,19 +88,26 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            SizeViewModel size = await this.sizeService.GetViewModelForEditByIdAsync(id);
-
-            size.ProductTypes = await this.productService.GetProductTypesAsync();
-
-            if (size == null)
+            if (await this.sizeService.ExistsById(id))
             {
-                // When product with this Id doesn't exists
-                return this.BadRequest();
+                SizeViewModel size = await this.sizeService.GetViewModelForEditByIdAsync(id);
+
+                size.ProductTypes = await this.productService.GetProductTypesAsync();
+
+                if (size == null)
+                {
+                    // When product with this Id doesn't exists
+                    return this.BadRequest();
+                }
+
+                this.ViewData["Title"] = "Edit Size";
+
+                return this.View(size);
             }
-
-            this.ViewData["Title"] = "Edit Size";
-
-            return this.View(size);
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -111,10 +118,18 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(SizeViewModel model)
         {
-            await this.sizeService.Edit(model);
-            TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
+            if (await this.sizeService.ExistsById(model.Id))
+            {
+                await this.sizeService.Edit(model);
+                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
-            return this.RedirectToAction("ManageAll", "Brand");
+                return this.RedirectToAction("ManageAll", "Brand");
+
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -125,9 +140,16 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Delete(string id)
         {
-            await this.sizeService.Delete(id);
+            if (await this.sizeService.ExistsById(id))
+            {
+                await this.sizeService.Delete(id);
 
-            return this.RedirectToAction(nameof(this.ManageAll));
+                return this.RedirectToAction(nameof(this.ManageAll));
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
     }
 }

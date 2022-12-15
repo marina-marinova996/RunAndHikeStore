@@ -10,7 +10,7 @@
     using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.Product.Enum;
     using RunAndHikeStore.Web.ViewModels.Size;
-
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -138,6 +138,13 @@
         /// <returns></returns>
         public async Task<ProductViewModel> GetByIdAsync(string id)
         {
+            var product = this.repo.AsNoTracking<Product>(p => p.Id == id);
+
+            if (product == null)
+            {
+                throw new NullReferenceException();
+            }
+
             return await this.repo
                         .AsNoTracking<Product>(p => p.Id == id)
                         .Where(p => p.IsDeleted == false)
@@ -488,6 +495,12 @@
         public async Task<List<Product>> GetAllProducts()
         {
             return await this.repo.All<Product>().ToListAsync();
+        }
+
+        public async Task<bool> ExistsById(string id)
+        {
+            return await repo.All<Product>()
+                .AnyAsync(a => a.Id == id);
         }
     }
 }
