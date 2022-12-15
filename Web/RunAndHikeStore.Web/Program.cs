@@ -55,6 +55,7 @@ namespace RunAndHikeStore.Web
                 options =>
                 {
                     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    options.ModelBinderProviders.Insert(0, new DecimalModelBinderProvider());
                 }).AddRazorRuntimeCompilation();
 
             services.AddRazorPages();

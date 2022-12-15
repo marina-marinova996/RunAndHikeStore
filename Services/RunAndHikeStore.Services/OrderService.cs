@@ -1,4 +1,5 @@
-﻿namespace RunAndHikeStore.Services
+﻿
+namespace RunAndHikeStore.Services
 {
     using System;
     using System.Collections.Generic;
@@ -270,11 +271,11 @@
             return model;
         }
 
-    /// <summary>
-    /// Get all order statuses.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerable<OrderStatusViewModel> GetOrderStatuses()
+        /// <summary>
+        /// Get all order statuses.
+        /// </summary>
+        /// <returns></returns>
+        public IEnumerable<OrderStatusViewModel> GetOrderStatuses()
         {
             List<OrderStatusViewModel> orderStatuses = new List<OrderStatusViewModel>();
 

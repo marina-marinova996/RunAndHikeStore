@@ -1,4 +1,5 @@
-﻿using RunAndHikeStore.Data.Models;
+﻿
+using RunAndHikeStore.Data.Models;
 using RunAndHikeStore.Web.ViewModels.Customer;
 using RunAndHikeStore.Web.ViewModels.Order;
 using RunAndHikeStore.Web.ViewModels.Order.Enum;
