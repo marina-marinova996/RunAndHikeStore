@@ -379,7 +379,7 @@
                                                     .OrderByDescending(p => p.UnitPrice),
                 ProductSorting.LowestPriceFirst => productsQuery
                                                     .OrderBy(p => p.UnitPrice),
-                _ => productsQuery.OrderBy(p => p.CreatedOn),
+                _ => productsQuery.OrderByDescending(p => p.CreatedOn),
             };
 
             var result = new AllProductsQueryViewModel();
@@ -449,7 +449,7 @@
                                                     .OrderByDescending(p => p.UnitPrice),
                 ProductSorting.LowestPriceFirst => productsQuery
                                                     .OrderBy(p => p.UnitPrice),
-                _ => productsQuery.OrderBy(p => p.CreatedOn),
+                _ => productsQuery.OrderByDescending(p => p.CreatedOn),
             };
 
             var products = await productsQuery

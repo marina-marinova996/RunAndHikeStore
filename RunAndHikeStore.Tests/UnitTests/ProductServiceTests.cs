@@ -86,7 +86,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
         [Test]
         public async Task TestAddProduct()
         {
-            
+
             repo = new Repository(dbContext);
             productService = new ProductService(repo);
 
@@ -128,7 +128,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
 
             var dbProducts = await this.productService.GetAllProducts();
             var dbProduct = dbProducts.FirstOrDefault(x => x.ProductNumber == expectedProduct.ProductNumber);
-            
+
             Assert.AreEqual(expectedProduct.ProductNumber, dbProduct.ProductNumber);
             Assert.AreEqual(expectedProduct.Name, dbProduct.Name);
             Assert.AreEqual(expectedProduct.Description, dbProduct.Description);
@@ -284,7 +284,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.AreEqual(expectedProduct.ProductTypeId, productModel.ProductTypeId);
         }
 
-       [Test]
+        [Test]
         public async Task TestGetCategoriesAsync()
         {
             repo = new Repository(dbContext);
@@ -295,7 +295,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
                 Id = "12345",
                 Name = "Category Test"
             };
-            
+
             var secondCategory = new Category()
             {
                 Id = "1345",
@@ -345,7 +345,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
         }
 
         [Test]
-        public async Task TestGetProductTypesAsync()
+        public async Task TestGetProductTypesAsyncCount()
         {
             repo = new Repository(dbContext);
             productService = new ProductService(repo);
@@ -478,6 +478,232 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             var dbProducts = await this.productService.GetAllProducts();
 
             Assert.That(products.Count, Is.EqualTo(dbProducts.Count()));
+        }
+
+        [Test]
+        public async Task TestGetProductTypesAsync()
+        {
+            repo = new Repository(dbContext);
+            productService = new ProductService(repo);
+
+            var productType = new ProductType()
+            {
+                Id = "12345",
+                Name = "Product Type Test",
+            };
+
+            var secondProductType = new ProductType()
+            {
+                Id = "1345",
+                Name = "Product Type 2 Test",
+            };
+
+            var productTypes = new List<ProductType>();
+            productTypes.Add(productType);
+            productTypes.Add(secondProductType);
+
+            await repo.AddRangeAsync(productTypes);
+            await repo.SaveChangesAsync();
+
+            var dbProductTypes = await this.productService.GetProductTypesAsync();
+
+            Assert.True(dbProductTypes.Any(x => x.Id == productType.Id && x.Name == productType.Name));
+            Assert.True(dbProductTypes.Any(x => x.Id == secondProductType.Id && x.Name == secondProductType.Name));
+        }
+
+        [Test]
+        public async Task TestGetGenders()
+        {
+            repo = new Repository(dbContext);
+            productService = new ProductService(repo);
+
+            List<GenderViewModel> genders = new List<GenderViewModel>();
+
+            genders.Add(new GenderViewModel
+            {
+                Id = (int)Gender.Male,
+                Name = "Male",
+            });
+
+            genders.Add(new GenderViewModel
+            {
+                Id = (int)Gender.Female,
+                Name = "Female",
+            });
+
+            genders.Add(new GenderViewModel
+            {
+                Id = (int)Gender.Unisex,
+                Name = "Unisex",
+            });
+
+            var actualGenders = this.productService.GetGenders();
+
+            Assert.AreEqual(genders.Count(), actualGenders.Count());
+            Assert.True(actualGenders.Any(x => x.Id == (int)Gender.Male && x.Name == "Male"));
+            Assert.True(actualGenders.Any(x => x.Id == (int)Gender.Female && x.Name == "Female"));
+            Assert.True(actualGenders.Any(x => x.Id == (int)Gender.Unisex && x.Name == "Unisex"));
+        }
+
+        [Test]
+        [TestCase("", ProductSorting.Newest, 1, 6)]
+        public async Task TestGetManageAllSorted(string searchTerm, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6)
+        {
+            repo = new Repository(dbContext);
+            productService = new ProductService(repo);
+
+            var products = new List<Product>();
+
+            await repo.AddAsync(new ProductType()
+            {
+                Id = "12345",
+                Name = "Product Type Test"
+            });
+
+            await repo.AddAsync(new Brand()
+            {
+                Id = "1345",
+                Name = "Brand Test"
+            });
+
+            await repo.SaveChangesAsync();
+
+            var expectedProduct = new Product()
+            {
+                Name = "Test Name",
+                ProductNumber = "23456789",
+                ImageUrl = "123456689970",
+                UnitPrice = 150m,
+                Description = "This product is added.",
+                Color = "Red",
+                BrandId = "1345",
+                ProductTypeId = "12345",
+                Gender = (Gender)1,
+            };
+
+            var secondExpectedProduct = new Product()
+            {
+                Name = "Test Name 2",
+                ProductNumber = "123456789",
+                ImageUrl = "1234566890",
+                UnitPrice = 140m,
+                Description = "This product is added.",
+                Color = "Red",
+                BrandId = "1345",
+                ProductTypeId = "12345",
+                Gender = (Gender)1,
+            };
+
+            await repo.AddAsync(expectedProduct);
+            await repo.SaveChangesAsync();
+            await repo.AddAsync(secondExpectedProduct);
+            await repo.SaveChangesAsync();
+
+            var dbProducts = await this.productService.GetManageAllSorted(searchTerm, sorting, currentPage, productsPerPage);
+            var newestProduct = dbProducts.Products.FirstOrDefault();
+
+            Assert.That(newestProduct.Name, Is.EqualTo(secondExpectedProduct.Name));
+            Assert.That(newestProduct.ProductNumber, Is.EqualTo(secondExpectedProduct.ProductNumber));
+            Assert.That(newestProduct.ImageUrl, Is.EqualTo(secondExpectedProduct.ImageUrl));
+            Assert.That(newestProduct.Color, Is.EqualTo(secondExpectedProduct.Color));
+            Assert.That(newestProduct.BrandId, Is.EqualTo(secondExpectedProduct.BrandId));
+            Assert.That(newestProduct.ProductTypeId, Is.EqualTo(secondExpectedProduct.ProductTypeId));
+        }
+
+        [Test]
+        [TestCase("1", new []{"134"}, "12345", new[] { "1345" }, new[] { "1" }, "", ProductSorting.Newest, 1, 6)]
+        public async Task TestGetAllSorted(string genderId, IEnumerable<string> multiCategoriesIds, string productTypeId, IEnumerable<string> multiBrandsIds, IEnumerable<string> multiSizesIds, string searchTerm = null, ProductSorting sorting = ProductSorting.Newest, int currentPage = 1, int productsPerPage = 6)
+        {
+            repo = new Repository(dbContext);
+            productService = new ProductService(repo);
+
+            var products = new List<Product>();
+
+            await repo.AddAsync(new ProductType()
+            {
+                Id = "12345",
+                Name = "Product Type Test"
+            });
+
+            await repo.AddAsync(new Brand()
+            {
+                Id = "1345",
+                Name = "Brand Test"
+            });
+
+            await repo.AddAsync(new Category()
+            {
+                Id = "134",
+                Name = "Category Test"
+            });
+
+            await repo.SaveChangesAsync();
+
+            var expectedProduct = new Product()
+            {
+                Id = "1",
+                Name = "Test Name",
+                ProductNumber = "23456789",
+                ImageUrl = "123456689970",
+                UnitPrice = 150m,
+                Description = "This product is added.",
+                Color = "Red",
+                BrandId = "1345",
+                ProductTypeId = "12345",
+                Gender = (Gender)1,
+            };
+
+            products.Add(expectedProduct);
+
+            var secondExpectedProduct = new Product()
+            {
+                Id = "2",
+                Name = "Test Name 2",
+                ProductNumber = "123456789",
+                ImageUrl = "1234566890",
+                UnitPrice = 140m,
+                Description = "This product is added.",
+                Color = "Red",
+                BrandId = "1345",
+                ProductTypeId = "12345",
+                Gender = (Gender)2,
+            };
+
+            products.Add(secondExpectedProduct);
+
+            await repo.AddRangeAsync(products);
+            await repo.SaveChangesAsync();
+
+            var size = new Size()
+            {
+                Id = "1",
+                Name = "Test Name",
+                ProductTypeId = "12345",
+            };
+            await repo.AddAsync(size);
+
+
+            var categoryProduct = new CategoryProduct()
+            {
+                CategoryId = "134",
+                ProductId = "1",
+            };
+            await repo.AddAsync(categoryProduct);
+
+            var stock = new ProductSize()
+            {
+                SizeId = "1",
+                ProductId = "1",
+                UnitsInStock = 12,
+            };
+
+            await repo.AddAsync(stock);
+            await repo.SaveChangesAsync();
+
+
+            var dbProducts = await this.productService.GetAllSorted(genderId, multiCategoriesIds, productTypeId, multiBrandsIds, multiSizesIds, searchTerm, ProductSorting.Newest, currentPage, productsPerPage);
+
+            Assert.That(dbProducts.TotalProductsCount == 1);
         }
 
         [TearDown]
