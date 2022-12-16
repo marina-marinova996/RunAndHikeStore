@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Mvc;
     using RunAndHikeStore.Services.Contracts;
+    using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.Stock;
     using System.Threading.Tasks;
     using static RunAndHikeStore.Common.GlobalConstants;
@@ -30,19 +31,19 @@
         [HttpGet]
         public async Task<IActionResult> AddStock(string productId)
         {
-            if (await this.productService.ExistsById(productId))
-            {
-                var model = await stockService.GetStockViewModelByProductId(productId);
-                model.Sizes = await productService.GetSizesAsync();
+                if (await this.productService.ExistsById(productId))
+                {
+                    var model = await stockService.GetStockViewModelByProductId(productId);
+                    model.Sizes = await productService.GetSizesAsync();
 
-                ViewData["Title"] = "Add Stock";
+                    ViewData["Title"] = "Add Stock";
 
-                return View(model);
-            }
-            else
-            {
-                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
-            }
+                    return View(model);
+                }
+                else
+                {
+                    return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                }
         }
 
         /// <summary>
@@ -74,11 +75,12 @@
                     return RedirectToAction("Error404NotFound", "Home", new { area = "" });
                 }
             }
-            catch (System.Exception)
+            catch (System.ArgumentException)
             {
-                ModelState.AddModelError("", "Something went wrong");
+                ModelState.AddModelError("", "The stock for product with this size Id is already added");
+                TempData[MessageConstant.WarningMessage] = $"The stock for product with this size Id was already added earlier!\nYou are redirected to Manage Stocks.";
 
-                return View(model);
+                return RedirectToAction("ManageStocks", "Stock");
             }
         }
 

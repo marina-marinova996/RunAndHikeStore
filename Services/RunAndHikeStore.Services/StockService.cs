@@ -35,29 +35,32 @@
         /// <exception cref="ArgumentException"></exception>
         public async Task AddStock(AddStockViewModel model)
         {
-            var product = await this.repo.All<Product>()
-                                         .Where(p => p.Id == model.ProductId)
-                                         .Where(p => p.IsDeleted == false)
-                                         .Include(p => p.Sizes)
-                                         .FirstOrDefaultAsync();
-
-            var size = product.Sizes.Where(p => p.SizeId == model.SizeId).FirstOrDefault();
-
-            if (product == null)
+            if (!(await this.ExistsById(model.ProductId, model.SizeId)))
             {
-                throw new ArgumentException("Invalid product ID");
-            }
+                var product = await this.repo.All<Product>()
+                             .Where(p => p.Id == model.ProductId)
+                             .Where(p => p.IsDeleted == false)
+                             .Include(p => p.Sizes)
+                             .FirstOrDefaultAsync();
 
-            if (!product.Sizes.Any(ps => ps.SizeId == model.SizeId))
-            {
-                product.Sizes.Add(new ProductSize()
+                var size = product.Sizes.Where(p => p.SizeId == model.SizeId).FirstOrDefault();
+
+                if (!product.Sizes.Any(ps => ps.SizeId == model.SizeId))
                 {
-                    ProductId = model.ProductId,
-                    SizeId = model.SizeId,
-                    UnitsInStock = model.UnitsInStock,
-                });
+                    product.Sizes.Add(new ProductSize()
+                    {
+                        ProductId = model.ProductId,
+                        SizeId = model.SizeId,
+                        UnitsInStock = model.UnitsInStock,
+                    });
 
-                await this.repo.SaveChangesAsync();
+                    await this.repo.SaveChangesAsync();
+                }
+            }
+            else
+            {
+
+               throw new ArgumentException("There is already added stock for this product and size");
             }
         }
 
