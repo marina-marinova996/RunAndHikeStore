@@ -214,6 +214,73 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.AreEqual(true, isDeleted);
         }
 
+        [Test]
+        public async Task TestExistsStockByProductIdIsFalse()
+        {
+            repo = new Repository(dbContext);
+            stockService = new StockService(repo);
+
+            var productId = "123455";
+            var sizeId = "123456";
+
+            var isExists = await stockService.ExistsById(productId,sizeId);
+
+            Assert.False(isExists);
+        }
+
+        [Test]
+        public async Task TestExistsSizeByIdIsTrue()
+        {
+            repo = new Repository(dbContext);
+            stockService = new StockService(repo);
+
+            var productType = new ProductType()
+            {
+                Id = "12345",
+                Name = "Product Type Test",
+            };
+
+            await repo.AddAsync(productType);
+
+            var size = new Size()
+            {
+                Id = "1",
+                Name = "Test Name",
+                ProductTypeId = "12345",
+            };
+            await repo.AddAsync(size);
+
+            var product = new Product()
+            {
+                Id = "1",
+                Name = "Test Name",
+                ProductNumber = "23456789",
+                ImageUrl = "123456689970",
+                UnitPrice = 150m,
+                Description = "This product is added.",
+                Color = "Red",
+                BrandId = "1345",
+                ProductTypeId = "12345",
+                Gender = (Gender)1,
+            };
+
+            await repo.AddAsync(product);
+
+            var stock = new ProductSize()
+            {
+                SizeId = "1",
+                ProductId = "1",
+                UnitsInStock = 12,
+            };
+
+            await repo.AddAsync(stock);
+            await repo.SaveChangesAsync();
+
+            var isExists = await stockService.ExistsById(product.Id,size.Id);
+
+            Assert.True(isExists);
+        }
+
         [TearDown]
         public void TearDown()
         {

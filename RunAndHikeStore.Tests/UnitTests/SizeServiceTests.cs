@@ -41,17 +41,7 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
                 Name = "Product Type Test",
             };
 
-            var secondProductType = new ProductType()
-            {
-                Id = "1345",
-                Name = "Product Type 2 Test",
-            };
-
-            var productTypes = new List<ProductType>();
-            productTypes.Add(productType);
-            productTypes.Add(secondProductType);
-
-            await repo.AddRangeAsync(productTypes);
+            await repo.AddAsync(productType);
             await repo.SaveChangesAsync();
 
             var expectedSize = new AddSizeViewModel()
@@ -220,6 +210,49 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.That(allSizesViewModel.Sizes.Count(), Is.EqualTo(2));
             Assert.That(allSizesViewModel.TotalRecordsCount, Is.EqualTo(2));
             Assert.True(IsContaining);
+        }
+
+        [Test]
+        public async Task TestExistsSizeByIdIsFalse()
+        {
+            repo = new Repository(dbContext);
+            sizeService = new SizeService(repo);
+
+            var sizeId = "123456";
+
+            var isExists = await sizeService.ExistsById(sizeId);
+
+            Assert.False(isExists);
+        }
+
+        [Test]
+        public async Task TestExistsSizeByIdIsTrue()
+        {
+            repo = new Repository(dbContext);
+            sizeService = new SizeService(repo);
+
+            var productType = new ProductType()
+            {
+                Id = "12345",
+                Name = "Product Type Test",
+            };
+
+            await repo.AddAsync(productType);
+            await repo.SaveChangesAsync();
+
+            var expectedSize = new Size()
+            {
+                Id = "123",
+                Name = "Size Test Name",
+                ProductTypeId = "12345",
+            };
+
+            await repo.AddAsync(expectedSize);
+            await repo.SaveChangesAsync();
+
+            var isExists = await sizeService.ExistsById(expectedSize.Id);
+
+            Assert.True(isExists);
         }
 
         [TearDown]

@@ -738,6 +738,71 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.True((int)order.PaymentStatus == model.PaymentStatusId);
         }
 
+        [Test]
+        public async Task TestExistsOrderByIdIsFalse()
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var orderId = "123456";
+
+            var isExists = await orderService.ExistsById(orderId);
+
+            Assert.False(isExists);
+        }
+
+        [Test]
+        public async Task TestExistsCartItemByIdIsTrue()
+        {
+            repo = new Repository(dbContext);
+            orderService = new OrderService(repo);
+
+            var user = new ApplicationUser()
+            {
+                Id = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                Email = "ivan@gmail.com",
+                UserName = "ivan@gmail.com",
+            };
+
+            await repo.AddAsync(user);
+            await repo.SaveChangesAsync();
+
+            var billingDetails = new BillingDetails
+            {
+                Id = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+                FirstName = "Ivan",
+                LastName = "Petrov",
+                StreetAddress = "Osmi Primorski Polk 145",
+                City = "Varna",
+                Country = "Bulgaria",
+                PostalCode = "9000",
+                PhoneNumber = "+359899665543",
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2"
+            };
+
+            await repo.AddAsync(billingDetails);
+            await repo.SaveChangesAsync();
+
+            var order = new Order
+            {
+                Id = "123456",
+                OrderDate = new DateTime(2022, 12, 10),
+                OrderStatus = Data.Models.Enums.OrderStatus.Pending,
+                PaymentStatus = Data.Models.Enums.PaymentStatus.NotPaid,
+                CustomerId = "6e736140-d201-4e92-afe8-d52895ec1bc2",
+                BillingDetailsId = "479939b8-ea8e-4daa-8c81-0635a3f7ff72",
+            };
+
+            await repo.AddAsync(order);
+            await repo.SaveChangesAsync();
+
+            var isExists = await orderService.ExistsById(order.Id);
+
+            Assert.True(isExists);
+        }
+
         [TearDown]
         public void TearDown()
         {

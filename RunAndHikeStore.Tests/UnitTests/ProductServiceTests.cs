@@ -552,8 +552,6 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             repo = new Repository(dbContext);
             productService = new ProductService(repo);
 
-            var products = new List<Product>();
-
             await repo.AddAsync(new ProductType()
             {
                 Id = "12345",
@@ -704,6 +702,60 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             var dbProducts = await this.productService.GetAllSorted(genderId, multiCategoriesIds, productTypeId, multiBrandsIds, multiSizesIds, searchTerm, ProductSorting.Newest, currentPage, productsPerPage);
 
             Assert.That(dbProducts.TotalProductsCount == 1);
+        }
+
+        [Test]
+        public async Task TestExistsProductByIdIsFalse()
+        {
+            repo = new Repository(dbContext);
+            productService = new ProductService(repo);
+
+            var productId = "123456";
+
+            var isExists = await productService.ExistsById(productId);
+
+            Assert.False(isExists);
+        }
+
+        [Test]
+        public async Task TestExistsProductByIdIsTrue()
+        {
+            repo = new Repository(dbContext);
+            productService = new ProductService(repo);
+
+            await repo.AddAsync(new ProductType()
+            {
+                Id = "12345",
+                Name = "Product Type Test"
+            });
+
+            await repo.AddAsync(new Brand()
+            {
+                Id = "1345",
+                Name = "Brand Test"
+            });
+
+            await repo.SaveChangesAsync();
+
+            var expectedProduct = new Product()
+            {
+                Name = "Test Name",
+                ProductNumber = "23456789",
+                ImageUrl = "123456689970",
+                UnitPrice = 150m,
+                Description = "This product is added.",
+                Color = "Red",
+                BrandId = "1345",
+                ProductTypeId = "12345",
+                Gender = (Gender)1,
+            };
+
+            await this.repo.AddAsync(expectedProduct);
+            await this.repo.SaveChangesAsync();
+
+            var isExists = await productService.ExistsById(expectedProduct.Id);
+
+            Assert.True(isExists);
         }
 
         [TearDown]

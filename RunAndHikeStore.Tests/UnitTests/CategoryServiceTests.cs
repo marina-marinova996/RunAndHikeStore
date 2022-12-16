@@ -205,6 +205,39 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.True(IsContaining);
         }
 
+        [Test]
+        public async Task TestExistsCategoryByIdIsFalse()
+        {
+            repo = new Repository(dbContext);
+            categoryService = new CategoryService(repo);
+
+            var categoryId = "123456";
+
+            var isExists = await categoryService.ExistsById(categoryId);
+
+            Assert.False(isExists);
+        }
+
+        [Test]
+        public async Task TestExistsCategoryByIdIsTrue()
+        {
+            repo = new Repository(dbContext);
+            categoryService = new CategoryService(repo);
+
+            var expectedCategory = new Category()
+            {
+                Id = "123",
+                Name = "Test Name",
+            };
+
+            await repo.AddAsync(expectedCategory);
+            await repo.SaveChangesAsync();
+
+            var isExists = await categoryService.ExistsById(expectedCategory.Id);
+
+            Assert.True(isExists);
+        }
+
         [TearDown]
         public void TearDown()
         {

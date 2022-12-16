@@ -209,6 +209,39 @@ namespace RunAndHikeStore.Tests.Services.UnitTests
             Assert.True(IsContaining);
         }
 
+        [Test]
+        public async Task TestExistsBrandByIdIsFalse()
+        {
+            repo = new Repository(dbContext);
+            brandService = new BrandService(repo);
+
+            var brandId = "123456";
+
+            var isExists = await brandService.ExistsById(brandId);
+
+            Assert.False(isExists);
+        }
+
+        [Test]
+        public async Task TestExistBrandByIdIsTrue()
+        {
+            repo = new Repository(dbContext);
+            brandService = new BrandService(repo);
+
+            var expectedBrand = new Brand()
+            {
+                Id = "123",
+                Name = "Test Name",
+            };
+
+            await repo.AddAsync(expectedBrand);
+            await repo.SaveChangesAsync();
+
+            var isExists = await brandService.ExistsById(expectedBrand.Id);
+
+            Assert.True(isExists);
+        }
+
         [TearDown]
         public void TearDown()
         {

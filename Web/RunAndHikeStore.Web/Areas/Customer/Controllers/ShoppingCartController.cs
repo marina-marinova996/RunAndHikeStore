@@ -1,6 +1,7 @@
 ﻿namespace RunAndHikeStore.Web.Areas.Customer.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using RunAndHikeStore.Data.Models;
     using RunAndHikeStore.Services.Contracts;
     using RunAndHikeStore.Web.ClaimsPrincipalExtensions;
     using RunAndHikeStore.Web.ViewModels.Order;
@@ -79,8 +80,10 @@
             catch (System.ArgumentException)
             {
                 ModelState.AddModelError("", "Not enough units in stock");
-                TempData[MessageConstant.ErrorMessage] = "Sorry, more more units in stock!";
-                return RedirectToAction("Index", "ShoppingCart");
+                TempData[MessageConstant.ErrorMessage] = "Sorry, no more units in stock!";
+
+                ProductViewModel product = await productService.GetByIdAsync(productId);
+                return RedirectToAction("Details", "Product", product);
             }
         }
 
