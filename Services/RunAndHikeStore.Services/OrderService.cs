@@ -119,8 +119,8 @@ namespace RunAndHikeStore.Services
             ordersQuery = sorting switch
             {
                 OrdersSorting.Oldest => ordersQuery
-                                                    .OrderBy(o => o.Id),
-                _ => ordersQuery.OrderByDescending(o => o.Id),
+                                                    .OrderBy(o => o.OrderDate),
+                _ => ordersQuery.OrderByDescending(o => o.OrderDate),
             };
 
             var orders = ordersQuery
