@@ -7,6 +7,7 @@
     using RunAndHikeStore.Web.ViewModels.Product;
     using RunAndHikeStore.Web.ViewModels.ShoppingCart;
     using System.Threading.Tasks;
+    using static RunAndHikeStore.Common.GlobalConstants;
 
     public class ShoppingCartController : BaseController
     {
@@ -72,21 +73,15 @@
 
                 var cartModel = await shoppingCartService.FindCartItem(productId, userId);
 
-                if (await shoppingCartService.IsInStock(productId, sizeId))
-                {
-                    await shoppingCartService.AddToCart(productId, userId, sizeId, 1);
-                }
-                else
-                {
-                    ModelState.AddModelError("", "There is no unit in stock!");
-                }
+                await shoppingCartService.AddToCart(productId, userId, sizeId, 1);
+                return RedirectToAction("All", "Product");
             }
-            catch (System.Exception)
+            catch (System.ArgumentException)
             {
-                ModelState.AddModelError("", "Something went wrong");
+                ModelState.AddModelError("", "Not enough units in stock");
+                TempData[MessageConstant.ErrorMessage] = "Sorry, more more units in stock!";
+                return RedirectToAction("Index", "ShoppingCart");
             }
-
-            return RedirectToAction("All", "Product");
         }
 
         /// <summary>
@@ -172,17 +167,27 @@
         [HttpPost]
         public async Task<IActionResult> CreateOrder(CreateOrderViewModel model)
         {
-            if (!this.ModelState.IsValid)
+            try
             {
-                return this.View(model);
+                if (!this.ModelState.IsValid)
+                {
+                    return this.View(model);
+                }
+
+                var customerId = User.Id();
+
+                model.CartItems = await shoppingCartService.GetAllCartItems(customerId);
+                await orderService.CreateAsync(model, customerId);
+
+                return this.RedirectToAction("Index", "Home", new { area = "" });
+
             }
-
-            var customerId = User.Id();
-
-            model.CartItems = await shoppingCartService.GetAllCartItems(customerId);
-            await orderService.CreateAsync(model, customerId);
-
-            return this.RedirectToAction("Index", "Home", new { area = "" });
+            catch (System.ArgumentException)
+            {
+                ModelState.AddModelError("", "Not enough units in stock");
+                TempData[MessageConstant.ErrorMessage] = "Sorry, not enough units in stock!";
+                return RedirectToAction("Index", "ShoppingCart");
+            }
         }
     }
 }

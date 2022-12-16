@@ -1,5 +1,6 @@
 ﻿namespace RunAndHikeStore.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -34,20 +35,27 @@
 
             bool isCreated = user.ShoppingCart.CartItems.Any(c => c.ProductId == productId && c.SizeId == sizeId);
 
-            if (!isCreated)
+            if (await this.IsInStock(productId, sizeId))
             {
-                var cartItem = await this.CreateCartItem(productId, userId, sizeId, quantity);
-                user.ShoppingCart.CartItems.Add(cartItem);
+                if (!isCreated)
+                {
+                    var cartItem = await this.CreateCartItem(productId, userId, sizeId, quantity);
+                    user.ShoppingCart.CartItems.Add(cartItem);
+                }
+                else
+                {
+                    var cartItem = user.ShoppingCart.CartItems
+                                            .Where(c => c.ProductId == productId && c.SizeId == sizeId)
+                                            .FirstOrDefault();
+                    cartItem.Quantity++;
+                }
+
+                await this.repo.SaveChangesAsync();
             }
             else
             {
-                var cartItem = user.ShoppingCart.CartItems
-                                        .Where(c => c.ProductId == productId && c.SizeId == sizeId)
-                                        .FirstOrDefault();
-                cartItem.Quantity++;
+                throw new ArgumentException("Not enough units in stock");
             }
-
-            await this.repo.SaveChangesAsync();
         }
 
         /// <summary>
@@ -186,9 +194,15 @@
         /// <returns></returns>
         public async Task<bool> IsInStock(string productId, string sizeId)
         {
-            return await this.repo.AsNoTracking<ProductSize>()
+            var cartItems = await this.repo.AsNoTracking<CartItem>().Where(c => c.ProductId == productId && c.SizeId == sizeId).ToListAsync();
+
+            var quantityInCartItems = cartItems.Select(x => x.Quantity).ToList().Sum();
+
+            var isInStock = await this.repo.AsNoTracking<ProductSize>()
                                   .Where(ps => ps.ProductId == productId && ps.SizeId == sizeId)
-                                  .AnyAsync(ps => ps.UnitsInStock > 0);
+                                  .AnyAsync(ps => ps.UnitsInStock - quantityInCartItems > 0);
+
+            return isInStock;
         }
 
         /// <summary>
