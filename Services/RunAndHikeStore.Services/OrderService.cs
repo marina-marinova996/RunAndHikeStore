@@ -112,7 +112,7 @@ namespace RunAndHikeStore.Services
                 ordersQuery = ordersQuery.Where(o => o.BillingDetails.FirstName.ToLower().Contains(searchTerm.ToLower()) ||
                                                 o.BillingDetails.LastName.ToLower().Contains(searchTerm.ToLower()) ||
                                                 o.Customer.Email.ToLower().Contains(searchTerm.ToLower()) ||
-                                                o.Id.ToString().ToLower().Contains(searchTerm.ToLower()) ||
+                                                o.Id.ToLower().Contains(searchTerm.ToLower()) ||
                                                 o.OrderDate.ToString().Contains(searchTerm.ToLower()));
             }
 

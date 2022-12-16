@@ -1,5 +1,6 @@
 ﻿namespace RunAndHikeStore.Services
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -92,19 +93,37 @@
         /// <returns></returns>
         public async Task<bool> UpdateUser(UserEditViewModel model)
         {
-            bool result = false;
-            var user = await repo.GetByIdAsync<ApplicationUser>(model.Id);
-
-            if (user != null)
+            if (await this.ExistsById(model.Id))
             {
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
+                bool result = false;
+                var user = await repo.GetByIdAsync<ApplicationUser>(model.Id);
 
-                await this.repo.SaveChangesAsync();
-                result = true;
+                if (user != null)
+                {
+                    user.FirstName = model.FirstName;
+                    user.LastName = model.LastName;
+
+                    await this.repo.SaveChangesAsync();
+                    result = true;
+                }
+
+                return result;
             }
+            else
+            {
+                  throw new ArgumentException("Unknown user");
+            }
+        }
 
-            return result;
+        /// <summary>
+        /// Check if size exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<bool> ExistsById(string id)
+        {
+            return await repo.All<ApplicationUser>()
+                            .AnyAsync(o => o.Id == id);
         }
     }
 }

@@ -109,9 +109,16 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
         /// <returns></returns>
         public async Task<IActionResult> Edit(string id)
         {
-            var model = await userService.GetUserForEdit(id);
+            if(await this.userService.ExistsById(id))
+            {
+                var model = await userService.GetUserForEdit(id);
 
-            return View(model);
+                return View(model);
+            }
+            else
+            {
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+            }
         }
 
         /// <summary>
@@ -122,20 +129,28 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(UserEditViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(model);
-            }
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
 
-            if (await userService.UpdateUser(model))
-            {
-                TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
-                return RedirectToAction(nameof(ManageUsers));
+                if (await userService.UpdateUser(model))
+                {
+                    TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
+                    return RedirectToAction(nameof(ManageUsers));
+                }
+                else
+                {
+                    TempData[MessageConstant.ErrorMessage] = "Error!";
+                    return View(model);
+                }
             }
-            else
+            catch (System.ArgumentException)
             {
-                TempData[MessageConstant.ErrorMessage] = "Error!";
-                return View(model);
+                return RedirectToAction("Error404NotFound", "Home", new { area = "" });
+                throw;
             }
         }
     }

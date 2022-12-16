@@ -75,7 +75,7 @@
 
         public static class Size
         {
-            public const int ProductSizeNameMinLength = 2;
+            public const int ProductSizeNameMinLength = 1;
             public const int ProductSizeNameMaxLength = 10;
 
             public const int GenderMaxLength = 10;

@@ -1,7 +1,6 @@
 ﻿namespace RunAndHikeStore.Data.Models
 {
     using RunAndHikeStore.Data.Common.Models;
-    using RunAndHikeStore.Data.Models.Enums;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

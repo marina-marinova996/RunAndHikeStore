@@ -41,5 +41,12 @@ namespace RunAndHikeStore.Services.Contracts
         /// <param name="id"></param>
         /// <returns></returns>
         Task<ApplicationUser> GetUserById(string id);
+
+        /// <summary>
+        /// Check if size exists.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Task<bool> ExistsById(string id);
     }
 }

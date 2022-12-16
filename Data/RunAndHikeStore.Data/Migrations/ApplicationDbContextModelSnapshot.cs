@@ -175,7 +175,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("DeliveryAddresses");
+                    b.ToTable("DeliveryAddresses", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ApplicationRole", b =>
@@ -377,7 +377,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("BillingDetails");
+                    b.ToTable("BillingDetails", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Brand", b =>
@@ -406,7 +406,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.CartItem", b =>
@@ -443,7 +443,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Category", b =>
@@ -472,7 +472,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.CategoryProduct", b =>
@@ -492,7 +492,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CategoriesProducts");
+                    b.ToTable("CategoriesProducts", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Order", b =>
@@ -545,7 +545,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.OrderDetail", b =>
@@ -593,7 +593,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Product", b =>
@@ -658,7 +658,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ProductSize", b =>
@@ -681,7 +681,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductsSizes");
+                    b.ToTable("ProductsSizes", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ProductType", b =>
@@ -710,7 +710,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("ProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Setting", b =>
@@ -743,7 +743,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.ShoppingCart", b =>
@@ -759,7 +759,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ShoppingCart");
+                    b.ToTable("ShoppingCart", (string)null);
                 });
 
             modelBuilder.Entity("RunAndHikeStore.Data.Models.Size", b =>
@@ -794,7 +794,7 @@ namespace RunAndHikeStore.Data.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -123,7 +123,7 @@ namespace RunAndHikeStore.Web.Areas.Admin.Controllers
                 await this.sizeService.Edit(model);
                 TempData[MessageConstant.SuccessMessage] = "Successfully editted!";
 
-                return this.RedirectToAction("ManageAll", "Brand");
+                return this.RedirectToAction(nameof(this.ManageAll));
 
             }
             else
