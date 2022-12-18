@@ -1,5 +1,6 @@
 ﻿namespace RunAndHikeStore.Services
 {
+    using System;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -114,7 +115,7 @@
         /// <returns></returns>
         public async Task<EditBillingDetailsViewModel> GetCustomerBillingDetailsByUserId(string userId)
         {
-             return await this.repo.AsNoTracking<BillingDetails>()
+            var billingDetails = await this.repo.AsNoTracking<BillingDetails>()
                                                 .Where(b => b.IsDeleted == false)
                                                 .Where(b => b.CustomerId == userId)
                                                 .Select(b => new EditBillingDetailsViewModel
@@ -128,6 +129,15 @@
                                                     PostalCode = b.PostalCode,
                                                     PhoneNumber = b.PhoneNumber,
                                                 }).FirstOrDefaultAsync();
+
+            if (billingDetails != null)
+            {
+                return billingDetails;
+            }
+            else
+            {
+                throw new ArgumentException("Billing details are missing");
+            }
         }
 
         /// <summary>
@@ -145,14 +155,21 @@
 
             var address = user.DeliveryAddresses.FirstOrDefault();
 
-            return user.DeliveryAddresses.Where(a => a.IsDeleted == false).Select(a => new EditAddressViewModel
+            if (address != null)
             {
-                Id = a.Id,
-                StreetAddress = a.StreetAddress,
-                City = a.City,
-                Country = a.Country,
-                PostalCode = a.PostalCode,
-            }).FirstOrDefault();
+                return user.DeliveryAddresses.Where(a => a.IsDeleted == false).Select(a => new EditAddressViewModel
+                {
+                    Id = a.Id,
+                    StreetAddress = a.StreetAddress,
+                    City = a.City,
+                    Country = a.Country,
+                    PostalCode = a.PostalCode,
+                }).FirstOrDefault();
+            }
+            else
+            {
+                throw new ArgumentException("Address details are missing");
+            }
         }
 
         /// <summary>

@@ -150,8 +150,18 @@
                 if (user != null)
                 {
                     model.CartItems = await shoppingCartService.GetAllCartItems(userId);
-                    model.BillingDetails = await customerService.GetCustomerBillingDetailsByUserId(userId);
-                    model.DeliveryAddress = await customerService.GetCustomerDeliveryAddressByUserId(userId);
+                    try
+                    {
+                        model.BillingDetails = await customerService.GetCustomerBillingDetailsByUserId(userId);
+                        model.DeliveryAddress = await customerService.GetCustomerDeliveryAddressByUserId(userId);
+                    }
+                    catch (System.ArgumentException)
+                    {
+
+                        ModelState.AddModelError("", "Billing details are not added.");
+                        TempData[MessageConstant.WarningMessage] = "Please add your billing details!";
+                        return RedirectToAction("Details", "Customer");
+                    }
                 }
             }
             catch
